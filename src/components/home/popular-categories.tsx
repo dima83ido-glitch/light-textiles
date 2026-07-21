@@ -1,0 +1,63 @@
+import Image from "next/image";
+import { getTranslations, getLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { prisma } from "@/lib/prisma";
+import { CategoryCardMotion } from "./category-card-motion";
+
+export async function PopularCategories() {
+  const [categories, t, locale] = await Promise.all([
+    prisma.category.findMany({
+      where: { isVisible: true, parentId: { not: null } },
+      orderBy: { sortOrder: "asc" },
+      take: 8,
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        image: true,
+        _count: { select: { products: true } },
+      },
+    }),
+    getTranslations("home"),
+    getLocale(),
+  ]);
+
+  if (categories.length === 0) return null;
+
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-20">
+      <h2 className="mb-10 text-center text-3xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+        {t("popularCategoriesTitle")}
+      </h2>
+
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+        {categories.map((category, i) => {
+          const name = (category.name as Record<string, string>)[locale] ?? (category.name as Record<string, string>).uk;
+          return (
+            <CategoryCardMotion key={category.id} index={i}>
+              <Link
+                href={`/catalog/${category.slug}`}
+                className="group relative flex aspect-square flex-col justify-end overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface-subtle)] p-5 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lifted)]"
+              >
+                {category.image && (
+                  <Image
+                    src={category.image}
+                    alt={name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0" />
+                <div className="relative">
+                  <p className="text-sm font-semibold text-white drop-shadow-sm">{name}</p>
+                  <p className="text-xs text-white/80">{category._count.products} товарів</p>
+                </div>
+              </Link>
+            </CategoryCardMotion>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

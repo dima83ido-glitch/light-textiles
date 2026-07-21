@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Admin ----------
+
+enum AdminRole {
+  OWNER
+  STAFF
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         AdminRole @default(STAFF)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ---------- Catalog ----------
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        Json // { uk: string, ru: string }
+  description Json? // { uk: string, ru: string }
+  image       String?
+  sortOrder   Int     @default(0)
+  isVisible   Boolean @default(true)
+
+  metaTitle       Json?
+  metaDescription Json?
+
+  parentId String?
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryTree")
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+}
+
+enum Availability {
+  IN_STOCK
+  OUT_OF_STOCK
+  ON_ORDER
+}
+
+model Product {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  name          Json // { uk: string, ru: string }
+  description   Json? // { uk: string, ru: string }
+  basePrice     Int
+  discountPrice Int?
+  currency      String       @default("UAH")
+  availability  Availability @default(IN_STOCK)
+  isVisible     Boolean      @default(true)
+  isFeatured    Boolean      @default(false)
+  sourceUrl     String?
+
+  metaTitle       Json?
+  metaDescription Json?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  images     ProductImage[]
+  variants   ProductVariant[]
+  reviews    Review[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String // e.g. "Наволочка 50x70"
+  price     Int
+  sortOrder Int     @default(0)
+
+  orderItems OrderItem[]
+
+  @@index([productId])
+}
+
+// ---------- Orders ----------
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  PACKING
+  SHIPPING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    String      @unique
+  customerName   String
+  phone          String
+  email          String?
+  address        String?
+  city           String?
+  deliveryMethod String?
+  status         OrderStatus @default(NEW)
+  totalAmount    Int
+  notes          String?
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String?
+  product   Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  nameSnapshot String
+  unitPrice    Int
+  quantity     Int
+  lineTotal    Int
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ---------- Reviews ----------
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  authorName String
+  rating     Int      @default(5)
+  text       String
+  photos     String[] @default([])
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([productId])
+}
+
+// ---------- Site content ----------
+
+model SiteSettings {
+  id           String  @id @default("main")
+  phone        String
+  viber        String?
+  email        String
+  workingHours Json // { uk: string, ru: string }
+  address      Json? // { uk: string, ru: string }
+  facebookUrl  String?
+  instagramUrl String?
+
+  heroTitle    Json?
+  heroSubtitle Json?
+  heroImage    String?
+
+  aboutText    Json?
+  deliveryText Json?
+
+  footerText Json?
+
+  metaTitle       Json?
+  metaDescription Json?
+
+  updatedAt DateTime @updatedAt
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     Json
+  subtitle  Json?
+  image     String
+  link      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model FaqItem {
+  id        String  @id @default(cuid())
+  question  Json
+  answer    Json
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+}
+
+model ContactRequest {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  message   String
+  isHandled Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  filename  String
+  size      Int
+  mimeType  String
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+}
