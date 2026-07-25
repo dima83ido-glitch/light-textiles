@@ -8,6 +8,7 @@ import type { NavCategory } from "@/lib/categories";
 import { HeaderNav } from "./header-nav";
 import { HeaderBadges } from "./header-badges";
 import { LocaleSwitcher } from "./locale-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function HeaderShell({
   groups,
@@ -65,6 +66,7 @@ export function HeaderShell({
 
         <div className="hidden items-center gap-3 lg:flex">
           <HeaderBadges />
+          <ThemeToggle />
           <LocaleSwitcher />
         </div>
       </div>

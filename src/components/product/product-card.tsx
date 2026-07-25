@@ -77,7 +77,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           }}
           aria-label={t("addToFavorites")}
           className={cn(
-            "absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur transition-colors",
+            "absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface)]/90 shadow-sm backdrop-blur transition-all duration-150 active:scale-90",
             isFavorite ? "text-red-500" : "text-[var(--color-ink-muted)] hover:text-red-500",
           )}
         >
@@ -102,7 +102,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
                 image: product.image,
               });
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-2.5 text-sm font-semibold text-white shadow-lg"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-2.5 text-sm font-semibold text-[var(--color-canvas)] shadow-lg"
           >
             <ShoppingBag className="h-4 w-4" />
             {t("addToCart")}
@@ -134,7 +134,9 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           <span
             className={cn(
               "text-[11px] font-medium",
-              product.availability === "IN_STOCK" ? "text-emerald-600" : "text-[var(--color-ink-soft)]",
+              product.availability === "IN_STOCK"
+                ? "text-emerald-600 dark:text-emerald-400"
+                : "text-[var(--color-ink-soft)]",
             )}
           >
             {availabilityLabel}

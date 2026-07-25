@@ -38,7 +38,7 @@ export function CatalogPagination({
             className={cn(
               "flex h-9 min-w-9 items-center justify-center rounded-full px-3 text-sm font-medium transition-colors",
               p === currentPage
-                ? "bg-[var(--color-ink)] text-white"
+                ? "bg-[var(--color-ink)] text-[var(--color-canvas)]"
                 : "text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-tint)]",
             )}
           >

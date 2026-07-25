@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+export function createContactRequestSchema(t: (key: string) => string) {
+  return z.object({
+    name: z.string().trim().min(2, t("nameMin")).max(120),
+    phone: z.string().trim().min(9, t("phoneInvalid")).max(20),
+    email: z.union([z.literal(""), z.string().trim().email()]).optional(),
+    message: z.string().trim().min(5, t("messageMin")).max(2000),
+  });
+}
+
 export const contactRequestSchema = z.object({
   name: z.string().trim().min(2, "Мінімум 2 символи").max(120),
   phone: z

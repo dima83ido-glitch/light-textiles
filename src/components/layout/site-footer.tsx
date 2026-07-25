@@ -2,17 +2,20 @@ import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getLocalized } from "@/lib/get-localized";
 import { FacebookIcon, InstagramIcon } from "@/components/icons/social-icons";
 
 export async function SiteFooter() {
-  const [settings, t, locale] = await Promise.all([
+  const [settings, t, tNav, tPages, locale] = await Promise.all([
     getSiteSettings(),
     getTranslations("footer"),
+    getTranslations("nav"),
+    getTranslations("pages"),
     getLocale(),
   ]);
 
-  const localized = (value: Record<string, string> | undefined) =>
-    value ? value[locale] ?? value.uk : "";
+  const localized = (value: Record<string, string> | undefined) => getLocalized(value, locale);
+  const advantagesItems = t.raw("advantagesItems") as string[];
 
   const year = new Date().getFullYear();
 
@@ -26,10 +29,7 @@ export async function SiteFooter() {
             </span>
             <span className="text-base font-semibold text-[var(--color-ink)]">Light Textiles</span>
           </div>
-          <p className="mb-5 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-            Українське виробництво постільної білизни та тканин зі 100% бавовни. Власне пошиття
-            за будь-якими розмірами з 2013 року.
-          </p>
+          <p className="mb-5 text-sm leading-relaxed text-[var(--color-ink-muted)]">{t("tagline")}</p>
           <div className="flex items-center gap-2">
             <a
               href={settings.facebookUrl}
@@ -82,10 +82,9 @@ export async function SiteFooter() {
         <div>
           <h3 className="mb-4 text-sm font-semibold text-[var(--color-ink)]">{t("advantages")}</h3>
           <ul className="space-y-3 text-sm text-[var(--color-ink-muted)]">
-            <li>Лише якісний товар, 100% бавовна</li>
-            <li>Власне пошиття за будь-якими розмірами</li>
-            <li>Знижки для гуртових покупців</li>
-            <li>Відправка 1–2 дні</li>
+            {advantagesItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </div>
 
@@ -94,22 +93,22 @@ export async function SiteFooter() {
           <ul className="space-y-3 text-sm text-[var(--color-ink-muted)]">
             <li>
               <Link href="/delivery" className="hover:text-[var(--color-accent-strong)]">
-                Доставка і оплата
+                {tNav("delivery")}
               </Link>
             </li>
             <li>
               <Link href="/delivery#returns" className="hover:text-[var(--color-accent-strong)]">
-                Повернення і обмін
+                {tPages("returnsTitle")}
               </Link>
             </li>
             <li>
               <Link href="/custom-order" className="hover:text-[var(--color-accent-strong)]">
-                Пошиття на замовлення
+                {tNav("customOrder")}
               </Link>
             </li>
             <li>
               <Link href="/about" className="hover:text-[var(--color-accent-strong)]">
-                Про компанію
+                {tNav("about")}
               </Link>
             </li>
           </ul>

@@ -1,5 +1,6 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { getLocalized } from "@/lib/get-localized";
 import { FaqAccordion } from "./faq-accordion";
 
 export async function Faq() {
@@ -16,8 +17,8 @@ export async function Faq() {
 
   const localized = items.map((item) => ({
     id: item.id,
-    question: (item.question as Record<string, string>)[locale] ?? (item.question as Record<string, string>).uk,
-    answer: (item.answer as Record<string, string>)[locale] ?? (item.answer as Record<string, string>).uk,
+    question: getLocalized(item.question as Record<string, string>, locale),
+    answer: getLocalized(item.answer as Record<string, string>, locale),
   }));
 
   return (

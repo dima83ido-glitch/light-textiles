@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { setRequestLocale, getLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoryBySlug, getProductsForCategoryIds, toProductCardData, type CatalogSort } from "@/lib/products";
+import { getLocalized } from "@/lib/get-localized";
+import { getAlternates } from "@/lib/seo";
 import { ProductCard } from "@/components/product/product-card";
 import { CatalogToolbar } from "@/components/catalog/catalog-toolbar";
 import { CatalogPagination } from "@/components/catalog/pagination";
@@ -15,10 +17,12 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const category = await getCategoryBySlug(slug);
   if (!category) return {};
-  const name = (category.name as Record<string, string>)[locale] ?? (category.name as Record<string, string>).uk;
+  const name = getLocalized(category.name as Record<string, string>, locale);
+  const t = await getTranslations({ locale, namespace: "catalog" });
   return {
     title: `${name} — Light Textiles`,
-    description: `${name}: каталог товарів Light Textiles. Купити з доставкою по всій Україні.`,
+    description: t("categoryMetaDescription", { name }),
+    alternates: getAlternates(`/catalog/${slug}`, locale),
   };
 }
 
@@ -32,6 +36,7 @@ export default async function CatalogCategoryPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
+  const [tNav, tCatalog] = await Promise.all([getTranslations("nav"), getTranslations("catalog")]);
 
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
@@ -51,16 +56,14 @@ export default async function CatalogCategoryPage({
     page,
   });
 
-  const name = (category.name as Record<string, string>)[locale] ?? (category.name as Record<string, string>).uk;
-  const parentName = category.parent
-    ? (category.parent.name as Record<string, string>)[locale] ?? (category.parent.name as Record<string, string>).uk
-    : null;
+  const name = getLocalized(category.name as Record<string, string>, locale);
+  const parentName = category.parent ? getLocalized(category.parent.name as Record<string, string>, locale) : null;
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <nav className="mb-6 flex items-center gap-2 text-sm text-[var(--color-ink-soft)]">
         <Link href="/" className="hover:text-[var(--color-accent-strong)]">
-          Головна
+          {tNav("home")}
         </Link>
         <span>/</span>
         {parentName && category.parent && (
@@ -81,7 +84,7 @@ export default async function CatalogCategoryPage({
       {category.children.length > 0 && (
         <div className="mb-8 flex flex-wrap gap-2">
           {category.children.map((child) => {
-            const childName = (child.name as Record<string, string>)[locale] ?? (child.name as Record<string, string>).uk;
+            const childName = getLocalized(child.name as Record<string, string>, locale);
             return (
               <Link
                 key={child.id}
@@ -98,9 +101,7 @@ export default async function CatalogCategoryPage({
       <CatalogToolbar total={total} />
 
       {items.length === 0 ? (
-        <p className="py-20 text-center text-[var(--color-ink-muted)]">
-          У цій категорії поки немає товарів.
-        </p>
+        <p className="py-20 text-center text-[var(--color-ink-muted)]">{tCatalog("empty")}</p>
       ) : (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((product) => (

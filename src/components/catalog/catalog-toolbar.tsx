@@ -2,19 +2,21 @@
 
 import { useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SORT_OPTIONS: { value: string; label: string }[] = [
-  { value: "newest", label: "Спочатку нові" },
-  { value: "price-asc", label: "Дешевші спочатку" },
-  { value: "price-desc", label: "Дорожчі спочатку" },
-];
-
 export function CatalogToolbar({ total }: { total: number }) {
+  const t = useTranslations("catalog");
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const SORT_OPTIONS: { value: string; label: string }[] = [
+    { value: "newest", label: t("sortNewest") },
+    { value: "price-asc", label: t("sortPriceAsc") },
+    { value: "price-desc", label: t("sortPriceDesc") },
+  ];
 
   const currentSort = searchParams.get("sort") ?? "newest";
   const minPrice = searchParams.get("min") ?? "";
@@ -36,7 +38,7 @@ export function CatalogToolbar({ total }: { total: number }) {
   return (
     <div className="mb-8 flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--color-ink-muted)]">Знайдено: {total}</p>
+        <p className="text-sm text-[var(--color-ink-muted)]">{t("resultsCount", { count: total })}</p>
 
         <div className="flex items-center gap-2">
           <button
@@ -45,7 +47,7 @@ export function CatalogToolbar({ total }: { total: number }) {
             className="flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-tint)]"
           >
             <SlidersHorizontal className="h-4 w-4" />
-            Фільтри
+            {t("filters")}
           </button>
 
           <div className="relative">
@@ -84,7 +86,7 @@ export function CatalogToolbar({ total }: { total: number }) {
             className="flex flex-wrap items-end gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-subtle)] p-4"
           >
             <div>
-              <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">Ціна від</label>
+              <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">{t("priceFrom")}</label>
               <input
                 name="min"
                 type="number"
@@ -94,7 +96,7 @@ export function CatalogToolbar({ total }: { total: number }) {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">Ціна до</label>
+              <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">{t("priceTo")}</label>
               <input
                 name="max"
                 type="number"
@@ -105,9 +107,9 @@ export function CatalogToolbar({ total }: { total: number }) {
             </div>
             <button
               type="submit"
-              className="rounded-full bg-[var(--color-ink)] px-5 py-2 text-sm font-semibold text-white"
+              className="rounded-full bg-[var(--color-ink)] px-5 py-2 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
             >
-              Застосувати
+              {t("apply")}
             </button>
           </form>
         </div>

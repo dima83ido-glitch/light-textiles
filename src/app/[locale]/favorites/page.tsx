@@ -9,6 +9,7 @@ import { ProductCard, type ProductCardData } from "@/components/product/product-
 
 export default function FavoritesPage() {
   const t = useTranslations("favorites");
+  const tCart = useTranslations("cart");
   const locale = useLocale();
   const productIds = useFavoritesStore((s) => s.productIds);
   const [products, setProducts] = useState<ProductCardData[] | null>(null);
@@ -35,8 +36,8 @@ export default function FavoritesPage() {
             <Heart className="h-7 w-7" />
           </div>
           <p className="text-[var(--color-ink-muted)]">{t("empty")}</p>
-          <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white">
-            Перейти до каталогу
+          <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+            {tCart("continueShopping")}
           </Link>
         </div>
       ) : (

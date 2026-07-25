@@ -12,6 +12,7 @@ import { useCartStore } from "@/stores/cart-store";
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
+  const tCart = useTranslations("cart");
   const [mounted, setMounted] = useState(false);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const items = useCartStore((s) => s.items);
@@ -59,8 +60,8 @@ export default function CheckoutPage() {
         <CheckCircle2 className="h-14 w-14 text-emerald-500" />
         <h1 className="text-2xl font-semibold text-[var(--color-ink)]">{t("success")}</h1>
         <p className="text-sm text-[var(--color-ink-soft)]">№ {orderNumber}</p>
-        <Link href="/" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white">
-          На головну
+        <Link href="/" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+          {t("goHome")}
         </Link>
       </div>
     );
@@ -69,9 +70,9 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-6 py-24 text-center">
-        <p className="mb-6 text-[var(--color-ink-muted)]">Ваш кошик порожній.</p>
-        <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white">
-          До каталогу
+        <p className="mb-6 text-[var(--color-ink-muted)]">{t("emptyCart")}</p>
+        <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+          {tCart("continueShopping")}
         </Link>
       </div>
     );
@@ -113,7 +114,7 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white shadow-[var(--shadow-lifted)] disabled:opacity-60"
+            className="mt-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] disabled:opacity-60"
           >
             {t("submit")}
           </button>
@@ -133,7 +134,7 @@ export default function CheckoutPage() {
             ))}
           </div>
           <div className="mt-4 flex justify-between border-t border-[var(--color-border)] pt-4 text-base font-semibold text-[var(--color-ink)]">
-            <span>Разом</span>
+            <span>{tCart("total")}</span>
             <span>{formatPrice(total)} ₴</span>
           </div>
         </div>

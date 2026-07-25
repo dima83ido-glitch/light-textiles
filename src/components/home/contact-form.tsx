@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
-import { contactRequestSchema, type ContactRequestInput } from "@/lib/validation/contact";
+import { useTranslations } from "next-intl";
+import { createContactRequestSchema, type ContactRequestInput } from "@/lib/validation/contact";
 import { cn } from "@/lib/utils";
 
 export function ContactForm() {
+  const t = useTranslations("contactForm");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const {
     register,
@@ -16,7 +18,7 @@ export function ContactForm() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ContactRequestInput>({
-    resolver: zodResolver(contactRequestSchema),
+    resolver: zodResolver(createContactRequestSchema(t)),
   });
 
   const onSubmit = async (data: ContactRequestInput) => {
@@ -41,24 +43,19 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div>
-        <input placeholder="Ваше ім'я" className={inputClass} {...register("name")} />
+        <input placeholder={t("name")} className={inputClass} {...register("name")} />
         {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
       </div>
       <div>
-        <input placeholder="Телефон" className={inputClass} {...register("phone")} />
+        <input placeholder={t("phone")} className={inputClass} {...register("phone")} />
         {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
       </div>
       <div>
-        <input placeholder="Email (необов'язково)" className={inputClass} {...register("email")} />
+        <input placeholder={t("email")} className={inputClass} {...register("email")} />
         {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
       </div>
       <div>
-        <textarea
-          placeholder="Ваше повідомлення"
-          rows={4}
-          className={inputClass}
-          {...register("message")}
-        />
+        <textarea placeholder={t("message")} rows={4} className={inputClass} {...register("message")} />
         {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message.message}</p>}
       </div>
 
@@ -67,22 +64,18 @@ export function ContactForm() {
         disabled={isSubmitting}
         whileTap={{ scale: 0.98 }}
         className={cn(
-          "flex items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white shadow-[var(--shadow-lifted)] transition-opacity",
+          "flex items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] transition-opacity",
           isSubmitting && "opacity-60",
         )}
       >
         <Send className="h-4 w-4" />
-        {isSubmitting ? "Надсилаємо..." : "Надіслати"}
+        {isSubmitting ? t("submitting") : t("submit")}
       </motion.button>
 
       {status === "success" && (
-        <p className="text-sm font-medium text-emerald-600">
-          Дякуємо! Ми зв&apos;яжемось з вами найближчим часом.
-        </p>
+        <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{t("success")}</p>
       )}
-      {status === "error" && (
-        <p className="text-sm font-medium text-red-500">Щось пішло не так. Спробуйте ще раз.</p>
-      )}
+      {status === "error" && <p className="text-sm font-medium text-red-500">{t("error")}</p>}
     </form>
   );
 }

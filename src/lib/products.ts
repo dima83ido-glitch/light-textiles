@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getLocalized } from "@/lib/get-localized";
 import type { ProductCardData } from "@/components/product/product-card";
 
 export const PAGE_SIZE = 24;
@@ -71,11 +72,10 @@ export function toProductCardData(
   },
   locale: string,
 ): ProductCardData {
-  const nameMap = product.name as Record<string, string>;
   return {
     id: product.id,
     slug: product.slug,
-    name: nameMap[locale] ?? nameMap.uk,
+    name: getLocalized(product.name as Record<string, string>, locale),
     image: product.images[0]?.url,
     basePrice: product.variants[0]?.price ?? product.basePrice,
     discountPrice: product.discountPrice,

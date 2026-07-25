@@ -1,13 +1,24 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { setRequestLocale, getLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoryTree } from "@/lib/categories";
+import { getLocalized } from "@/lib/get-localized";
+import { getAlternates } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Каталог — Light Textiles",
-  description: "Повний каталог постільної білизни, рушників та тканин Light Textiles.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "catalog" });
+  return {
+    title: `${t("title")} — Light Textiles`,
+    description: t("rootMetaDescription"),
+    alternates: getAlternates("/catalog", locale),
+  };
+}
 
 export default async function CatalogRootPage({
   params,
@@ -16,19 +27,19 @@ export default async function CatalogRootPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const groups = await getCategoryTree();
+  const [groups, t] = await Promise.all([getCategoryTree(), getTranslations("catalog")]);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <h1 className="mb-10 text-3xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-4xl">
-        Каталог
+        {t("title")}
       </h1>
 
       <div className="flex flex-col gap-12">
         {groups.map((group) => (
           <div key={group.id}>
             <h2 className="mb-5 text-xl font-semibold text-[var(--color-ink)]">
-              {(group.name as Record<string, string>)[locale] ?? group.name.uk}
+              {getLocalized(group.name, locale)}
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {group.children.map((child) => (
@@ -40,7 +51,7 @@ export default async function CatalogRootPage({
                   {child.image && (
                     <Image
                       src={child.image}
-                      alt={(child.name as Record<string, string>)[locale] ?? child.name.uk}
+                      alt={getLocalized(child.name, locale)}
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -48,7 +59,7 @@ export default async function CatalogRootPage({
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0" />
                   <p className="relative text-sm font-semibold text-white drop-shadow-sm">
-                    {(child.name as Record<string, string>)[locale] ?? child.name.uk}
+                    {getLocalized(child.name, locale)}
                   </p>
                 </Link>
               ))}

@@ -1,0 +1,458 @@
+{
+  "nav": {
+    "home": "Home",
+    "bedding": "Bedding",
+    "towels": "Towels",
+    "fabrics": "Bedding fabrics",
+    "threads": "Threads & notions",
+    "customOrder": "Custom sewing",
+    "about": "About us",
+    "delivery": "Delivery & payment",
+    "contacts": "Contacts",
+    "search": "Search",
+    "cart": "Cart",
+    "favorites": "Favorites",
+    "menu": "Menu"
+  },
+  "home": {
+    "metaTitle": "Light Textiles — Bedding, towels, and fabrics from the manufacturer",
+    "metaDescription": "Ukrainian manufacturer of bedding, towels, and fabrics made from 100% cotton. Custom sewing to any size, delivery across Ukraine.",
+    "heroEyebrow": "Ukrainian manufacturing since 2013",
+    "heroTitle": "Bedding and fabrics trusted for years",
+    "heroSubtitle": "100% cotton, custom sewing to any size, and delivery across Ukraine in 1–2 days.",
+    "heroCtaPrimary": "Browse catalog",
+    "heroCtaSecondary": "Order custom sewing",
+    "advantagesTitle": "Why choose Light Textiles",
+    "popularCategoriesTitle": "Popular categories",
+    "featuredTitle": "Featured products",
+    "aboutTitle": "About the company",
+    "deliveryTitle": "Delivery & payment",
+    "reviewsTitle": "Customer reviews",
+    "faqTitle": "Frequently asked questions",
+    "contactTitle": "Get in touch",
+    "contactSubtitle": "Leave a request and our manager will contact you to clarify the details of your order or custom sewing.",
+    "heroCardEyebrow": "100% cotton",
+    "heroCardTitle": "Premium fabric quality",
+    "advantagesItems": [
+      {
+        "title": "100% cotton",
+        "text": "Tirotex poplin, Turkish stripe satin, and Pakistani satin — only trusted materials."
+      },
+      {
+        "title": "Made to size",
+        "text": "We'll make a set or a single item to any non-standard size in 1–5 days."
+      },
+      {
+        "title": "Fast delivery",
+        "text": "Nova Poshta and Ukrposhta across Ukraine. Ready-made items ship within 1–2 days."
+      },
+      {
+        "title": "Wholesale discounts",
+        "text": "Favorable terms for wholesale buyers and the hospitality business (HoReCa)."
+      }
+    ],
+    "deliveryItems": [
+      {
+        "title": "Nova Poshta / Ukrposhta",
+        "text": "We deliver across Ukraine. Ready-made items ship within 1–2 days, custom orders in 2–5 days."
+      },
+      {
+        "title": "Payment",
+        "text": "To our business bank account, or cash on delivery when you receive your order."
+      },
+      {
+        "title": "Wholesale & retail",
+        "text": "Fabrics are sold in rolls of 50–60 m or cut from 1 meter. Favorable prices for wholesalers."
+      }
+    ],
+    "aboutParagraph1": "Light Textiles is a Ukrainian manufacturer of bedding, towels, and fabrics with over 10 years of experience. Our production facility is located in Radomyshl, Zhytomyr region.",
+    "aboutParagraph2": "We work only with 100% cotton fabrics — Tirotex poplin (Moldova), stripe satin (Turkey), and satin (Pakistan) — sewing both ready-made collections and custom orders in non-standard sizes for homes and the hospitality business.",
+    "aboutStats": [
+      { "value": "10+", "label": "years in business" },
+      { "value": "100%", "label": "cotton" },
+      { "value": "1–5", "label": "days to sew" },
+      { "value": "486+", "label": "catalog items" }
+    ]
+  },
+  "product": {
+    "price": "Price",
+    "priceFrom": "from",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "onOrder": "Made to order",
+    "addToCart": "Add to cart",
+    "quickOrder": "Quick order",
+    "viewDetails": "View details",
+    "addToFavorites": "Add to favorites",
+    "chooseSize": "Choose a size",
+    "description": "Description",
+    "characteristics": "Specifications",
+    "similar": "Similar products",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "quickOrderTitle": "Quick order",
+    "quickOrderThanks": "Thank you! We'll call you shortly to confirm your order.",
+    "quickOrderName": "Your name",
+    "quickOrderPhone": "Phone",
+    "quickOrderSubmitting": "Sending...",
+    "quickOrderSubmit": "Request a call",
+    "quickOrderError": "Something went wrong. Please try again."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue shopping",
+    "total": "Total",
+    "checkout": "Checkout",
+    "quantity": "Quantity",
+    "remove": "Remove"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "You don't have any favorite products yet"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "city": "City",
+    "address": "Address",
+    "deliveryMethod": "Delivery method",
+    "novaPoshta": "Nova Poshta",
+    "ukrPoshta": "Ukrposhta",
+    "notes": "Order notes",
+    "submit": "Confirm order",
+    "success": "Thank you! Your order has been received, we'll contact you shortly.",
+    "goHome": "Back to home",
+    "emptyCart": "Your cart is empty."
+  },
+  "footer": {
+    "contacts": "Contacts",
+    "advantages": "Our advantages",
+    "info": "Useful information",
+    "articles": "Articles",
+    "rights": "All rights reserved",
+    "tagline": "Ukrainian manufacturer of bedding and fabrics made from 100% cotton. Custom sewing to any size since 2013.",
+    "advantagesItems": [
+      "Only quality goods, 100% cotton",
+      "Custom sewing to any size",
+      "Discounts for wholesale buyers",
+      "Shipping in 1–2 days"
+    ]
+  },
+  "common": {
+    "loading": "Loading...",
+    "readMore": "Read more",
+    "back": "Back",
+    "currency": "UAH",
+    "itemsCount": "{count, plural, one {# item} other {# items}}"
+  },
+  "catalog": {
+    "title": "Catalog",
+    "rootMetaDescription": "Full catalog of bedding, towels, and fabrics from Light Textiles.",
+    "categoryMetaDescription": "{name}: Light Textiles product catalog. Buy with delivery across Ukraine.",
+    "empty": "There are no products in this category yet.",
+    "sortNewest": "Newest first",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "resultsCount": "Found: {count}",
+    "filters": "Filters",
+    "priceFrom": "Price from",
+    "priceTo": "Price to",
+    "apply": "Apply"
+  },
+  "contactForm": {
+    "name": "Your name",
+    "phone": "Phone",
+    "email": "Email (optional)",
+    "message": "Your message",
+    "submitting": "Sending...",
+    "submit": "Send",
+    "success": "Thank you! We'll contact you shortly.",
+    "error": "Something went wrong. Please try again.",
+    "nameMin": "Minimum 2 characters",
+    "phoneInvalid": "Enter a valid phone number",
+    "messageMin": "Please describe your question"
+  },
+  "pages": {
+    "contactsTitle": "Get in touch",
+    "contactsSubtitle": "We're available every day and happy to answer any questions about products, delivery, or custom sewing.",
+    "aboutHeroSubtitle": "Ukrainian manufacturer of bedding, towels, and fabrics since 2013.",
+    "deliveryHeroSubtitle": "Clear delivery and payment terms across Ukraine.",
+    "returnsTitle": "Returns & exchanges",
+    "returnsItems": [
+      {
+        "title": "14 days to return",
+        "text": "Unused items can be returned or exchanged within 14 days of receiving your order."
+      },
+      {
+        "title": "Custom-made items",
+        "text": "Items sewn to individual measurements cannot be returned, except in case of a manufacturing defect."
+      },
+      {
+        "title": "How to start",
+        "text": "Message us on Viber, by email, or through the contact form below and we'll guide you through the next steps."
+      }
+    ],
+    "customOrderTitle": "Custom sewing",
+    "customOrderSubtitle": "We'll make bedding, towels, or hospitality textiles to any non-standard size — in 1 to 5 days.",
+    "customOrderSteps": [
+      {
+        "title": "Send a request",
+        "text": "Tell us the sizes, fabric, and quantity you need using the form below, or give us a call."
+      },
+      {
+        "title": "We confirm the details",
+        "text": "A manager will reach out within one business day, help pick the fabric, and quote the price."
+      },
+      {
+        "title": "We sew and ship it",
+        "text": "The finished item ships via Nova Poshta or Ukrposhta within 1–5 days."
+      }
+    ],
+    "customOrderFormTitle": "Submit a custom sewing request"
+  },
+  "admin": {
+    "title": "Admin panel",
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "orders": "Orders",
+      "reviews": "Reviews",
+      "media": "Media",
+      "homepage": "Homepage",
+      "contacts": "Contacts",
+      "seo": "SEO",
+      "users": "Administrators",
+      "roles": "Roles",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "account": "My account",
+      "signOut": "Sign out"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "add": "Add",
+      "create": "Create",
+      "confirm": "Confirm",
+      "back": "Back",
+      "actions": "Actions",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "yes": "Yes",
+      "no": "No",
+      "saving": "Saving...",
+      "saved": "Saved",
+      "noResults": "Nothing found",
+      "confirmDelete": "Are you sure you want to delete this?",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "role": "Role",
+      "language": "Language",
+      "toggleVisibility": "Toggle visibility",
+      "unauthorized": "Authentication required",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {page} of {total}"
+    },
+    "login": {
+      "title": "Admin panel",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "invalid": "Invalid email or password."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "newOrders": "New orders",
+      "totalOrders": "Total orders",
+      "revenue": "Total revenue (excluding cancelled)",
+      "recentOrders": "Recent orders",
+      "allOrders": "All orders →",
+      "orderNumber": "No.",
+      "customer": "Customer",
+      "amount": "Amount",
+      "noOrders": "No orders yet"
+    },
+    "orderStatus": {
+      "NEW": "New",
+      "CONFIRMED": "Confirmed",
+      "PACKING": "Packing",
+      "SHIPPING": "Shipped",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "orderStatusPlural": {
+      "ALL": "All",
+      "NEW": "New",
+      "CONFIRMED": "Confirmed",
+      "PACKING": "Packing",
+      "SHIPPING": "Shipped",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "orders": {
+      "orderNumber": "No.",
+      "customer": "Customer",
+      "phone": "Phone",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status",
+      "notFound": "No orders found",
+      "allOrders": "All orders",
+      "orderTitle": "Order {orderNumber}",
+      "items": "Items",
+      "total": "Total",
+      "comment": "Comment",
+      "name": "Name",
+      "email": "Email",
+      "city": "City",
+      "address": "Address",
+      "delivery": "Delivery"
+    },
+    "products": {
+      "title": "Products",
+      "addProduct": "Add product",
+      "editProduct": "Edit product",
+      "newProduct": "New product",
+      "searchPlaceholder": "Search by slug...",
+      "columnProduct": "Product",
+      "columnCategory": "Category",
+      "columnPrice": "Price",
+      "columnVisible": "Visible",
+      "notFound": "No products found",
+      "nameLabel": "Name",
+      "descriptionLabel": "Description",
+      "category": "Category",
+      "basePrice": "Base price, UAH",
+      "discountPrice": "Discounted price, UAH",
+      "availability": "Availability",
+      "availabilityInStock": "In stock",
+      "availabilityOutOfStock": "Out of stock",
+      "availabilityOnOrder": "Made to order",
+      "showOnSite": "Show on the site",
+      "featured": "Featured product",
+      "images": "Images",
+      "addImageShort": "Add",
+      "variants": "Size / price variants",
+      "addVariant": "Add variant",
+      "variantNamePlaceholder": "Name (e.g. 50x70)",
+      "variantPricePlaceholder": "Price"
+    },
+    "categories": {
+      "title": "Categories",
+      "addCategory": "Add category",
+      "editCategory": "Edit category",
+      "newCategory": "New category",
+      "columnCategory": "Category",
+      "columnParent": "Parent",
+      "columnVisible": "Visible",
+      "notFound": "No categories found",
+      "nameLabel": "Name",
+      "descriptionLabel": "Description",
+      "parentCategory": "Parent category",
+      "noParent": "— No parent —",
+      "sortOrder": "Sort order",
+      "showOnSite": "Show on the site",
+      "image": "Image",
+      "noSubcategories": "No subcategories",
+      "upload": "Upload"
+    },
+    "media": {
+      "title": "Media library",
+      "uploadFiles": "Upload files",
+      "uploading": "Uploading...",
+      "empty": "No files yet. Uploaded product, category, and banner images also appear here.",
+      "copied": "Copied",
+      "urlLabel": "URL"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "addReview": "Add review",
+      "newReview": "New review",
+      "authorPlaceholder": "Author name",
+      "textPlaceholder": "Review text",
+      "starsOption": "{count} stars",
+      "empty": "No reviews yet. They'll appear here once customers leave a review on a product page."
+    },
+    "contacts": {
+      "title": "Contact & business details",
+      "phone": "Phone",
+      "email": "Email",
+      "workingHours": "Working hours",
+      "address": "Address",
+      "viberLabel": "Viber",
+      "facebookLabel": "Facebook URL",
+      "instagramLabel": "Instagram URL"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "General meta tags for the homepage. The sitemap (/sitemap.xml) and robots.txt are generated automatically. Meta tags for individual products and categories are edited on their own cards.",
+      "metaTitle": "Meta title",
+      "metaDescription": "Meta description"
+    },
+    "homepage": {
+      "title": "Homepage",
+      "description": "Banners and FAQ shown on the site's homepage.",
+      "banners": "Banners",
+      "addBanner": "Add banner",
+      "newBanner": "New banner",
+      "titleLabel": "Title",
+      "subtitleLabel": "Subtitle",
+      "linkPlaceholder": "Link (e.g. /catalog/double)",
+      "uploadImage": "Upload image",
+      "noBanners": "No banners yet",
+      "faq": "FAQ",
+      "addQuestion": "Add question",
+      "newQuestion": "New question",
+      "questionLabel": "Question",
+      "answerLabel": "Answer",
+      "noFaq": "No questions yet"
+    },
+    "users": {
+      "title": "Administrators",
+      "addAdmin": "Add administrator",
+      "newAdmin": "New administrator",
+      "editAdmin": "Edit administrator",
+      "columnName": "Name",
+      "columnEmail": "Email",
+      "columnRole": "Role",
+      "columnStatus": "Status",
+      "roleOwner": "Super admin",
+      "roleStaff": "Administrator",
+      "namePlaceholder": "Name",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "newPasswordPlaceholder": "New password (leave blank to keep unchanged)",
+      "notFound": "No administrators found",
+      "you": "(you)",
+      "cannotDeleteSelf": "You cannot delete your own account",
+      "cannotDeactivateSelf": "You cannot deactivate your own account",
+      "transferOwnership": "Transfer ownership",
+      "transferConfirmTitle": "Transfer ownership?",
+      "transferConfirmText": "You will transfer Super admin rights to this user and become a regular administrator yourself.",
+      "transferButton": "Transfer",
+      "onlyOwnerError": "Only the Super admin can manage administrators"
+    },
+    "account": {
+      "title": "My account",
+      "description": "Manage your name, email and password.",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "passwordLabel": "New password",
+      "passwordHint": "Leave blank to keep your current password",
+      "roleLabel": "Role",
+      "saved": "Changes saved"
+    }
+  }
+}

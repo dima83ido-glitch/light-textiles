@@ -36,7 +36,7 @@ export default function CartPage() {
           <p className="text-[var(--color-ink-muted)]">{t("empty")}</p>
           <Link
             href="/catalog"
-            className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white"
+            className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]"
           >
             {t("continueShopping")}
           </Link>
@@ -114,7 +114,7 @@ export default function CartPage() {
             </div>
             <Link
               href="/checkout"
-              className="flex w-full items-center justify-center rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white shadow-[var(--shadow-lifted)] transition-transform hover:-translate-y-0.5"
+              className="flex w-full items-center justify-center rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] transition-transform hover:-translate-y-0.5"
             >
               {t("checkout")}
             </Link>

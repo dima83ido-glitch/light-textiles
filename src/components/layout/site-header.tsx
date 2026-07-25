@@ -1,6 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { getCategoryTree } from "@/lib/categories";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getLocalized } from "@/lib/get-localized";
 import { HeaderShell } from "./header-shell";
 
 export const revalidate = 300;
@@ -18,10 +19,7 @@ export async function SiteHeader() {
     { href: "/contacts", label: t("contacts") },
   ];
 
-  const workingHours =
-    typeof settings.workingHours === "object"
-      ? (settings.workingHours as Record<string, string>)[locale] ?? settings.workingHours.uk
-      : settings.workingHours;
+  const workingHours = getLocalized(settings.workingHours, locale);
 
   return (
     <HeaderShell

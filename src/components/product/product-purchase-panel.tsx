@@ -47,7 +47,7 @@ export function ProductPurchasePanel({
         <span
           className={cn(
             "text-sm font-medium",
-            availability === "IN_STOCK" ? "text-emerald-600" : "text-[var(--color-ink-soft)]",
+            availability === "IN_STOCK" ? "text-emerald-600 dark:text-emerald-400" : "text-[var(--color-ink-soft)]",
           )}
         >
           {availabilityLabel}
@@ -83,7 +83,7 @@ export function ProductPurchasePanel({
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             className="flex h-11 w-11 items-center justify-center text-[var(--color-ink-muted)]"
-            aria-label="Minus"
+            aria-label={t("decreaseQuantity")}
           >
             <Minus className="h-4 w-4" />
           </button>
@@ -92,7 +92,7 @@ export function ProductPurchasePanel({
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
             className="flex h-11 w-11 items-center justify-center text-[var(--color-ink-muted)]"
-            aria-label="Plus"
+            aria-label={t("increaseQuantity")}
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -128,7 +128,7 @@ export function ProductPurchasePanel({
               quantity,
             )
           }
-          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white shadow-[var(--shadow-lifted)] transition-transform hover:-translate-y-0.5"
+          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] transition-transform hover:-translate-y-0.5"
         >
           <ShoppingBag className="h-4 w-4" />
           {t("addToCart")}
@@ -171,6 +171,7 @@ function QuickOrderModal({
   unitPrice: number;
   onClose: () => void;
 }) {
+  const t = useTranslations("product");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -207,42 +208,38 @@ function QuickOrderModal({
         className="w-full max-w-sm rounded-[var(--radius-card)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-lifted)]"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-[var(--color-ink)]">Швидке замовлення</h3>
+          <h3 className="text-lg font-semibold text-[var(--color-ink)]">{t("quickOrderTitle")}</h3>
           <button type="button" onClick={onClose} aria-label="Close" className="text-[var(--color-ink-muted)]">
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {status === "success" ? (
-          <p className="text-sm font-medium text-emerald-600">
-            Дякуємо! Ми зателефонуємо вам найближчим часом для підтвердження замовлення.
-          </p>
+          <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{t("quickOrderThanks")}</p>
         ) : (
           <form onSubmit={submit} className="flex flex-col gap-3">
             <input
               required
-              placeholder="Ваше ім'я"
+              placeholder={t("quickOrderName")}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="rounded-2xl border border-[var(--color-border)] px-4 py-3 text-sm outline-none focus:border-[var(--color-accent)]"
+              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-accent)]"
             />
             <input
               required
-              placeholder="Телефон"
+              placeholder={t("quickOrderPhone")}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="rounded-2xl border border-[var(--color-border)] px-4 py-3 text-sm outline-none focus:border-[var(--color-accent)]"
+              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-accent)]"
             />
             <button
               type="submit"
               disabled={status === "loading"}
-              className="rounded-full bg-[var(--color-ink)] py-3 text-sm font-semibold text-white disabled:opacity-60"
+              className="rounded-full bg-[var(--color-ink)] py-3 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
             >
-              {status === "loading" ? "Надсилаємо..." : "Замовити дзвінок"}
+              {status === "loading" ? t("quickOrderSubmitting") : t("quickOrderSubmit")}
             </button>
-            {status === "error" && (
-              <p className="text-xs text-red-500">Щось пішло не так. Спробуйте ще раз.</p>
-            )}
+            {status === "error" && <p className="text-xs text-red-500">{t("quickOrderError")}</p>}
           </form>
         )}
       </motion.div>

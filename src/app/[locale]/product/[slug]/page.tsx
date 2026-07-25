@@ -5,6 +5,8 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { toProductCardData } from "@/lib/products";
+import { getLocalized } from "@/lib/get-localized";
+import { getAlternates } from "@/lib/seo";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 import { ProductCard } from "@/components/product/product-card";
@@ -28,14 +30,15 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const product = await getProduct(slug);
   if (!product) return {};
-  const name = (product.name as Record<string, string>)[locale] ?? (product.name as Record<string, string>).uk;
+  const name = getLocalized(product.name as Record<string, string>, locale);
   const description = product.description
-    ? ((product.description as Record<string, string>)[locale] ?? (product.description as Record<string, string>).uk)
+    ? getLocalized(product.description as Record<string, string>, locale)
     : undefined;
 
   return {
     title: `${name} — Light Textiles`,
     description: description?.slice(0, 160),
+    alternates: getAlternates(`/product/${slug}`, locale),
     openGraph: {
       title: name,
       description: description?.slice(0, 160),
@@ -51,17 +54,16 @@ export default async function ProductPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("product");
+  const [t, tNav] = await Promise.all([getTranslations("product"), getTranslations("nav")]);
 
   const product = await getProduct(slug);
   if (!product) notFound();
 
-  const name = (product.name as Record<string, string>)[locale] ?? (product.name as Record<string, string>).uk;
+  const name = getLocalized(product.name as Record<string, string>, locale);
   const description = product.description
-    ? ((product.description as Record<string, string>)[locale] ?? (product.description as Record<string, string>).uk)
+    ? getLocalized(product.description as Record<string, string>, locale)
     : null;
-  const categoryName =
-    (product.category.name as Record<string, string>)[locale] ?? (product.category.name as Record<string, string>).uk;
+  const categoryName = getLocalized(product.category.name as Record<string, string>, locale);
 
   const similar = await prisma.product.findMany({
     where: { categoryId: product.categoryId, isVisible: true, id: { not: product.id } },
@@ -93,7 +95,7 @@ export default async function ProductPage({
 
       <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-ink-soft)]">
         <Link href="/" className="hover:text-[var(--color-accent-strong)]">
-          Головна
+          {tNav("home")}
         </Link>
         <span>/</span>
         <Link href={`/catalog/${product.category.slug}`} className="hover:text-[var(--color-accent-strong)]">

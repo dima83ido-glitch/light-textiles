@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Brand palette */
   --color-canvas: #ffffff;
@@ -45,28 +47,35 @@
   --radius-control: var(--radius-control);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-canvas: #0b0f14;
-    --color-surface: #121822;
-    --color-surface-subtle: #161d29;
-    --color-surface-tint: #10263b;
-    --color-ink: #eef2f7;
-    --color-ink-muted: #a3adba;
-    --color-ink-soft: #6b7684;
-    --color-border: #232c39;
-    --color-accent: #5fb2ff;
-    --color-accent-strong: #4fa9ff;
-    --color-accent-ink: #dceeff;
-  }
+.dark {
+  --color-canvas: #0b0f14;
+  --color-surface: #121822;
+  --color-surface-subtle: #161d29;
+  --color-surface-tint: #10263b;
+  --color-ink: #eef2f7;
+  --color-ink-muted: #a3adba;
+  --color-ink-soft: #6b7684;
+  --color-border: #232c39;
+  --color-accent: #5fb2ff;
+  --color-accent-strong: #4fa9ff;
+  --color-accent-ink: #dceeff;
+
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.24), 0 8px 24px rgba(0, 0, 0, 0.28);
+  --shadow-lifted: 0 12px 32px rgba(0, 0, 0, 0.36), 0 4px 12px rgba(0, 0, 0, 0.24);
+  --shadow-glow: 0 0 0 1px rgba(95, 178, 255, 0.16), 0 12px 32px rgba(95, 178, 255, 0.22);
 }
 
 * {
   scroll-behavior: smooth;
 }
 
+html {
+  transition: background-color 0.25s ease;
+}
+
 body {
   font-family: var(--font-sans);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 ::selection {

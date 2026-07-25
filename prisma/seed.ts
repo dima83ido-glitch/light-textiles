@@ -3,7 +3,7 @@ import path from "node:path";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { CATEGORY_GROUPS } from "./seed-data/category-map";
-import { slugify } from "./seed-data/slugify";
+import { slugify } from "../src/lib/slugify";
 
 const prisma = new PrismaClient();
 
@@ -25,6 +25,7 @@ type RawProduct = {
 };
 
 type RawProductRu = { id: string; name: string | null; description: string | null };
+type RawProductEn = { id: string; name: string | null; description: string | null };
 type RawCategory = { slug: string; clothParam: string | null; url: string; title: string | null; h1: string | null; productIds: string[] };
 
 // Niche-first priority so products tagged into a specific category page
@@ -39,6 +40,14 @@ const CATEGORY_PRIORITY = [
 
 function readJson<T>(filename: string): T {
   return JSON.parse(fs.readFileSync(path.join(RAW_DIR, filename), "utf8"));
+}
+
+function readJsonOptional<T>(filename: string, fallback: T): T {
+  try {
+    return readJson<T>(filename);
+  } catch {
+    return fallback;
+  }
 }
 
 const imageCache = new Map<string, string>();
@@ -79,9 +88,11 @@ async function main() {
   console.log("Loading scraped data...");
   const products = readJson<RawProduct[]>("products.json");
   const productsRu = readJson<RawProductRu[]>("products_ru.json");
+  const productsEn = readJsonOptional<RawProductEn[]>("products_en.json", []);
   const categoriesRaw = readJson<RawCategory[]>("categories.json");
 
   const ruById = new Map(productsRu.map((p) => [p.id, p]));
+  const enById = new Map(productsEn.map((p) => [p.id, p]));
 
   // --- Admin user ---
   console.log("Creating admin user...");
@@ -175,8 +186,10 @@ async function main() {
     const nameUk = product.name?.trim() || `Товар ${product.id}`;
     const ru = ruById.get(product.id);
     const nameRu = ru?.name?.trim() || nameUk;
+    const en = enById.get(product.id);
+    const nameEn = en?.name?.trim() || nameUk;
 
-    let baseSlug = slugify(nameUk) || `product-${product.id}`;
+    const baseSlug = slugify(nameUk) || `product-${product.id}`;
     let slug = `${baseSlug}-${product.id}`;
     let n = 1;
     while (usedSlugs.has(slug)) {
@@ -194,10 +207,14 @@ async function main() {
     const created_ = await prisma.product.create({
       data: {
         slug,
-        name: { uk: nameUk, ru: nameRu },
+        name: { uk: nameUk, en: nameEn, ru: nameRu },
         description:
-          product.description || ru?.description
-            ? { uk: product.description ?? "", ru: ru?.description ?? product.description ?? "" }
+          product.description || ru?.description || en?.description
+            ? {
+                uk: product.description ?? "",
+                en: en?.description ?? product.description ?? "",
+                ru: ru?.description ?? product.description ?? "",
+              }
             : undefined,
         basePrice,
         currency: product.currency || "UAH",
@@ -262,9 +279,10 @@ async function main() {
       phone: "0977050575",
       viber: "+380977050575",
       email: "light-textiles@ukr.net",
-      workingHours: { uk: "Пн–Пт 10:00–18:00", ru: "Пн–Пт 10:00–18:00" },
+      workingHours: { uk: "Пн–Пт 10:00–18:00", en: "Mon–Fri 10:00 AM–6:00 PM", ru: "Пн–Пт 10:00–18:00" },
       address: {
         uk: "Виробництво: м. Радомишль, Житомирська область",
+        en: "Production: Radomyshl, Zhytomyr region, Ukraine",
         ru: "Производство: г. Радомышль, Житомирская область",
       },
       facebookUrl: "https://www.facebook.com/lighttextiles.com.ua/",
@@ -276,37 +294,62 @@ async function main() {
   console.log("Creating FAQ items...");
   const faqItems = [
     {
-      question: { uk: "Скільки часу займає індивідуальне пошиття?", ru: "Сколько времени занимает индивидуальный пошив?" },
+      question: {
+        uk: "Скільки часу займає індивідуальне пошиття?",
+        en: "How long does custom sewing take?",
+        ru: "Сколько времени занимает индивидуальный пошив?",
+      },
       answer: {
         uk: "Виготовлення комплекту чи окремого виробу за вашими розмірами займає від 1 до 5 робочих днів залежно від складності замовлення.",
+        en: "Making a set or an individual item to your measurements takes 1 to 5 business days, depending on the complexity of the order.",
         ru: "Изготовление комплекта или отдельного изделия по вашим размерам занимает от 1 до 5 рабочих дней в зависимости от сложности заказа.",
       },
     },
     {
-      question: { uk: "Як здійснюється доставка?", ru: "Как осуществляется доставка?" },
+      question: {
+        uk: "Як здійснюється доставка?",
+        en: "How is delivery handled?",
+        ru: "Как осуществляется доставка?",
+      },
       answer: {
         uk: "Доставляємо по всій Україні Новою Поштою та Укрпоштою. Готові товари відправляємо протягом 1–2 днів після оформлення замовлення.",
+        en: "We deliver across Ukraine via Nova Poshta and Ukrposhta. Ready-made items are shipped within 1–2 days of placing the order.",
         ru: "Доставляем по всей Украине Новой Почтой и Укрпочтой. Готовые товары отправляем в течение 1–2 дней после оформления заказа.",
       },
     },
     {
-      question: { uk: "Які способи оплати ви приймаєте?", ru: "Какие способы оплаты вы принимаете?" },
+      question: {
+        uk: "Які способи оплати ви приймаєте?",
+        en: "What payment methods do you accept?",
+        ru: "Какие способы оплаты вы принимаете?",
+      },
       answer: {
         uk: "Оплатити замовлення можна на розрахунковий рахунок ФОП або накладеним платежем (післяплата) під час отримання на пошті.",
+        en: "You can pay by bank transfer to our business account or by cash on delivery when picking up the order at the post office.",
         ru: "Оплатить заказ можно на расчетный счет ФОП или наложенным платежом (постоплата) при получении на почте.",
       },
     },
     {
-      question: { uk: "З якої тканини виготовляється постільна білизна?", ru: "Из какой ткани изготавливается постельное белье?" },
+      question: {
+        uk: "З якої тканини виготовляється постільна білизна?",
+        en: "What fabric is the bedding made from?",
+        ru: "Из какой ткани изготавливается постельное белье?",
+      },
       answer: {
         uk: "Ми працюємо зі 100% бавовняними тканинами: бязь Тиротекс (Молдова), страйп-сатин (Туреччина) та сатин (Пакистан).",
+        en: "We work only with 100% cotton fabrics: Tirotex poplin (Moldova), stripe satin (Turkey), and satin (Pakistan).",
         ru: "Мы работаем со 100% хлопковыми тканями: бязь Тиротекс (Молдова), страйп-сатин (Турция) и сатин (Пакистан).",
       },
     },
     {
-      question: { uk: "Чи можна замовити нестандартний розмір?", ru: "Можно ли заказать нестандартный размер?" },
+      question: {
+        uk: "Чи можна замовити нестандартний розмір?",
+        en: "Can I order a non-standard size?",
+        ru: "Можно ли заказать нестандартный размер?",
+      },
       answer: {
         uk: "Так, ми шиємо комплекти, простирадла на резинці та наволочки за будь-якими нестандартними розмірами, включно з круглими та дитячими ліжками.",
+        en: "Yes, we sew bedding sets, fitted sheets, and pillowcases to any non-standard size, including round and children's beds.",
         ru: "Да, мы шьем комплекты, простыни на резинке и наволочки по любым нестандартным размерам, включая круглые и детские кровати.",
       },
     },

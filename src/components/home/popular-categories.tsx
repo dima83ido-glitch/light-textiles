@@ -2,10 +2,11 @@ import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
+import { getLocalized } from "@/lib/get-localized";
 import { CategoryCardMotion } from "./category-card-motion";
 
 export async function PopularCategories() {
-  const [categories, t, locale] = await Promise.all([
+  const [categories, t, tCommon, locale] = await Promise.all([
     prisma.category.findMany({
       where: { isVisible: true, parentId: { not: null } },
       orderBy: { sortOrder: "asc" },
@@ -19,6 +20,7 @@ export async function PopularCategories() {
       },
     }),
     getTranslations("home"),
+    getTranslations("common"),
     getLocale(),
   ]);
 
@@ -32,7 +34,7 @@ export async function PopularCategories() {
 
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
         {categories.map((category, i) => {
-          const name = (category.name as Record<string, string>)[locale] ?? (category.name as Record<string, string>).uk;
+          const name = getLocalized(category.name as Record<string, string>, locale);
           return (
             <CategoryCardMotion key={category.id} index={i}>
               <Link
@@ -51,7 +53,9 @@ export async function PopularCategories() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0" />
                 <div className="relative">
                   <p className="text-sm font-semibold text-white drop-shadow-sm">{name}</p>
-                  <p className="text-xs text-white/80">{category._count.products} товарів</p>
+                  <p className="text-xs text-white/80">
+                    {tCommon("itemsCount", { count: category._count.products })}
+                  </p>
                 </div>
               </Link>
             </CategoryCardMotion>

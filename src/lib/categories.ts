@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 export type NavCategory = {
   id: string;
   slug: string;
-  name: { uk: string; ru: string };
+  name: Record<string, string>;
   image: string | null;
   children: NavCategory[];
 };
@@ -18,7 +18,7 @@ export async function getCategoryTree(): Promise<NavCategory[]> {
   const byId = new Map<string, NavCategory>(
     categories.map((c) => [
       c.id,
-      { id: c.id, slug: c.slug, name: c.name as { uk: string; ru: string }, image: c.image, children: [] },
+      { id: c.id, slug: c.slug, name: c.name as Record<string, string>, image: c.image, children: [] },
     ]),
   );
 

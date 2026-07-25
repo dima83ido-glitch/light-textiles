@@ -11,9 +11,12 @@
     "contacts": "Контакти",
     "search": "Пошук",
     "cart": "Кошик",
-    "favorites": "Обране"
+    "favorites": "Обране",
+    "menu": "Меню"
   },
   "home": {
+    "metaTitle": "Light Textiles — Постільна білизна, рушники та тканини від виробника",
+    "metaDescription": "Українське виробництво постільної білизни, рушників та тканин зі 100% бавовни. Власне пошиття за будь-якими розмірами, доставка по всій Україні.",
     "heroEyebrow": "Українське виробництво з 2013 року",
     "heroTitle": "Постільна білизна та тканини, яким довіряють роками",
     "heroSubtitle": "100% бавовна, власне пошиття за будь-якими розмірами та доставка по всій Україні за 1–2 дні.",
@@ -27,6 +30,7 @@
     "reviewsTitle": "Відгуки клієнтів",
     "faqTitle": "Часті запитання",
     "contactTitle": "Зв'яжіться з нами",
+    "contactSubtitle": "Залиште заявку, і наш менеджер зв'яжеться з вами, щоб уточнити деталі замовлення чи індивідуального пошиття.",
     "heroCardEyebrow": "100% бавовна",
     "heroCardTitle": "Преміум якість тканин",
     "advantagesItems": [
@@ -83,7 +87,16 @@
     "chooseSize": "Оберіть розмір",
     "description": "Опис",
     "characteristics": "Характеристики",
-    "similar": "Схожі товари"
+    "similar": "Схожі товари",
+    "decreaseQuantity": "Зменшити кількість",
+    "increaseQuantity": "Збільшити кількість",
+    "quickOrderTitle": "Швидке замовлення",
+    "quickOrderThanks": "Дякуємо! Ми зателефонуємо вам найближчим часом для підтвердження замовлення.",
+    "quickOrderName": "Ваше ім'я",
+    "quickOrderPhone": "Телефон",
+    "quickOrderSubmitting": "Надсилаємо...",
+    "quickOrderSubmit": "Замовити дзвінок",
+    "quickOrderError": "Щось пішло не так. Спробуйте ще раз."
   },
   "cart": {
     "title": "Кошик",
@@ -110,19 +123,336 @@
     "ukrPoshta": "Укрпошта",
     "notes": "Коментар до замовлення",
     "submit": "Підтвердити замовлення",
-    "success": "Дякуємо! Ваше замовлення прийнято, ми зв'яжемось з вами найближчим часом."
+    "success": "Дякуємо! Ваше замовлення прийнято, ми зв'яжемось з вами найближчим часом.",
+    "goHome": "На головну",
+    "emptyCart": "Ваш кошик порожній."
   },
   "footer": {
     "contacts": "Контакти",
     "advantages": "Наші переваги",
     "info": "Корисна інформація",
     "articles": "Статті",
-    "rights": "Усі права захищено"
+    "rights": "Усі права захищено",
+    "tagline": "Українське виробництво постільної білизни та тканин зі 100% бавовни. Власне пошиття за будь-якими розмірами з 2013 року.",
+    "advantagesItems": [
+      "Лише якісний товар, 100% бавовна",
+      "Власне пошиття за будь-якими розмірами",
+      "Знижки для гуртових покупців",
+      "Відправка 1–2 дні"
+    ]
   },
   "common": {
     "loading": "Завантаження...",
     "readMore": "Детальніше",
     "back": "Назад",
-    "currency": "грн"
+    "currency": "грн",
+    "itemsCount": "{count, plural, one {# товар} few {# товари} many {# товарів} other {# товару}}"
+  },
+  "catalog": {
+    "title": "Каталог",
+    "rootMetaDescription": "Повний каталог постільної білизни, рушників та тканин Light Textiles.",
+    "categoryMetaDescription": "{name}: каталог товарів Light Textiles. Купити з доставкою по всій Україні.",
+    "empty": "У цій категорії поки немає товарів.",
+    "sortNewest": "Спочатку нові",
+    "sortPriceAsc": "Дешевші спочатку",
+    "sortPriceDesc": "Дорожчі спочатку",
+    "resultsCount": "Знайдено: {count}",
+    "filters": "Фільтри",
+    "priceFrom": "Ціна від",
+    "priceTo": "Ціна до",
+    "apply": "Застосувати"
+  },
+  "contactForm": {
+    "name": "Ваше ім'я",
+    "phone": "Телефон",
+    "email": "Email (необов'язково)",
+    "message": "Ваше повідомлення",
+    "submitting": "Надсилаємо...",
+    "submit": "Надіслати",
+    "success": "Дякуємо! Ми зв'яжемось з вами найближчим часом.",
+    "error": "Щось пішло не так. Спробуйте ще раз.",
+    "nameMin": "Мінімум 2 символи",
+    "phoneInvalid": "Введіть коректний номер телефону",
+    "messageMin": "Опишіть ваше питання"
+  },
+  "pages": {
+    "contactsTitle": "Зв'яжіться з нами",
+    "contactsSubtitle": "Ми на зв'язку щодня і відповімо на будь-які питання про товари, доставку чи індивідуальне пошиття.",
+    "aboutHeroSubtitle": "Українське виробництво постільної білизни, рушників та тканин з 2013 року.",
+    "deliveryHeroSubtitle": "Прозорі умови доставки та оплати по всій Україні.",
+    "returnsTitle": "Повернення і обмін",
+    "returnsItems": [
+      {
+        "title": "14 днів на повернення",
+        "text": "Товар без ознак використання можна повернути або обміняти протягом 14 днів з моменту отримання."
+      },
+      {
+        "title": "Індивідуальний пошив",
+        "text": "Вироби, пошиті за індивідуальними розмірами, поверненню не підлягають, окрім випадків браку."
+      },
+      {
+        "title": "Як оформити",
+        "text": "Напишіть нам у Viber, на пошту чи через форму зворотного зв'язку — ми підкажемо подальші кроки."
+      }
+    ],
+    "customOrderTitle": "Пошиття на замовлення",
+    "customOrderSubtitle": "Виготовимо постільну білизну, рушники чи текстиль для готелю під будь-які нестандартні розміри — від 1 до 5 днів.",
+    "customOrderSteps": [
+      {
+        "title": "Залиште заявку",
+        "text": "Вкажіть бажані розміри, тканину та кількість виробів у формі нижче або зателефонуйте нам."
+      },
+      {
+        "title": "Узгодимо деталі",
+        "text": "Менеджер зв'яжеться протягом робочого дня, підбере тканину і розрахує вартість."
+      },
+      {
+        "title": "Пошиємо і відправимо",
+        "text": "Готовий виріб відправимо Новою Поштою чи Укрпоштою протягом 1–5 днів."
+      }
+    ],
+    "customOrderFormTitle": "Залишити заявку на пошиття"
+  },
+  "admin": {
+    "title": "Адмін-панель",
+    "nav": {
+      "dashboard": "Дашборд",
+      "products": "Товари",
+      "categories": "Категорії",
+      "orders": "Замовлення",
+      "reviews": "Відгуки",
+      "media": "Медіа",
+      "homepage": "Головна сторінка",
+      "contacts": "Контакти",
+      "seo": "SEO",
+      "users": "Адміністратори",
+      "roles": "Ролі",
+      "analytics": "Аналітика",
+      "settings": "Налаштування",
+      "account": "Мій акаунт",
+      "signOut": "Вийти"
+    },
+    "common": {
+      "save": "Зберегти",
+      "cancel": "Скасувати",
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "add": "Додати",
+      "create": "Створити",
+      "confirm": "Підтвердити",
+      "back": "Назад",
+      "actions": "Дії",
+      "status": "Статус",
+      "active": "Активний",
+      "inactive": "Неактивний",
+      "yes": "Так",
+      "no": "Ні",
+      "saving": "Збереження...",
+      "saved": "Збережено",
+      "noResults": "Нічого не знайдено",
+      "confirmDelete": "Ви впевнені, що хочете видалити?",
+      "name": "Назва",
+      "email": "Email",
+      "password": "Пароль",
+      "role": "Роль",
+      "language": "Мова",
+      "toggleVisibility": "Показати/приховати",
+      "unauthorized": "Потрібна авторизація",
+      "previous": "Назад",
+      "next": "Далі",
+      "pageInfo": "Сторінка {page} з {total}"
+    },
+    "login": {
+      "title": "Адмін-панель",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль",
+      "submit": "Увійти",
+      "submitting": "Вхід...",
+      "invalid": "Невірний email або пароль."
+    },
+    "dashboard": {
+      "title": "Дашборд",
+      "products": "Товари",
+      "categories": "Категорії",
+      "newOrders": "Нові замовлення",
+      "totalOrders": "Усього замовлень",
+      "revenue": "Загальний дохід (без скасованих)",
+      "recentOrders": "Останні замовлення",
+      "allOrders": "Усі замовлення →",
+      "orderNumber": "№",
+      "customer": "Клієнт",
+      "amount": "Сума",
+      "noOrders": "Замовлень поки немає"
+    },
+    "orderStatus": {
+      "NEW": "Нове",
+      "CONFIRMED": "Підтверджено",
+      "PACKING": "Пакується",
+      "SHIPPING": "Відправлено",
+      "COMPLETED": "Завершено",
+      "CANCELLED": "Скасовано"
+    },
+    "orderStatusPlural": {
+      "ALL": "Усі",
+      "NEW": "Нові",
+      "CONFIRMED": "Підтверджені",
+      "PACKING": "Пакуються",
+      "SHIPPING": "Відправлені",
+      "COMPLETED": "Завершені",
+      "CANCELLED": "Скасовані"
+    },
+    "orders": {
+      "orderNumber": "№",
+      "customer": "Клієнт",
+      "phone": "Телефон",
+      "amount": "Сума",
+      "date": "Дата",
+      "status": "Статус",
+      "notFound": "Замовлень не знайдено",
+      "allOrders": "Усі замовлення",
+      "orderTitle": "Замовлення {orderNumber}",
+      "items": "Товари",
+      "total": "Разом",
+      "comment": "Коментар",
+      "name": "Ім'я",
+      "email": "Email",
+      "city": "Місто",
+      "address": "Адреса",
+      "delivery": "Доставка"
+    },
+    "products": {
+      "title": "Товари",
+      "addProduct": "Додати товар",
+      "editProduct": "Редагувати товар",
+      "newProduct": "Новий товар",
+      "searchPlaceholder": "Пошук за slug...",
+      "columnProduct": "Товар",
+      "columnCategory": "Категорія",
+      "columnPrice": "Ціна",
+      "columnVisible": "Показ",
+      "notFound": "Товарів не знайдено",
+      "nameLabel": "Назва",
+      "descriptionLabel": "Опис",
+      "category": "Категорія",
+      "basePrice": "Базова ціна, ₴",
+      "discountPrice": "Ціна зі знижкою, ₴",
+      "availability": "Наявність",
+      "availabilityInStock": "В наявності",
+      "availabilityOutOfStock": "Немає в наявності",
+      "availabilityOnOrder": "Під замовлення",
+      "showOnSite": "Показувати на сайті",
+      "featured": "Рекомендований товар",
+      "images": "Зображення",
+      "addImageShort": "Додати",
+      "variants": "Варіанти розмірів / цін",
+      "addVariant": "Додати варіант",
+      "variantNamePlaceholder": "Назва (напр. 50x70)",
+      "variantPricePlaceholder": "Ціна"
+    },
+    "categories": {
+      "title": "Категорії",
+      "addCategory": "Додати категорію",
+      "editCategory": "Редагувати категорію",
+      "newCategory": "Нова категорія",
+      "columnCategory": "Категорія",
+      "columnParent": "Батьківська",
+      "columnVisible": "Показ",
+      "notFound": "Категорій не знайдено",
+      "nameLabel": "Назва",
+      "descriptionLabel": "Опис",
+      "parentCategory": "Батьківська категорія",
+      "noParent": "— Без батьківської —",
+      "sortOrder": "Порядок сортування",
+      "showOnSite": "Показувати на сайті",
+      "image": "Зображення",
+      "noSubcategories": "Немає підкатегорій",
+      "upload": "Завантажити"
+    },
+    "media": {
+      "title": "Медіатека",
+      "uploadFiles": "Завантажити файли",
+      "uploading": "Завантаження...",
+      "empty": "Файлів ще немає. Завантажені зображення товарів, категорій і банерів також з'являються тут.",
+      "copied": "Скопійовано",
+      "urlLabel": "URL"
+    },
+    "reviews": {
+      "title": "Відгуки",
+      "addReview": "Додати відгук",
+      "newReview": "Новий відгук",
+      "authorPlaceholder": "Ім'я автора",
+      "textPlaceholder": "Текст відгуку",
+      "starsOption": "{count} зірок",
+      "empty": "Відгуків поки немає. Вони з'являться тут, коли клієнти залишать відгук на сторінці товару."
+    },
+    "contacts": {
+      "title": "Контакти та реквізити",
+      "phone": "Телефон",
+      "email": "Email",
+      "workingHours": "Графік роботи",
+      "address": "Адреса",
+      "viberLabel": "Viber",
+      "facebookLabel": "Facebook URL",
+      "instagramLabel": "Instagram URL"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Загальні meta-теги для головної сторінки. Sitemap (/sitemap.xml) та robots.txt генеруються автоматично. Meta-теги окремих товарів і категорій редагуються в їхніх картках.",
+      "metaTitle": "Meta title",
+      "metaDescription": "Meta description"
+    },
+    "homepage": {
+      "title": "Головна сторінка",
+      "description": "Банери та часті запитання, що відображаються на головній сторінці сайту.",
+      "banners": "Банери",
+      "addBanner": "Додати банер",
+      "newBanner": "Новий банер",
+      "titleLabel": "Заголовок",
+      "subtitleLabel": "Підзаголовок",
+      "linkPlaceholder": "Посилання (напр. /catalog/double)",
+      "uploadImage": "Завантажити зображення",
+      "noBanners": "Банерів ще немає",
+      "faq": "Часті запитання (FAQ)",
+      "addQuestion": "Додати запитання",
+      "newQuestion": "Нове запитання",
+      "questionLabel": "Питання",
+      "answerLabel": "Відповідь",
+      "noFaq": "Питань ще немає"
+    },
+    "users": {
+      "title": "Адміністратори",
+      "addAdmin": "Додати адміністратора",
+      "newAdmin": "Новий адміністратор",
+      "editAdmin": "Редагувати адміністратора",
+      "columnName": "Ім'я",
+      "columnEmail": "Email",
+      "columnRole": "Роль",
+      "columnStatus": "Статус",
+      "roleOwner": "Супер адмін",
+      "roleStaff": "Адміністратор",
+      "namePlaceholder": "Ім'я",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль",
+      "newPasswordPlaceholder": "Новий пароль (залиште порожнім, щоб не змінювати)",
+      "notFound": "Адміністраторів не знайдено",
+      "you": "(ви)",
+      "cannotDeleteSelf": "Ви не можете видалити власний акаунт",
+      "cannotDeactivateSelf": "Ви не можете деактивувати власний акаунт",
+      "transferOwnership": "Передати права власника",
+      "transferConfirmTitle": "Передати права власника?",
+      "transferConfirmText": "Ви передасте права Супер адміна цьому користувачу, а самі станете звичайним адміністратором.",
+      "transferButton": "Передати",
+      "onlyOwnerError": "Тільки Супер адмін може керувати адміністраторами"
+    },
+    "account": {
+      "title": "Мій акаунт",
+      "description": "Керуйте своїм ім'ям, email та паролем.",
+      "nameLabel": "Ім'я",
+      "emailLabel": "Email",
+      "passwordLabel": "Новий пароль",
+      "passwordHint": "Залиште порожнім, щоб не змінювати пароль",
+      "roleLabel": "Роль",
+      "saved": "Зміни збережено"
+    }
   }
 }

@@ -11,9 +11,12 @@
     "contacts": "Контакты",
     "search": "Поиск",
     "cart": "Корзина",
-    "favorites": "Избранное"
+    "favorites": "Избранное",
+    "menu": "Меню"
   },
   "home": {
+    "metaTitle": "Light Textiles — Постельное белье, полотенца и ткани от производителя",
+    "metaDescription": "Украинское производство постельного белья, полотенец и тканей из 100% хлопка. Собственный пошив по любым размерам, доставка по всей Украине.",
     "heroEyebrow": "Украинское производство с 2013 года",
     "heroTitle": "Постельное белье и ткани, которым доверяют годами",
     "heroSubtitle": "100% хлопок, собственный пошив по любым размерам и доставка по всей Украине за 1–2 дня.",
@@ -27,6 +30,7 @@
     "reviewsTitle": "Отзывы клиентов",
     "faqTitle": "Частые вопросы",
     "contactTitle": "Свяжитесь с нами",
+    "contactSubtitle": "Оставьте заявку, и наш менеджер свяжется с вами, чтобы уточнить детали заказа или индивидуального пошива.",
     "heroCardEyebrow": "100% хлопок",
     "heroCardTitle": "Премиум качество тканей",
     "advantagesItems": [
@@ -83,7 +87,16 @@
     "chooseSize": "Выберите размер",
     "description": "Описание",
     "characteristics": "Характеристики",
-    "similar": "Похожие товары"
+    "similar": "Похожие товары",
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "quickOrderTitle": "Быстрый заказ",
+    "quickOrderThanks": "Спасибо! Мы позвоним вам в ближайшее время для подтверждения заказа.",
+    "quickOrderName": "Ваше имя",
+    "quickOrderPhone": "Телефон",
+    "quickOrderSubmitting": "Отправляем...",
+    "quickOrderSubmit": "Заказать звонок",
+    "quickOrderError": "Что-то пошло не так. Попробуйте еще раз."
   },
   "cart": {
     "title": "Корзина",
@@ -110,19 +123,336 @@
     "ukrPoshta": "Укрпочта",
     "notes": "Комментарий к заказу",
     "submit": "Подтвердить заказ",
-    "success": "Спасибо! Ваш заказ принят, мы свяжемся с вами в ближайшее время."
+    "success": "Спасибо! Ваш заказ принят, мы свяжемся с вами в ближайшее время.",
+    "goHome": "На главную",
+    "emptyCart": "Ваша корзина пуста."
   },
   "footer": {
     "contacts": "Контакты",
     "advantages": "Наши преимущества",
     "info": "Полезная информация",
     "articles": "Статьи",
-    "rights": "Все права защищены"
+    "rights": "Все права защищены",
+    "tagline": "Украинское производство постельного белья и тканей из 100% хлопка. Собственный пошив по любым размерам с 2013 года.",
+    "advantagesItems": [
+      "Только качественный товар, 100% хлопок",
+      "Собственный пошив по любым размерам",
+      "Скидки для оптовых покупателей",
+      "Отправка 1–2 дня"
+    ]
   },
   "common": {
     "loading": "Загрузка...",
     "readMore": "Подробнее",
     "back": "Назад",
-    "currency": "грн"
+    "currency": "грн",
+    "itemsCount": "{count, plural, one {# товар} few {# товара} many {# товаров} other {# товара}}"
+  },
+  "catalog": {
+    "title": "Каталог",
+    "rootMetaDescription": "Полный каталог постельного белья, полотенец и тканей Light Textiles.",
+    "categoryMetaDescription": "{name}: каталог товаров Light Textiles. Купить с доставкой по всей Украине.",
+    "empty": "В этой категории пока нет товаров.",
+    "sortNewest": "Сначала новые",
+    "sortPriceAsc": "Сначала дешевле",
+    "sortPriceDesc": "Сначала дороже",
+    "resultsCount": "Найдено: {count}",
+    "filters": "Фильтры",
+    "priceFrom": "Цена от",
+    "priceTo": "Цена до",
+    "apply": "Применить"
+  },
+  "contactForm": {
+    "name": "Ваше имя",
+    "phone": "Телефон",
+    "email": "Email (необязательно)",
+    "message": "Ваше сообщение",
+    "submitting": "Отправляем...",
+    "submit": "Отправить",
+    "success": "Спасибо! Мы свяжемся с вами в ближайшее время.",
+    "error": "Что-то пошло не так. Попробуйте еще раз.",
+    "nameMin": "Минимум 2 символа",
+    "phoneInvalid": "Введите корректный номер телефона",
+    "messageMin": "Опишите ваш вопрос"
+  },
+  "pages": {
+    "contactsTitle": "Свяжитесь с нами",
+    "contactsSubtitle": "Мы на связи каждый день и ответим на любые вопросы о товарах, доставке или индивидуальном пошиве.",
+    "aboutHeroSubtitle": "Украинское производство постельного белья, полотенец и тканей с 2013 года.",
+    "deliveryHeroSubtitle": "Прозрачные условия доставки и оплаты по всей Украине.",
+    "returnsTitle": "Возврат и обмен",
+    "returnsItems": [
+      {
+        "title": "14 дней на возврат",
+        "text": "Товар без следов использования можно вернуть или обменять в течение 14 дней с момента получения."
+      },
+      {
+        "title": "Индивидуальный пошив",
+        "text": "Изделия, пошитые по индивидуальным размерам, возврату не подлежат, кроме случаев брака."
+      },
+      {
+        "title": "Как оформить",
+        "text": "Напишите нам в Viber, на почту или через форму обратной связи — мы подскажем дальнейшие шаги."
+      }
+    ],
+    "customOrderTitle": "Пошив на заказ",
+    "customOrderSubtitle": "Изготовим постельное белье, полотенца или текстиль для отеля под любые нестандартные размеры — от 1 до 5 дней.",
+    "customOrderSteps": [
+      {
+        "title": "Оставьте заявку",
+        "text": "Укажите желаемые размеры, ткань и количество изделий в форме ниже или позвоните нам."
+      },
+      {
+        "title": "Согласуем детали",
+        "text": "Менеджер свяжется в течение рабочего дня, подберет ткань и рассчитает стоимость."
+      },
+      {
+        "title": "Пошьем и отправим",
+        "text": "Готовое изделие отправим Новой Почтой или Укрпочтой в течение 1–5 дней."
+      }
+    ],
+    "customOrderFormTitle": "Оставить заявку на пошив"
+  },
+  "admin": {
+    "title": "Админ-панель",
+    "nav": {
+      "dashboard": "Дашборд",
+      "products": "Товары",
+      "categories": "Категории",
+      "orders": "Заказы",
+      "reviews": "Отзывы",
+      "media": "Медиа",
+      "homepage": "Главная страница",
+      "contacts": "Контакты",
+      "seo": "SEO",
+      "users": "Администраторы",
+      "roles": "Роли",
+      "analytics": "Аналитика",
+      "settings": "Настройки",
+      "account": "Мой аккаунт",
+      "signOut": "Выйти"
+    },
+    "common": {
+      "save": "Сохранить",
+      "cancel": "Отменить",
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "add": "Добавить",
+      "create": "Создать",
+      "confirm": "Подтвердить",
+      "back": "Назад",
+      "actions": "Действия",
+      "status": "Статус",
+      "active": "Активен",
+      "inactive": "Неактивен",
+      "yes": "Да",
+      "no": "Нет",
+      "saving": "Сохранение...",
+      "saved": "Сохранено",
+      "noResults": "Ничего не найдено",
+      "confirmDelete": "Вы уверены, что хотите удалить?",
+      "name": "Название",
+      "email": "Email",
+      "password": "Пароль",
+      "role": "Роль",
+      "language": "Язык",
+      "toggleVisibility": "Показать/скрыть",
+      "unauthorized": "Требуется авторизация",
+      "previous": "Назад",
+      "next": "Далее",
+      "pageInfo": "Страница {page} из {total}"
+    },
+    "login": {
+      "title": "Админ-панель",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль",
+      "submit": "Войти",
+      "submitting": "Вход...",
+      "invalid": "Неверный email или пароль."
+    },
+    "dashboard": {
+      "title": "Дашборд",
+      "products": "Товары",
+      "categories": "Категории",
+      "newOrders": "Новые заказы",
+      "totalOrders": "Всего заказов",
+      "revenue": "Общий доход (без отмененных)",
+      "recentOrders": "Последние заказы",
+      "allOrders": "Все заказы →",
+      "orderNumber": "№",
+      "customer": "Клиент",
+      "amount": "Сумма",
+      "noOrders": "Заказов пока нет"
+    },
+    "orderStatus": {
+      "NEW": "Новое",
+      "CONFIRMED": "Подтверждено",
+      "PACKING": "Упаковывается",
+      "SHIPPING": "Отправлено",
+      "COMPLETED": "Завершено",
+      "CANCELLED": "Отменено"
+    },
+    "orderStatusPlural": {
+      "ALL": "Все",
+      "NEW": "Новые",
+      "CONFIRMED": "Подтвержденные",
+      "PACKING": "Упаковываются",
+      "SHIPPING": "Отправленные",
+      "COMPLETED": "Завершенные",
+      "CANCELLED": "Отмененные"
+    },
+    "orders": {
+      "orderNumber": "№",
+      "customer": "Клиент",
+      "phone": "Телефон",
+      "amount": "Сумма",
+      "date": "Дата",
+      "status": "Статус",
+      "notFound": "Заказов не найдено",
+      "allOrders": "Все заказы",
+      "orderTitle": "Заказ {orderNumber}",
+      "items": "Товары",
+      "total": "Итого",
+      "comment": "Комментарий",
+      "name": "Имя",
+      "email": "Email",
+      "city": "Город",
+      "address": "Адрес",
+      "delivery": "Доставка"
+    },
+    "products": {
+      "title": "Товары",
+      "addProduct": "Добавить товар",
+      "editProduct": "Редактировать товар",
+      "newProduct": "Новый товар",
+      "searchPlaceholder": "Поиск по slug...",
+      "columnProduct": "Товар",
+      "columnCategory": "Категория",
+      "columnPrice": "Цена",
+      "columnVisible": "Показ",
+      "notFound": "Товары не найдены",
+      "nameLabel": "Название",
+      "descriptionLabel": "Описание",
+      "category": "Категория",
+      "basePrice": "Базовая цена, ₴",
+      "discountPrice": "Цена со скидкой, ₴",
+      "availability": "Наличие",
+      "availabilityInStock": "В наличии",
+      "availabilityOutOfStock": "Нет в наличии",
+      "availabilityOnOrder": "Под заказ",
+      "showOnSite": "Показывать на сайте",
+      "featured": "Рекомендуемый товар",
+      "images": "Изображения",
+      "addImageShort": "Добавить",
+      "variants": "Варианты размеров / цен",
+      "addVariant": "Добавить вариант",
+      "variantNamePlaceholder": "Название (напр. 50x70)",
+      "variantPricePlaceholder": "Цена"
+    },
+    "categories": {
+      "title": "Категории",
+      "addCategory": "Добавить категорию",
+      "editCategory": "Редактировать категорию",
+      "newCategory": "Новая категория",
+      "columnCategory": "Категория",
+      "columnParent": "Родительская",
+      "columnVisible": "Показ",
+      "notFound": "Категории не найдены",
+      "nameLabel": "Название",
+      "descriptionLabel": "Описание",
+      "parentCategory": "Родительская категория",
+      "noParent": "— Без родительской —",
+      "sortOrder": "Порядок сортировки",
+      "showOnSite": "Показывать на сайте",
+      "image": "Изображение",
+      "noSubcategories": "Нет подкатегорий",
+      "upload": "Загрузить"
+    },
+    "media": {
+      "title": "Медиатека",
+      "uploadFiles": "Загрузить файлы",
+      "uploading": "Загрузка...",
+      "empty": "Файлов пока нет. Загруженные изображения товаров, категорий и баннеров также появляются здесь.",
+      "copied": "Скопировано",
+      "urlLabel": "URL"
+    },
+    "reviews": {
+      "title": "Отзывы",
+      "addReview": "Добавить отзыв",
+      "newReview": "Новый отзыв",
+      "authorPlaceholder": "Имя автора",
+      "textPlaceholder": "Текст отзыва",
+      "starsOption": "{count} звезд",
+      "empty": "Отзывов пока нет. Они появятся здесь, когда клиенты оставят отзыв на странице товара."
+    },
+    "contacts": {
+      "title": "Контакты и реквизиты",
+      "phone": "Телефон",
+      "email": "Email",
+      "workingHours": "График работы",
+      "address": "Адрес",
+      "viberLabel": "Viber",
+      "facebookLabel": "Facebook URL",
+      "instagramLabel": "Instagram URL"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Общие meta-теги для главной страницы. Sitemap (/sitemap.xml) и robots.txt генерируются автоматически. Meta-теги отдельных товаров и категорий редактируются в их карточках.",
+      "metaTitle": "Meta title",
+      "metaDescription": "Meta description"
+    },
+    "homepage": {
+      "title": "Главная страница",
+      "description": "Баннеры и частые вопросы, отображаемые на главной странице сайта.",
+      "banners": "Баннеры",
+      "addBanner": "Добавить баннер",
+      "newBanner": "Новый баннер",
+      "titleLabel": "Заголовок",
+      "subtitleLabel": "Подзаголовок",
+      "linkPlaceholder": "Ссылка (напр. /catalog/double)",
+      "uploadImage": "Загрузить изображение",
+      "noBanners": "Баннеров пока нет",
+      "faq": "Частые вопросы (FAQ)",
+      "addQuestion": "Добавить вопрос",
+      "newQuestion": "Новый вопрос",
+      "questionLabel": "Вопрос",
+      "answerLabel": "Ответ",
+      "noFaq": "Вопросов пока нет"
+    },
+    "users": {
+      "title": "Администраторы",
+      "addAdmin": "Добавить администратора",
+      "newAdmin": "Новый администратор",
+      "editAdmin": "Редактировать администратора",
+      "columnName": "Имя",
+      "columnEmail": "Email",
+      "columnRole": "Роль",
+      "columnStatus": "Статус",
+      "roleOwner": "Супер админ",
+      "roleStaff": "Администратор",
+      "namePlaceholder": "Имя",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль",
+      "newPasswordPlaceholder": "Новый пароль (оставьте пустым, чтобы не менять)",
+      "notFound": "Администраторов не найдено",
+      "you": "(вы)",
+      "cannotDeleteSelf": "Вы не можете удалить собственный аккаунт",
+      "cannotDeactivateSelf": "Вы не можете деактивировать собственный аккаунт",
+      "transferOwnership": "Передать права владельца",
+      "transferConfirmTitle": "Передать права владельца?",
+      "transferConfirmText": "Вы передадите права Супер админа этому пользователю, а сами станете обычным администратором.",
+      "transferButton": "Передать",
+      "onlyOwnerError": "Только Супер админ может управлять администраторами"
+    },
+    "account": {
+      "title": "Мой аккаунт",
+      "description": "Управляйте своим именем, email и паролем.",
+      "nameLabel": "Имя",
+      "emailLabel": "Email",
+      "passwordLabel": "Новый пароль",
+      "passwordHint": "Оставьте пустым, чтобы не менять пароль",
+      "roleLabel": "Роль",
+      "saved": "Изменения сохранены"
+    }
   }
 }

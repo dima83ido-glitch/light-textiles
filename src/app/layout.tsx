@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 import { getLocale } from "next-intl/server";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const golosText = Golos_Text({
@@ -27,7 +28,9 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[var(--color-canvas)] text-[var(--color-ink)] font-sans">
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="light-textiles-theme">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

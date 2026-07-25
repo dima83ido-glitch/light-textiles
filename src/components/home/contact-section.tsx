@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getLocalized } from "@/lib/get-localized";
 import { ContactForm } from "./contact-form";
 
 export async function ContactSection() {
@@ -10,7 +11,7 @@ export async function ContactSection() {
     getLocale(),
   ]);
 
-  const localized = (value: Record<string, string>) => value[locale] ?? value.uk;
+  const localized = (value: Record<string, string>) => getLocalized(value, locale);
 
   return (
     <section className="bg-[var(--color-surface-tint)] py-20">
@@ -20,25 +21,24 @@ export async function ContactSection() {
             {t("contactTitle")}
           </h2>
           <p className="mb-8 max-w-md text-base leading-relaxed text-[var(--color-ink-muted)]">
-            Залиште заявку, і наш менеджер зв&apos;яжеться з вами, щоб уточнити деталі
-            замовлення чи індивідуального пошиття.
+            {t("contactSubtitle")}
           </p>
 
           <div className="flex flex-col gap-4">
-            <a href={`tel:${settings.phone}`} className="flex items-center gap-3 text-sm font-medium text-[var(--color-ink)]">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+            <a href={`tel:${settings.phone}`} className="flex items-center gap-3 text-sm font-medium text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-strong)]">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-surface)] shadow-sm">
                 <Phone className="h-4 w-4 text-[var(--color-accent-strong)]" />
               </span>
               {settings.phoneDisplay}
             </a>
-            <a href={`mailto:${settings.email}`} className="flex items-center gap-3 text-sm font-medium text-[var(--color-ink)]">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+            <a href={`mailto:${settings.email}`} className="flex items-center gap-3 text-sm font-medium text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-strong)]">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-surface)] shadow-sm">
                 <Mail className="h-4 w-4 text-[var(--color-accent-strong)]" />
               </span>
               {settings.email}
             </a>
             <div className="flex items-center gap-3 text-sm font-medium text-[var(--color-ink)]">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-surface)] shadow-sm">
                 <MapPin className="h-4 w-4 text-[var(--color-accent-strong)]" />
               </span>
               {localized(settings.address)}

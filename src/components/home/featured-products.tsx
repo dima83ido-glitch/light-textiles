@@ -1,5 +1,6 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { getLocalized } from "@/lib/get-localized";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
 
 export async function FeaturedProducts() {
@@ -27,7 +28,7 @@ export async function FeaturedProducts() {
 
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => {
-          const name = (product.name as Record<string, string>)[locale] ?? (product.name as Record<string, string>).uk;
+          const name = getLocalized(product.name as Record<string, string>, locale);
           const price = product.variants[0]?.price ?? product.basePrice;
           const data: ProductCardData = {
             id: product.id,

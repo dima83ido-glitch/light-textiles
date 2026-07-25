@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { getLocalized } from "@/lib/get-localized";
 import type { NavCategory } from "@/lib/categories";
 import { HeaderBadges } from "./header-badges";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { LocaleSwitcher } from "./locale-switcher";
 
 export function HeaderNav({
   groups,
@@ -20,6 +24,8 @@ export function HeaderNav({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = useTranslations("nav");
 
   useEffect(() => setMounted(true), []);
 
@@ -37,7 +43,7 @@ export function HeaderNav({
               href={`/catalog/${group.slug}`}
               className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-accent-strong)]"
             >
-              {group.name.uk}
+              {getLocalized(group.name, locale)}
               {group.children.length > 0 && (
                 <ChevronDown className="h-3.5 w-3.5 opacity-60" strokeWidth={2} />
               )}
@@ -58,7 +64,7 @@ export function HeaderNav({
                       href={`/catalog/${child.slug}`}
                       className="rounded-[var(--radius-control)] px-4 py-2.5 text-sm text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-accent-strong)]"
                     >
-                      {child.name.uk}
+                      {getLocalized(child.name, locale)}
                     </Link>
                   ))}
                 </motion.div>
@@ -83,6 +89,7 @@ export function HeaderNav({
 
       <div className="flex items-center gap-2 lg:hidden">
         <HeaderBadges />
+        <ThemeToggle />
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
@@ -113,7 +120,7 @@ export function HeaderNav({
               className="fixed inset-y-0 right-0 z-50 flex w-[85%] max-w-sm flex-col overflow-y-auto bg-[var(--color-surface)] p-6 shadow-2xl lg:hidden"
             >
               <div className="mb-6 flex items-center justify-between">
-                <span className="text-lg font-semibold">Меню</span>
+                <span className="text-lg font-semibold">{t("menu")}</span>
                 <button
                   type="button"
                   onClick={() => setMobileOpen(false)}
@@ -132,7 +139,7 @@ export function HeaderNav({
                       onClick={() => setMobileOpen(false)}
                       className="text-base font-semibold text-[var(--color-ink)]"
                     >
-                      {group.name.uk}
+                      {getLocalized(group.name, locale)}
                     </Link>
                     {group.children.length > 0 && (
                       <div className="mt-2 flex flex-col gap-1 border-l border-[var(--color-border)] pl-3">
@@ -143,7 +150,7 @@ export function HeaderNav({
                             onClick={() => setMobileOpen(false)}
                             className="py-1.5 text-sm text-[var(--color-ink-muted)]"
                           >
-                            {child.name.uk}
+                            {getLocalized(child.name, locale)}
                           </Link>
                         ))}
                       </div>
@@ -162,6 +169,10 @@ export function HeaderNav({
                       {link.label}
                     </Link>
                   ))}
+                </div>
+
+                <div className="border-t border-[var(--color-border)] pt-4">
+                  <LocaleSwitcher />
                 </div>
               </div>
             </motion.div>
