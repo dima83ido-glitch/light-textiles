@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
+import { store, genId } from "@/lib/demo-store";
 import { routing } from "@/i18n/routing";
 
 function normalizeLocalized(value: Record<string, string>) {
@@ -23,51 +23,54 @@ export async function createBanner(data: {
   image: string;
   link: string;
 }) {
-  const count = await prisma.banner.count();
-  await prisma.banner.create({
-    data: {
-      title: normalizeLocalized(data.title),
-      subtitle: hasAnyValue(data.subtitle) ? normalizeLocalized(data.subtitle) : undefined,
-      image: data.image,
-      link: data.link || null,
-      sortOrder: count,
-    },
+  store.banners.push({
+    id: genId(),
+    title: normalizeLocalized(data.title),
+    subtitle: hasAnyValue(data.subtitle) ? normalizeLocalized(data.subtitle) : null,
+    image: data.image,
+    link: data.link || null,
+    sortOrder: store.banners.length,
+    isActive: true,
+    createdAt: new Date(),
   });
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
 
 export async function toggleBannerActive(id: string, isActive: boolean) {
-  await prisma.banner.update({ where: { id }, data: { isActive } });
+  const banner = store.banners.find((b) => b.id === id);
+  if (!banner) return;
+  banner.isActive = isActive;
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
 
 export async function deleteBanner(id: string) {
-  await prisma.banner.delete({ where: { id } });
+  store.banners = store.banners.filter((b) => b.id !== id);
   revalidatePath("/admin/homepage");
 }
 
 export async function createFaqItem(data: { question: Record<string, string>; answer: Record<string, string> }) {
-  const count = await prisma.faqItem.count();
-  await prisma.faqItem.create({
-    data: {
-      question: normalizeLocalized(data.question),
-      answer: normalizeLocalized(data.answer),
-      sortOrder: count,
-    },
+  store.faqItems.push({
+    id: genId(),
+    question: normalizeLocalized(data.question),
+    answer: normalizeLocalized(data.answer),
+    sortOrder: store.faqItems.length,
+    isActive: true,
   });
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
 
 export async function toggleFaqActive(id: string, isActive: boolean) {
-  await prisma.faqItem.update({ where: { id }, data: { isActive } });
+  const item = store.faqItems.find((f) => f.id === id);
+  if (!item) return;
+  item.isActive = isActive;
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
 
 export async function deleteFaqItem(id: string) {
-  await prisma.faqItem.delete({ where: { id } });
+  store.faqItems = store.faqItems.filter((f) => f.id !== id);
   revalidatePath("/admin/homepage");
 }

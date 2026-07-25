@@ -1,24 +1,26 @@
 import Link from "next/link";
 import { Package, FolderTree, ShoppingCart, Clock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
 
 export default async function AdminDashboardPage() {
   const locale = await getAdminLocale();
-  const [t, tCommon, tStatus, productCount, categoryCount, newOrders, totalOrders, recentOrders, revenue] =
-    await Promise.all([
+  const [t, tCommon, tStatus] = await Promise.all([
     getTranslations({ locale, namespace: "admin.dashboard" }),
     getTranslations({ locale, namespace: "admin.common" }),
     getTranslations({ locale, namespace: "admin.orderStatus" }),
-    prisma.product.count(),
-    prisma.category.count(),
-    prisma.order.count({ where: { status: "NEW" } }),
-    prisma.order.count(),
-    prisma.order.findMany({ orderBy: { createdAt: "desc" }, take: 6 }),
-    prisma.order.aggregate({ _sum: { totalAmount: true }, where: { status: { not: "CANCELLED" } } }),
   ]);
+
+  const productCount = store.products.length;
+  const categoryCount = store.categories.length;
+  const newOrders = store.orders.filter((o) => o.status === "NEW").length;
+  const totalOrders = store.orders.length;
+  const recentOrders = [...store.orders].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 6);
+  const revenueSum = store.orders
+    .filter((o) => o.status !== "CANCELLED")
+    .reduce((sum, o) => sum + o.totalAmount, 0);
 
   const stats = [
     { label: t("products"), value: productCount, icon: Package, href: "/admin/products" },
@@ -50,7 +52,7 @@ export default async function AdminDashboardPage() {
       <div className="mb-10 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-soft)]">
         <p className="text-sm text-[var(--color-ink-muted)]">{t("revenue")}</p>
         <p className="text-3xl font-semibold text-[var(--color-ink)]">
-          {formatPrice(revenue._sum.totalAmount ?? 0)} ₴
+          {formatPrice(revenueSum)} ₴
         </p>
       </div>
 

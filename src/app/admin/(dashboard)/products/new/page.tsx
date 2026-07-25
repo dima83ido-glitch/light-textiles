@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { ProductForm } from "@/components/admin/product-form";
@@ -7,14 +7,11 @@ import { createProduct } from "../actions";
 
 export default async function NewProductPage() {
   const locale = await getAdminLocale();
-  const [t, categories] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.products" }),
-    prisma.category.findMany({
-      where: { parentId: { not: null } },
-      orderBy: { sortOrder: "asc" },
-      include: { parent: true },
-    }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.products" })]);
+  const categories = [...store.categories]
+    .filter((c) => c.parentId !== null)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((c) => ({ ...c, parent: c.parentId ? store.categories.find((p) => p.id === c.parentId) : undefined }));
 
   const options = categories.map((c) => ({
     id: c.id,

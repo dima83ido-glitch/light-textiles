@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -21,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AdminLocaleSwitcher } from "./admin-locale-switcher";
+import { demoLogout } from "@/lib/demo-auth-actions";
 
 export function AdminSidebar({ isOwner, name }: { isOwner: boolean; name: string }) {
   const pathname = usePathname();
@@ -83,7 +83,7 @@ export function AdminSidebar({ isOwner, name }: { isOwner: boolean; name: string
         </div>
         <button
           type="button"
-          onClick={() => signOut({ callbackUrl: "/admin/login" })}
+          onClick={() => demoLogout()}
           className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-subtle)]"
         >
           <LogOut className="h-4.5 w-4.5" strokeWidth={1.75} />

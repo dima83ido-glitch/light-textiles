@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store, withCategory } from "@/lib/demo-store";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
@@ -23,24 +23,21 @@ export default async function AdminProductsPage({
   const locale = await getAdminLocale();
   const t = await getTranslations({ locale, namespace: "admin.products" });
 
-  const where = q
-    ? {
-        OR: [
-          { slug: { contains: q, mode: "insensitive" as const } },
-        ],
-      }
-    : undefined;
+  const matching = q
+    ? store.products.filter((p) => p.slug.toLowerCase().includes(q.toLowerCase()))
+    : store.products;
 
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: { images: { take: 1, orderBy: { sortOrder: "asc" } }, category: true },
-    }),
-    prisma.product.count({ where }),
-  ]);
+  const sorted = [...matching].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const total = sorted.length;
+  const start = (page - 1) * PAGE_SIZE;
+  const products = sorted.slice(start, start + PAGE_SIZE).map((p) => {
+    const withRelations = withCategory(p);
+    return {
+      ...withRelations,
+      category: withRelations.category!,
+      images: [...p.images].sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 1),
+    };
+  });
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (

@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
-import type { OrderStatus } from "@prisma/client";
+import { store, type OrderStatus } from "@/lib/demo-store";
 
 export async function updateOrderStatus(id: string, status: OrderStatus) {
-  await prisma.order.update({ where: { id }, data: { status } });
+  const order = store.orders.find((o) => o.id === id);
+  if (!order) return;
+  order.status = status;
+  order.updatedAt = new Date();
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${id}`);
 }

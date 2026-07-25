@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
-import type { OrderStatus } from "@prisma/client";
+import type { OrderStatus } from "@/lib/demo-store";
 import { cn } from "@/lib/utils";
 
 const STATUS_VALUES: OrderStatus[] = ["NEW", "CONFIRMED", "PACKING", "SHIPPING", "COMPLETED", "CANCELLED"];

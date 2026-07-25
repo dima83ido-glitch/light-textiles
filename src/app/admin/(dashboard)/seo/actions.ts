@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { routing } from "@/i18n/routing";
 
 function normalizeLocalized(value: Record<string, string>) {
@@ -20,18 +20,32 @@ export async function updateGlobalSeo(data: {
   const metaTitle = normalizeLocalized(data.metaTitle);
   const metaDescription = normalizeLocalized(data.metaDescription);
 
-  await prisma.siteSettings.upsert({
-    where: { id: "main" },
-    create: {
+  if (store.siteSettings) {
+    store.siteSettings.metaTitle = metaTitle;
+    store.siteSettings.metaDescription = metaDescription;
+    store.siteSettings.updatedAt = new Date();
+  } else {
+    store.siteSettings = {
       id: "main",
       phone: "",
+      viber: null,
       email: "",
       workingHours: Object.fromEntries(routing.locales.map((l) => [l, ""])),
+      address: null,
+      facebookUrl: null,
+      instagramUrl: null,
+      heroTitle: null,
+      heroSubtitle: null,
+      heroImage: null,
+      aboutText: null,
+      deliveryText: null,
+      footerText: null,
       metaTitle,
       metaDescription,
-    },
-    update: { metaTitle, metaDescription },
-  });
+      updatedAt: new Date(),
+    };
+  }
+
   revalidatePath("/", "layout");
   revalidatePath("/admin/seo");
 }

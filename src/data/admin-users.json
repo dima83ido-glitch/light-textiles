@@ -1,0 +1,12 @@
+[
+  {
+    "id": "demo-owner",
+    "email": "demo@lighttextiles.dev",
+    "passwordHash": "$2b$10$lvwEVIUecvFlH3fIaE6dSuKgEzpydpgc7AYaN0AntSxAfSSIG95Ne",
+    "name": "Demo Owner",
+    "role": "OWNER",
+    "isActive": true,
+    "createdAt": "2026-07-25T16:07:05.149Z",
+    "updatedAt": "2026-07-25T16:07:05.149Z"
+  }
+]

@@ -1,27 +1,27 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import { prisma } from "@/lib/prisma";
+import { store, genId } from "@/lib/demo-store";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "media");
-
+/**
+ * Portfolio-demo upload: no disk, no DB. The file is converted to a data URL
+ * and registered in the in-memory media store, so it's usable immediately
+ * (product/category/banner form previews, media library) for the lifetime of
+ * this server process. It does not persist across a restart/redeploy.
+ */
 export async function saveUploadedFile(file: File): Promise<{ url: string; id: string }> {
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
-
-  const ext = path.extname(file.name) || "";
-  const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(UPLOAD_DIR, safeName), buffer);
+  const mimeType = file.type || "application/octet-stream";
+  const url = `data:${mimeType};base64,${buffer.toString("base64")}`;
 
-  const url = `/uploads/media/${safeName}`;
-
-  const asset = await prisma.mediaAsset.create({
-    data: {
-      url,
-      filename: file.name,
-      size: file.size,
-      mimeType: file.type || "application/octet-stream",
-    },
+  const id = genId();
+  store.mediaAssets.unshift({
+    id,
+    url,
+    filename: file.name,
+    size: file.size,
+    mimeType,
+    width: null,
+    height: null,
+    createdAt: new Date(),
   });
 
-  return { url, id: asset.id };
+  return { url, id };
 }

@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getLocalized } from "@/lib/get-localized";
 
 export async function PromoBanners() {
-  const [banners, locale] = await Promise.all([
-    prisma.banner.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" }, take: 3 }),
-    getLocale(),
-  ]);
+  const banners = [...store.banners]
+    .filter((b) => b.isActive)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .slice(0, 3);
+  const locale = await getLocale();
 
   if (banners.length === 0) return null;
 

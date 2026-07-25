@@ -1,15 +1,13 @@
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { routing } from "@/i18n/routing";
 import { SeoForm } from "./seo-form";
 
 export default async function AdminSeoPage() {
   const locale = await getAdminLocale();
-  const [t, settings] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.seo" }),
-    prisma.siteSettings.findUnique({ where: { id: "main" } }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.seo" })]);
+  const settings = store.siteSettings;
   const metaTitle = (settings?.metaTitle as Record<string, string> | null) ?? {};
   const metaDescription = (settings?.metaDescription as Record<string, string> | null) ?? {};
 

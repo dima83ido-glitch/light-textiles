@@ -1,17 +1,17 @@
 import { getTranslations } from "next-intl/server";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/demo-session";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { AccountForm } from "./account-form";
 
 export default async function AccountPage() {
-  const session = await auth();
+  const session = await getSession();
   const locale = await getAdminLocale();
-  const [t, tu, user] = await Promise.all([
+  const [t, tu] = await Promise.all([
     getTranslations({ locale, namespace: "admin.account" }),
     getTranslations({ locale, namespace: "admin.users" }),
-    prisma.adminUser.findUnique({ where: { id: session!.user!.id } }),
   ]);
+  const user = session ? store.adminUsers.find((u) => u.id === session.id) : undefined;
 
   if (!user) return null;
 

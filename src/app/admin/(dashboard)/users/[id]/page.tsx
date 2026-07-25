@@ -1,21 +1,19 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/demo-session";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { EditStaffForm } from "./edit-staff-form";
 import { updateStaffUser } from "../actions";
 
 export default async function EditStaffPage({ params }: { params: Promise<{ id: string }> }) {
-  const session = await auth();
-  if (session?.user?.role !== "OWNER") redirect("/admin");
+  const session = await getSession();
+  if (session?.role !== "OWNER") redirect("/admin");
 
   const { id } = await params;
   const locale = await getAdminLocale();
-  const [t, user] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.users" }),
-    prisma.adminUser.findUnique({ where: { id } }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.users" })]);
+  const user = store.adminUsers.find((u) => u.id === id);
 
   if (!user) notFound();
 

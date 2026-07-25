@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "export-demo-data": "tsx scripts/export-demo-data.ts"
   },
   "engines": {
     "node": ">=20.9.0"
@@ -24,7 +24,6 @@
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.25.0",
     "next": "^15.5.21",
-    "next-auth": "^5.0.0-beta.32",
     "next-intl": "^4.13.3",
     "next-themes": "^0.4.6",
     "prisma": "^6.19.3",

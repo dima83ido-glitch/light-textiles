@@ -1,16 +1,9 @@
 "use server";
 
-import fs from "node:fs/promises";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 
 export async function deleteMediaAsset(id: string) {
-  const asset = await prisma.mediaAsset.findUnique({ where: { id } });
-  if (asset) {
-    const filePath = path.join(process.cwd(), "public", asset.url);
-    await fs.unlink(filePath).catch(() => {});
-  }
-  await prisma.mediaAsset.delete({ where: { id } });
+  store.mediaAssets = store.mediaAssets.filter((a) => a.id !== id);
   revalidatePath("/admin/media");
 }

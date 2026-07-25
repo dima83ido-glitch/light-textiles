@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { OrderStatusSelect } from "@/components/admin/order-status-select";
@@ -11,10 +11,8 @@ import { updateOrderStatus } from "../actions";
 export default async function AdminOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const locale = await getAdminLocale();
-  const [t, order] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.orders" }),
-    prisma.order.findUnique({ where: { id }, include: { items: true } }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.orders" })]);
+  const order = store.orders.find((o) => o.id === id);
 
   if (!order) notFound();
 

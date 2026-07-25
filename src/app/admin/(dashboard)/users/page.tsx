@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/demo-session";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -12,17 +12,17 @@ import { NewStaffForm } from "./new-staff-form";
 import { toggleStaffActive, deleteStaffUser, transferOwnership } from "./actions";
 
 export default async function AdminUsersPage() {
-  const session = await auth();
-  if (session?.user?.role !== "OWNER") redirect("/admin");
+  const session = await getSession();
+  if (session?.role !== "OWNER") redirect("/admin");
 
   const locale = await getAdminLocale();
-  const [t, tc, users] = await Promise.all([
+  const [t, tc] = await Promise.all([
     getTranslations({ locale, namespace: "admin.users" }),
     getTranslations({ locale, namespace: "admin.common" }),
-    prisma.adminUser.findMany({ orderBy: { createdAt: "asc" } }),
   ]);
+  const users = [...store.adminUsers].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
-  const currentId = session.user.id;
+  const currentId = session.id;
 
   return (
     <div>

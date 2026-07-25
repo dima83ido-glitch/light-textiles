@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
@@ -11,11 +11,9 @@ import { toggleBannerActive, deleteBanner, toggleFaqActive, deleteFaqItem } from
 
 export default async function AdminHomepagePage() {
   const locale = await getAdminLocale();
-  const [t, banners, faqItems] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.homepage" }),
-    prisma.banner.findMany({ orderBy: { sortOrder: "asc" } }),
-    prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" } }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.homepage" })]);
+  const banners = [...store.banners].sort((a, b) => a.sortOrder - b.sortOrder);
+  const faqItems = [...store.faqItems].sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <div className="flex flex-col gap-12">

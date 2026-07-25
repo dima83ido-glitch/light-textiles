@@ -1,29 +1,28 @@
-import NextAuth from "next-auth";
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "@/i18n/routing";
-import { authConfig } from "@/lib/auth.config";
+import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/demo-session-token";
 
 const intlMiddleware = createMiddleware(routing);
-const { auth } = NextAuth(authConfig);
 
-export default auth((req: NextRequest & { auth: unknown }) => {
+export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith("/admin")) {
     const isLoginPage = pathname === "/admin/login";
-    if (!req.auth && !isLoginPage) {
-      const loginUrl = new URL("/admin/login", req.url);
-      return NextResponse.redirect(loginUrl);
+    const session = await verifySessionToken(req.cookies.get(SESSION_COOKIE_NAME)?.value);
+
+    if (!session && !isLoginPage) {
+      return NextResponse.redirect(new URL("/admin/login", req.url));
     }
-    if (req.auth && isLoginPage) {
+    if (session && isLoginPage) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
     return NextResponse.next();
   }
 
   return intlMiddleware(req);
-});
+}
 
 export const config = {
   matcher: [

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
+import { demoLogin } from "@/lib/demo-auth-actions";
 
 export default function AdminLoginPage() {
   const t = useTranslations("admin.login");
@@ -18,9 +18,9 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const res = await signIn("credentials", { email, password, redirect: false });
+    const res = await demoLogin(email, password);
     setLoading(false);
-    if (res?.error) {
+    if (res.error) {
       setError(t("invalid"));
       return;
     }
@@ -67,6 +67,11 @@ export default function AdminLoginPage() {
             {loading ? t("submitting") : t("submit")}
           </button>
         </form>
+
+        <p className="mt-5 text-center text-xs text-[var(--color-ink-soft)]">
+          Portfolio demo — try it: <span className="font-medium text-[var(--color-ink-muted)]">demo@lighttextiles.dev</span> /{" "}
+          <span className="font-medium text-[var(--color-ink-muted)]">Demo1234!</span>
+        </p>
       </div>
     </div>
   );

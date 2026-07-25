@@ -1,0 +1,444 @@
+[
+  {
+    "id": "cmrv7du240001tvno3grck5st",
+    "slug": "bedclothes",
+    "name": {
+      "ru": "Постельное белье",
+      "uk": "Постільна білизна"
+    },
+    "description": null,
+    "image": null,
+    "sortOrder": 0,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": null,
+    "createdAt": "2026-07-21T22:06:27.436Z",
+    "updatedAt": "2026-07-21T22:06:27.436Z"
+  },
+  {
+    "id": "cmrv7du2z000ttvnog1xop5tx",
+    "slug": "satin",
+    "name": {
+      "ru": "Сатин, страйп-сатин",
+      "uk": "Сатин, страйп-сатин"
+    },
+    "description": null,
+    "image": "/uploads/products/straip-satin-white-3x3-aHR0cHM6.jpg",
+    "sortOrder": 0,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.468Z",
+    "updatedAt": "2026-07-21T22:06:48.402Z"
+  },
+  {
+    "id": "cmrv7du2s000itvnomf3298pq",
+    "slug": "vafelnye-polotenca",
+    "name": {
+      "ru": "Вафельные полотенца",
+      "uk": "Вафельні рушники"
+    },
+    "description": null,
+    "image": "/uploads/products/3870-04-00-aHR0cHM6.jpg",
+    "sortOrder": 0,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2r000gtvnoaxwhwve5",
+    "createdAt": "2026-07-21T22:06:27.460Z",
+    "updatedAt": "2026-07-21T22:06:48.390Z"
+  },
+  {
+    "id": "cmrv7du38001atvnoig8jcw6r",
+    "slug": "nitki",
+    "name": {
+      "ru": "Нитки",
+      "uk": "Нитки"
+    },
+    "description": null,
+    "image": "/uploads/products/nitki-40x2-white2-aHR0cHM6.webp",
+    "sortOrder": 0,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du370018tvnoklf1fjcu",
+    "createdAt": "2026-07-21T22:06:27.476Z",
+    "updatedAt": "2026-07-21T22:06:48.421Z"
+  },
+  {
+    "id": "cmrv7du2e0003tvnoy4o248fm",
+    "slug": "double",
+    "name": {
+      "ru": "Комплекты постельного белья",
+      "uk": "Комплекти постільної білизни"
+    },
+    "description": null,
+    "image": "/uploads/products/t-33974-aHR0cHM6.webp",
+    "sortOrder": 0,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.447Z",
+    "updatedAt": "2026-07-21T22:06:48.371Z"
+  },
+  {
+    "id": "cmrv7du39001ctvnou640xa6y",
+    "slug": "upakovka",
+    "name": {
+      "ru": "Упаковка",
+      "uk": "Упаковка"
+    },
+    "description": null,
+    "image": "/uploads/products/pvh-aHR0cHM6.jpg",
+    "sortOrder": 1,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du370018tvnoklf1fjcu",
+    "createdAt": "2026-07-21T22:06:27.477Z",
+    "updatedAt": "2026-07-21T22:06:48.423Z"
+  },
+  {
+    "id": "cmrv7du2r000gtvnoaxwhwve5",
+    "slug": "towels",
+    "name": {
+      "ru": "Полотенца",
+      "uk": "Рушники"
+    },
+    "description": null,
+    "image": null,
+    "sortOrder": 1,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": null,
+    "createdAt": "2026-07-21T22:06:27.459Z",
+    "updatedAt": "2026-07-21T22:06:27.459Z"
+  },
+  {
+    "id": "cmrv7du2j0005tvnohbd4fncy",
+    "slug": "baby",
+    "name": {
+      "ru": "Детское постельное белье",
+      "uk": "Дитяча постіль"
+    },
+    "description": null,
+    "image": "/uploads/products/az-80139-00-aHR0cHM6.jpg",
+    "sortOrder": 1,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.451Z",
+    "updatedAt": "2026-07-21T22:06:48.374Z"
+  },
+  {
+    "id": "cmrv7du2t000ktvnoqh2cz8w9",
+    "slug": "polotentsa-50x90",
+    "name": {
+      "ru": "Полотенца махровые 50х90",
+      "uk": "Рушники махрові 50х90"
+    },
+    "description": null,
+    "image": "/uploads/products/14-dairy-1-aHR0cHM6.jpg",
+    "sortOrder": 1,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2r000gtvnoaxwhwve5",
+    "createdAt": "2026-07-21T22:06:27.462Z",
+    "updatedAt": "2026-07-21T22:06:48.392Z"
+  },
+  {
+    "id": "cmrv7du30000vtvnoo3hhccrw",
+    "slug": "tkani_optom",
+    "name": {
+      "ru": "Бязь, 100% хлопок",
+      "uk": "Бязь, 100% бавовна"
+    },
+    "description": null,
+    "image": "/uploads/products/t-33974-aHR0cHM6.webp",
+    "sortOrder": 1,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.469Z",
+    "updatedAt": "2026-07-21T22:06:48.404Z"
+  },
+  {
+    "id": "cmrv7du31000xtvnotxzwhzmw",
+    "slug": "children",
+    "name": {
+      "ru": "Детские ткани",
+      "uk": "Дитячі тканини"
+    },
+    "description": null,
+    "image": "/uploads/products/50185-02-aHR0cHM6.jpg",
+    "sortOrder": 2,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.470Z",
+    "updatedAt": "2026-07-21T22:06:48.407Z"
+  },
+  {
+    "id": "cmrv7du2v000mtvno1jiveval",
+    "slug": "polotentsa-70x140",
+    "name": {
+      "ru": "Полотенца махровые 70х140",
+      "uk": "Рушники махрові 70х140"
+    },
+    "description": null,
+    "image": "/uploads/products/blue-yellow-aHR0cHM6.jpg",
+    "sortOrder": 2,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2r000gtvnoaxwhwve5",
+    "createdAt": "2026-07-21T22:06:27.464Z",
+    "updatedAt": "2026-07-21T22:06:48.394Z"
+  },
+  {
+    "id": "cmrv7du2k0007tvnohah5moik",
+    "slug": "bedsheet",
+    "name": {
+      "ru": "Простыни, простыни на резинке",
+      "uk": "Простирадла, простирадла на резинці"
+    },
+    "description": null,
+    "image": "/uploads/products/az-60168-aHR0cHM6.webp",
+    "sortOrder": 2,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.452Z",
+    "updatedAt": "2026-07-21T22:06:48.377Z"
+  },
+  {
+    "id": "cmrv7du2y000rtvno6mzdq1f2",
+    "slug": "cloth",
+    "name": {
+      "ru": "Постельные ткани",
+      "uk": "Постільні тканини"
+    },
+    "description": null,
+    "image": null,
+    "sortOrder": 2,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": null,
+    "createdAt": "2026-07-21T22:06:27.467Z",
+    "updatedAt": "2026-07-21T22:06:27.467Z"
+  },
+  {
+    "id": "cmrv7du2w000otvnok88xocz0",
+    "slug": "beach-towel",
+    "name": {
+      "ru": "Полотенца пляжные",
+      "uk": "Рушники пляжні"
+    },
+    "description": null,
+    "image": "/uploads/products/1-aHR0cHM6.jpg",
+    "sortOrder": 3,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2r000gtvnoaxwhwve5",
+    "createdAt": "2026-07-21T22:06:27.465Z",
+    "updatedAt": "2026-07-21T22:06:48.397Z"
+  },
+  {
+    "id": "cmrv7du32000ztvnoba3fpjl0",
+    "slug": "flannel",
+    "name": {
+      "ru": "Фланель",
+      "uk": "Фланель"
+    },
+    "description": null,
+    "image": "/uploads/products/sabaev-2-1-aHR0cHM6.jpg",
+    "sortOrder": 3,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.471Z",
+    "updatedAt": "2026-07-21T22:06:48.409Z"
+  },
+  {
+    "id": "cmrv7du2l0009tvnoo7l699y8",
+    "slug": "navolochki",
+    "name": {
+      "ru": "Наволочки",
+      "uk": "Наволочки"
+    },
+    "description": null,
+    "image": "/uploads/products/az-60168-aHR0cHM6.webp",
+    "sortOrder": 3,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.454Z",
+    "updatedAt": "2026-07-21T22:06:48.380Z"
+  },
+  {
+    "id": "cmrv7du370018tvnoklf1fjcu",
+    "slug": "accessories",
+    "name": {
+      "ru": "Нитки и фурнитура",
+      "uk": "Нитки та фурнітура"
+    },
+    "description": null,
+    "image": null,
+    "sortOrder": 3,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": null,
+    "createdAt": "2026-07-21T22:06:27.475Z",
+    "updatedAt": "2026-07-21T22:06:27.475Z"
+  },
+  {
+    "id": "cmrv7du330011tvno83nu0d6q",
+    "slug": "waffle_cloth",
+    "name": {
+      "ru": "Ткань вафельная",
+      "uk": "Тканина вафельна"
+    },
+    "description": null,
+    "image": "/uploads/products/waffle-white-1-aHR0cHM6.jpg",
+    "sortOrder": 4,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.472Z",
+    "updatedAt": "2026-07-21T22:06:48.412Z"
+  },
+  {
+    "id": "cmrv7du2m000btvnojzz7q0kv",
+    "slug": "duvet-cover",
+    "name": {
+      "ru": "Пододеяльники",
+      "uk": "Підковдри"
+    },
+    "description": null,
+    "image": "/uploads/products/az-60168-aHR0cHM6.webp",
+    "sortOrder": 4,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.455Z",
+    "updatedAt": "2026-07-21T22:06:48.382Z"
+  },
+  {
+    "id": "cmrv7du2x000qtvno8k9av5x1",
+    "slug": "towel-poncho",
+    "name": {
+      "ru": "Полотенца ПОНЧО",
+      "uk": "Рушники ПОНЧО"
+    },
+    "description": null,
+    "image": "/uploads/products/1-aHR0cHM6.jpg",
+    "sortOrder": 4,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2r000gtvnoaxwhwve5",
+    "createdAt": "2026-07-21T22:06:27.466Z",
+    "updatedAt": "2026-07-21T22:06:48.399Z"
+  },
+  {
+    "id": "cmrv7du2o000dtvnodk0l0z7h",
+    "slug": "blanket",
+    "name": {
+      "ru": "Одеяла",
+      "uk": "Ковдри"
+    },
+    "description": null,
+    "image": "/uploads/products/bkp-wool-1-aHR0cHM6.jpg",
+    "sortOrder": 5,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.456Z",
+    "updatedAt": "2026-07-21T22:06:48.385Z"
+  },
+  {
+    "id": "cmrv7du340013tvnob841pxhd",
+    "slug": "tkani_skatertnye",
+    "name": {
+      "ru": "Ткань для скатертей",
+      "uk": "Тканина для скатертин"
+    },
+    "description": null,
+    "image": "/uploads/products/lavanda4491-02-aHR0cHM6.jpg",
+    "sortOrder": 5,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.473Z",
+    "updatedAt": "2026-07-21T22:06:48.415Z"
+  },
+  {
+    "id": "cmrv7du350015tvnowd1l4h0g",
+    "slug": "linen",
+    "name": {
+      "ru": "Лён для постельного белья",
+      "uk": "Льон для постільної білизни"
+    },
+    "description": null,
+    "image": "/uploads/products/linen-330-aHR0cHM6.jpg",
+    "sortOrder": 6,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.474Z",
+    "updatedAt": "2026-07-21T22:06:48.417Z"
+  },
+  {
+    "id": "cmrv7du2q000ftvnozg6rad71",
+    "slug": "skaterti",
+    "name": {
+      "ru": "Скатерти",
+      "uk": "Скатертини"
+    },
+    "description": null,
+    "image": "/uploads/products/5757-02-aHR0cHM6.jpg",
+    "sortOrder": 6,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du240001tvno3grck5st",
+    "createdAt": "2026-07-21T22:06:27.458Z",
+    "updatedAt": "2026-07-21T22:06:48.388Z"
+  },
+  {
+    "id": "cmrv7du360017tvno3vesjldk",
+    "slug": "tik",
+    "name": {
+      "ru": "Тик наперниковый",
+      "uk": "Тік напірниковий"
+    },
+    "description": null,
+    "image": "/uploads/products/tik-white-aHR0cHM6.jpg",
+    "sortOrder": 7,
+    "isVisible": true,
+    "metaTitle": null,
+    "metaDescription": null,
+    "parentId": "cmrv7du2y000rtvno6mzdq1f2",
+    "createdAt": "2026-07-21T22:06:27.475Z",
+    "updatedAt": "2026-07-21T22:06:48.419Z"
+  }
+]

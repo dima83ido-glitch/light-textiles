@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { routing } from "@/i18n/routing";
@@ -10,11 +10,11 @@ import { updateCategory, type CategoryFormState } from "../actions";
 export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const locale = await getAdminLocale();
-  const [t, category, groups] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.categories" }),
-    prisma.category.findUnique({ where: { id } }),
-    prisma.category.findMany({ where: { parentId: null, id: { not: id } }, orderBy: { sortOrder: "asc" } }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.categories" })]);
+  const category = store.categories.find((c) => c.id === id);
+  const groups = [...store.categories]
+    .filter((c) => c.parentId === null && c.id !== id)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   if (!category) notFound();
 

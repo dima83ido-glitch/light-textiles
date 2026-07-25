@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { routing } from "@/i18n/routing";
@@ -11,21 +11,19 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   const { id } = await params;
   const locale = await getAdminLocale();
 
-  const [t, product, categories] = await Promise.all([
-    getTranslations({ locale, namespace: "admin.products" }),
-    prisma.product.findUnique({
-      where: { id },
-      include: {
-        images: { orderBy: { sortOrder: "asc" } },
-        variants: { orderBy: { sortOrder: "asc" } },
-      },
-    }),
-    prisma.category.findMany({
-      where: { parentId: { not: null } },
-      orderBy: { sortOrder: "asc" },
-      include: { parent: true },
-    }),
-  ]);
+  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.products" })]);
+  const found = store.products.find((p) => p.id === id);
+  const product = found
+    ? {
+        ...found,
+        images: [...found.images].sort((a, b) => a.sortOrder - b.sortOrder),
+        variants: [...found.variants].sort((a, b) => a.sortOrder - b.sortOrder),
+      }
+    : null;
+  const categories = [...store.categories]
+    .filter((c) => c.parentId !== null)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((c) => ({ ...c, parent: c.parentId ? store.categories.find((p) => p.id === c.parentId) : undefined }));
 
   if (!product) notFound();
 

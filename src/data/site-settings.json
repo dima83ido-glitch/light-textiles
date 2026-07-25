@@ -1,0 +1,25 @@
+{
+  "id": "main",
+  "phone": "0977050575",
+  "viber": "+380977050575",
+  "email": "light-textiles@ukr.net",
+  "workingHours": {
+    "ru": "Пн–Пт 10:00–18:00",
+    "uk": "Пн–Пт 10:00–18:00"
+  },
+  "address": {
+    "ru": "Производство: г. Радомышль, Житомирская область",
+    "uk": "Виробництво: м. Радомишль, Житомирська область"
+  },
+  "facebookUrl": "https://www.facebook.com/lighttextiles.com.ua/",
+  "instagramUrl": "https://www.instagram.com/light_textiles.com.ua/",
+  "heroTitle": null,
+  "heroSubtitle": null,
+  "heroImage": null,
+  "aboutText": null,
+  "deliveryText": null,
+  "footerText": null,
+  "metaTitle": null,
+  "metaDescription": null,
+  "updatedAt": "2026-07-21T22:06:48.424Z"
+}

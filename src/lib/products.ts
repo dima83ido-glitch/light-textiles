@@ -1,17 +1,13 @@
-import { prisma } from "@/lib/prisma";
+import { store, withCategoryRelations } from "@/lib/demo-store";
 import { getLocalized } from "@/lib/get-localized";
 import type { ProductCardData } from "@/components/product/product-card";
 
 export const PAGE_SIZE = 24;
 
 export async function getCategoryBySlug(slug: string) {
-  return prisma.category.findUnique({
-    where: { slug, isVisible: true },
-    include: {
-      children: { where: { isVisible: true }, orderBy: { sortOrder: "asc" } },
-      parent: true,
-    },
-  });
+  const category = store.categories.find((c) => c.slug === slug && c.isVisible);
+  if (!category) return null;
+  return withCategoryRelations(category);
 }
 
 export type CatalogSort = "newest" | "price-asc" | "price-desc";
@@ -22,39 +18,26 @@ export async function getProductsForCategoryIds(
 ) {
   const { sort = "newest", minPrice, maxPrice, page = 1 } = opts;
 
-  const where = {
-    categoryId: { in: categoryIds },
-    isVisible: true,
-    ...(minPrice !== undefined || maxPrice !== undefined
-      ? {
-          basePrice: {
-            ...(minPrice !== undefined ? { gte: minPrice } : {}),
-            ...(maxPrice !== undefined ? { lte: maxPrice } : {}),
-          },
-        }
-      : {}),
-  };
+  const matching = store.products.filter((p) => {
+    if (!categoryIds.includes(p.categoryId) || !p.isVisible) return false;
+    if (minPrice !== undefined && p.basePrice < minPrice) return false;
+    if (maxPrice !== undefined && p.basePrice > maxPrice) return false;
+    return true;
+  });
 
-  const orderBy =
-    sort === "price-asc"
-      ? { basePrice: "asc" as const }
-      : sort === "price-desc"
-        ? { basePrice: "desc" as const }
-        : { createdAt: "desc" as const };
+  const sorted = [...matching].sort((a, b) => {
+    if (sort === "price-asc") return a.basePrice - b.basePrice;
+    if (sort === "price-desc") return b.basePrice - a.basePrice;
+    return b.createdAt.getTime() - a.createdAt.getTime();
+  });
 
-  const [items, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      orderBy,
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: {
-        images: { orderBy: { sortOrder: "asc" }, take: 1 },
-        variants: { orderBy: { price: "asc" }, take: 1 },
-      },
-    }),
-    prisma.product.count({ where }),
-  ]);
+  const total = sorted.length;
+  const start = (page - 1) * PAGE_SIZE;
+  const items = sorted.slice(start, start + PAGE_SIZE).map((p) => ({
+    ...p,
+    images: [...p.images].sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 1),
+    variants: [...p.variants].sort((a, b) => a.price - b.price).slice(0, 1),
+  }));
 
   return { items, total, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)) };
 }

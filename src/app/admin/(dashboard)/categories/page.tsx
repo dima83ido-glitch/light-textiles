@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { store, countProductsInCategory } from "@/lib/demo-store";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
@@ -10,14 +10,16 @@ import { toggleCategoryVisibility, deleteCategory } from "./actions";
 
 export default async function AdminCategoriesPage() {
   const locale = await getAdminLocale();
-  const [t, tCommon, categories] = await Promise.all([
+  const [t, tCommon] = await Promise.all([
     getTranslations({ locale, namespace: "admin.categories" }),
     getTranslations({ locale, namespace: "common" }),
-    prisma.category.findMany({
-      orderBy: [{ parentId: "asc" }, { sortOrder: "asc" }],
-      include: { parent: true, _count: { select: { products: true } } },
-    }),
   ]);
+  const categories = [...store.categories]
+    .sort((a, b) => {
+      const parentCmp = (a.parentId ?? "").localeCompare(b.parentId ?? "");
+      return parentCmp !== 0 ? parentCmp : a.sortOrder - b.sortOrder;
+    })
+    .map((c) => ({ ...c, _count: { products: countProductsInCategory(c.id) } }));
 
   const groups = categories.filter((c) => !c.parentId);
   const childrenByParent = new Map<string, typeof categories>();
