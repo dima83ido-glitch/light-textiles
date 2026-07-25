@@ -10,6 +10,12 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+// SiteHeader/SiteFooter (rendered on every page here) read the DB for nav
+// categories and site settings. Force per-request rendering so nothing under
+// this layout is statically prerendered at build time — build environments
+// (e.g. Render's build step) aren't guaranteed to have DB access.
+export const dynamic = "force-dynamic";
+
 export default async function LocaleLayout({
   children,
   params,

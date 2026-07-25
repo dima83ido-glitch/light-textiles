@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
 
+// Reads product/category slugs from the DB — generate per-request instead of
+// at build time, since build environments aren't guaranteed to have DB access.
+export const dynamic = "force-dynamic";
+
 function localizedUrl(path: string, locale: string) {
   const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
   return `${SITE_URL}${prefix}${path}`;
