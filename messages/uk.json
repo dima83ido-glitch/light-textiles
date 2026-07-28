@@ -33,6 +33,7 @@
     "contactSubtitle": "Залиште заявку, і наш менеджер зв'яжеться з вами, щоб уточнити деталі замовлення чи індивідуального пошиття.",
     "heroCardEyebrow": "100% бавовна",
     "heroCardTitle": "Преміум якість тканин",
+    "heroImageAlt": "Складки преміальної темно-синьої атласної тканини",
     "advantagesItems": [
       {
         "title": "100% бавовна",
@@ -78,6 +79,7 @@
     "price": "Ціна",
     "priceFrom": "від",
     "inStock": "В наявності",
+    "stockByWarehouse": "Наявність на складах",
     "outOfStock": "Немає в наявності",
     "onOrder": "Під замовлення",
     "addToCart": "Додати в кошик",
@@ -220,6 +222,7 @@
       "products": "Товари",
       "categories": "Категорії",
       "orders": "Замовлення",
+      "warehouses": "Склади",
       "reviews": "Відгуки",
       "media": "Медіа",
       "homepage": "Головна сторінка",
@@ -282,7 +285,10 @@
       "orderNumber": "№",
       "customer": "Клієнт",
       "amount": "Сума",
-      "noOrders": "Замовлень поки немає"
+      "noOrders": "Замовлень поки немає",
+      "lowStockAlerts": "Закінчується на складі",
+      "noLowStock": "Дефіциту немає",
+      "openOrdersQueue": "Відкриті замовлення"
     },
     "orderStatus": {
       "NEW": "Нове",
@@ -318,7 +324,44 @@
       "email": "Email",
       "city": "Місто",
       "address": "Адреса",
-      "delivery": "Доставка"
+      "delivery": "Доставка",
+      "warehouseNumber": "Номер відділення",
+      "paymentMethod": "Спосіб оплати",
+      "paymentMethods": {
+        "CASH_ON_DELIVERY": "Накладений платіж",
+        "CARD_ONLINE": "Оплата карткою онлайн",
+        "BANK_TRANSFER": "Банківський переказ"
+      }
+    },
+    "notifications": {
+      "title": "Сповіщення",
+      "markAllRead": "Позначити всі прочитаними",
+      "empty": "Немає сповіщень"
+    },
+    "warehouses": {
+      "title": "Склади",
+      "productsStocked": "Товарів: {count}",
+      "unitsInStock": "Одиниць: {count}",
+      "product": "Товар",
+      "selectProduct": "Виберіть товар",
+      "toWarehouse": "Склад призначення",
+      "selectWarehouse": "Виберіть склад",
+      "newQuantity": "Нова кількість",
+      "quantity": "Кількість",
+      "note": "Коментар",
+      "currentStock": "Поточний залишок",
+      "noStock": "Залишків поки немає",
+      "history": "Історія рухів",
+      "date": "Дата",
+      "movementTypeLabel": "Тип",
+      "by": "Хто",
+      "noHistory": "Рухів поки немає",
+      "movementType": {
+        "INCOMING": "Прихід",
+        "OUTGOING": "Витрата",
+        "TRANSFER": "Переміщення",
+        "ADJUSTMENT": "Коригування"
+      }
     },
     "products": {
       "title": "Товари",
@@ -428,8 +471,10 @@
       "columnEmail": "Email",
       "columnRole": "Роль",
       "columnStatus": "Статус",
-      "roleOwner": "Супер адмін",
-      "roleStaff": "Адміністратор",
+      "roleOwner": "Власник",
+      "roleManager": "Менеджер",
+      "roleWarehouse": "Склад",
+      "roleEmployee": "Співробітник",
       "namePlaceholder": "Ім'я",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Пароль",
@@ -440,9 +485,9 @@
       "cannotDeactivateSelf": "Ви не можете деактивувати власний акаунт",
       "transferOwnership": "Передати права власника",
       "transferConfirmTitle": "Передати права власника?",
-      "transferConfirmText": "Ви передасте права Супер адміна цьому користувачу, а самі станете звичайним адміністратором.",
+      "transferConfirmText": "Ви передасте права Власника цьому користувачу, а самі станете Менеджером.",
       "transferButton": "Передати",
-      "onlyOwnerError": "Тільки Супер адмін може керувати адміністраторами"
+      "onlyOwnerError": "Тільки Власник може керувати адміністраторами"
     },
     "account": {
       "title": "Мій акаунт",

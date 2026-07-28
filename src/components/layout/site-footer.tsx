@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getLocalized } from "@/lib/get-localized";
 import { FacebookIcon, InstagramIcon } from "@/components/icons/social-icons";
+import { LogoMark } from "@/components/brand/logo";
 
 export async function SiteFooter() {
   const [settings, t, tNav, tPages, locale] = await Promise.all([
@@ -23,10 +24,8 @@ export async function SiteFooter() {
     <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface-subtle)]">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="mb-4 flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-strong)] text-sm font-bold text-white">
-              LT
-            </span>
+          <div className="mb-4 flex items-center gap-2">
+            <LogoMark className="h-9 w-9" />
             <span className="text-base font-semibold text-[var(--color-ink)]">Light Textiles</span>
           </div>
           <p className="mb-5 text-sm leading-relaxed text-[var(--color-ink-muted)]">{t("tagline")}</p>

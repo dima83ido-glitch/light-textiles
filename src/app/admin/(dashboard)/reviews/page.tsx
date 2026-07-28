@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
@@ -10,10 +10,10 @@ import { NewReviewForm } from "./new-review-form";
 
 export default async function AdminReviewsPage() {
   const locale = await getAdminLocale();
-  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.reviews" })]);
-  const reviews = [...store.reviews]
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .map((r) => ({ ...r, product: r.productId ? store.products.find((p) => p.id === r.productId) : undefined }));
+  const [t, reviews] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.reviews" }),
+    prisma.review.findMany({ orderBy: { createdAt: "desc" }, include: { product: true } }),
+  ]);
 
   return (
     <div>

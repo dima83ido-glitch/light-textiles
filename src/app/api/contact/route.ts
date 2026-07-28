@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { store, genId } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { contactRequestSchema } from "@/lib/validation/contact";
 
 export async function POST(request: Request) {
@@ -12,14 +12,8 @@ export async function POST(request: Request) {
 
   const { name, phone, email, message } = parsed.data;
 
-  store.contactRequests.push({
-    id: genId(),
-    name,
-    phone,
-    email: email || null,
-    message,
-    isHandled: false,
-    createdAt: new Date(),
+  await prisma.contactRequest.create({
+    data: { name, phone, email: email || null, message, isHandled: false },
   });
 
   return NextResponse.json({ ok: true });

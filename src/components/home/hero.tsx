@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -53,11 +54,22 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-          className="relative mx-auto aspect-[4/5] w-full max-w-md"
+          className="relative mx-auto aspect-[4/5] w-full max-w-md sm:max-w-lg lg:max-w-md"
         >
-          <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface-tint)] shadow-[var(--shadow-lifted)]" />
-          <div className="absolute inset-6 rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm" />
-          <div className="absolute inset-x-10 bottom-10 rounded-2xl bg-[var(--color-surface)]/90 p-5 shadow-[var(--shadow-soft)]">
+          <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] shadow-[var(--shadow-lifted)]">
+            <Image
+              src="/images/hero-fabric.jpg"
+              alt={t("heroImageAlt")}
+              fill
+              priority
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 448px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-black/5" />
+            <div className="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/15" />
+          </div>
+
+          <div className="absolute inset-x-8 bottom-8 rounded-2xl bg-[var(--color-surface)]/90 p-5 shadow-[var(--shadow-soft)] backdrop-blur-sm">
             <p className="text-xs font-medium text-[var(--color-ink-soft)]">{t("heroCardEyebrow")}</p>
             <p className="mt-1 text-lg font-semibold text-[var(--color-ink)]">{t("heroCardTitle")}</p>
           </div>

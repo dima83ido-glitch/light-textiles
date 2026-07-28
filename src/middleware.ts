@@ -1,9 +1,15 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "@/i18n/routing";
-import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/demo-session-token";
+import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/session-token";
 
 const intlMiddleware = createMiddleware(routing);
+
+// Path-prefix -> roles allowed to access it. Unlisted /admin paths are open to any signed-in role.
+const ROUTE_ROLES: { prefix: string; roles: string[] }[] = [
+  { prefix: "/admin/users", roles: ["OWNER"] },
+  { prefix: "/admin/warehouses", roles: ["OWNER", "MANAGER", "WAREHOUSE"] },
+];
 
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -17,6 +23,12 @@ export default async function middleware(req: NextRequest) {
     }
     if (session && isLoginPage) {
       return NextResponse.redirect(new URL("/admin", req.url));
+    }
+    if (session) {
+      const restricted = ROUTE_ROLES.find((r) => pathname.startsWith(r.prefix));
+      if (restricted && !restricted.roles.includes(session.role)) {
+        return NextResponse.redirect(new URL("/admin", req.url));
+      }
     }
     return NextResponse.next();
   }

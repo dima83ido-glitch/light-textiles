@@ -9,6 +9,7 @@ import { HeaderNav } from "./header-nav";
 import { HeaderBadges } from "./header-badges";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LogoMark } from "@/components/brand/logo";
 
 export function HeaderShell({
   groups,
@@ -48,10 +49,8 @@ export function HeaderShell({
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-strong)] text-base font-bold text-white shadow-[var(--shadow-glow)]">
-            LT
-          </span>
+        <Link href="/" className="flex items-center gap-2">
+          <LogoMark className="h-10 w-10" />
           <span className="flex flex-col leading-tight">
             <span className="text-base font-semibold tracking-tight text-[var(--color-ink)]">
               Light Textiles

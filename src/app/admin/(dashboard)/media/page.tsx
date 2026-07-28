@@ -1,15 +1,15 @@
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { MediaUploader } from "./media-uploader";
 import { MediaGridItem } from "./media-grid-item";
 
 export default async function AdminMediaPage() {
   const locale = await getAdminLocale();
-  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.media" })]);
-  const assets = [...store.mediaAssets]
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 200);
+  const [t, assets] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.media" }),
+    prisma.mediaAsset.findMany({ orderBy: { createdAt: "desc" }, take: 200 }),
+  ]);
 
   return (
     <div>

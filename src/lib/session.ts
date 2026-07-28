@@ -5,7 +5,7 @@ import {
   createSessionToken,
   verifySessionToken,
   type SessionPayload,
-} from "@/lib/demo-session-token";
+} from "@/lib/session-token";
 
 export type { SessionPayload };
 

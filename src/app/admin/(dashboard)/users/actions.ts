@@ -2,97 +2,88 @@
 
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
-import { getSession } from "@/lib/demo-session";
-import { store, genId } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
+import { assertRole, requireSession } from "@/lib/rbac";
+import type { AdminRole } from "@prisma/client";
 import { getAdminLocale, getAdminMessages } from "@/lib/admin-locale";
 
 async function assertOwner() {
-  const session = await getSession();
-  const current = session?.id ? store.adminUsers.find((u) => u.id === session.id) : null;
-  if (!current || current.role !== "OWNER" || !current.isActive) {
+  try {
+    return await assertRole("OWNER");
+  } catch {
     const locale = await getAdminLocale();
     const messages = await getAdminMessages(locale);
     throw new Error(messages.admin.users.onlyOwnerError);
   }
-  return session;
 }
 
-export async function createStaffUser(data: { email: string; name: string; password: string }) {
+export async function createStaffUser(data: { email: string; name: string; password: string; role: AdminRole }) {
   await assertOwner();
   const passwordHash = await bcrypt.hash(data.password, 10);
-  const now = new Date();
-  store.adminUsers.push({
-    id: genId(),
-    email: data.email,
-    name: data.name,
-    passwordHash,
-    role: "STAFF",
-    isActive: true,
-    createdAt: now,
-    updatedAt: now,
+  await prisma.adminUser.create({
+    data: { email: data.email, name: data.name, passwordHash, role: data.role, isActive: true },
   });
   revalidatePath("/admin/users");
 }
 
 export async function updateStaffUser(
   id: string,
-  data: { name: string; email: string; password?: string },
+  data: { name: string; email: string; password?: string; role: AdminRole },
 ) {
   await assertOwner();
-  const user = store.adminUsers.find((u) => u.id === id);
-  if (!user) return;
-  user.name = data.name;
-  user.email = data.email;
-  if (data.password) user.passwordHash = await bcrypt.hash(data.password, 10);
-  user.updatedAt = new Date();
+  await prisma.adminUser.update({
+    where: { id },
+    data: {
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      ...(data.password ? { passwordHash: await bcrypt.hash(data.password, 10) } : {}),
+    },
+  });
   revalidatePath("/admin/users");
 }
 
 export async function toggleStaffActive(id: string, isActive: boolean) {
   const session = await assertOwner();
-  if (session?.id === id) return;
-  const user = store.adminUsers.find((u) => u.id === id);
-  if (!user) return;
-  user.isActive = isActive;
-  user.updatedAt = new Date();
+  if (session.id === id) return;
+  await prisma.adminUser.update({ where: { id }, data: { isActive } });
   revalidatePath("/admin/users");
 }
 
 export async function deleteStaffUser(id: string) {
   const session = await assertOwner();
-  if (session?.id === id) return;
-  store.adminUsers = store.adminUsers.filter((u) => u.id !== id);
+  if (session.id === id) return;
+  await prisma.adminUser.delete({ where: { id } });
   revalidatePath("/admin/users");
 }
 
 export async function transferOwnership(targetId: string) {
   const session = await assertOwner();
-  if (session?.id === targetId) return;
+  if (session.id === targetId) return;
 
-  const target = store.adminUsers.find((u) => u.id === targetId);
-  const current = store.adminUsers.find((u) => u.id === session!.id);
-  if (!target || !current) return;
-  target.role = "OWNER";
-  target.isActive = true;
-  target.updatedAt = new Date();
-  current.role = "STAFF";
-  current.updatedAt = new Date();
+  await prisma.$transaction([
+    prisma.adminUser.update({ where: { id: targetId }, data: { role: "OWNER", isActive: true } }),
+    prisma.adminUser.update({ where: { id: session.id }, data: { role: "MANAGER" } }),
+  ]);
   revalidatePath("/admin/users");
 }
 
 export async function updateOwnProfile(data: { name: string; email: string; password?: string }) {
-  const session = await getSession();
-  if (!session?.id) {
+  let session;
+  try {
+    session = await requireSession();
+  } catch {
     const locale = await getAdminLocale();
     const messages = await getAdminMessages(locale);
     throw new Error(messages.admin.common.unauthorized);
   }
-
-  const user = store.adminUsers.find((u) => u.id === session.id);
-  if (!user) return;
-  user.name = data.name;
-  user.email = data.email;
-  if (data.password) user.passwordHash = await bcrypt.hash(data.password, 10);
-  user.updatedAt = new Date();
+  await prisma.adminUser.update({
+    where: { id: session.id },
+    data: {
+      name: data.name,
+      email: data.email,
+      ...(data.password ? { passwordHash: await bcrypt.hash(data.password, 10) } : {}),
+    },
+  });
   revalidatePath("/admin/account");
 }

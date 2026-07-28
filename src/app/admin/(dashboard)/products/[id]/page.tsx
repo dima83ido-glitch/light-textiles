@@ -1,8 +1,10 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
+import { getSession } from "@/lib/session";
+import { canEdit } from "@/lib/rbac";
 import { routing } from "@/i18n/routing";
 import { ProductForm } from "@/components/admin/product-form";
 import { updateProduct, type ProductFormState } from "../actions";
@@ -11,41 +13,45 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   const { id } = await params;
   const locale = await getAdminLocale();
 
-  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.products" })]);
-  const found = store.products.find((p) => p.id === id);
-  const product = found
-    ? {
-        ...found,
-        images: [...found.images].sort((a, b) => a.sortOrder - b.sortOrder),
-        variants: [...found.variants].sort((a, b) => a.sortOrder - b.sortOrder),
-      }
-    : null;
-  const categories = [...store.categories]
-    .filter((c) => c.parentId !== null)
-    .sort((a, b) => a.sortOrder - b.sortOrder)
-    .map((c) => ({ ...c, parent: c.parentId ? store.categories.find((p) => p.id === c.parentId) : undefined }));
+  const [t, session, found, categories] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.products" }),
+    getSession(),
+    prisma.product.findUnique({
+      where: { id },
+      include: {
+        images: { orderBy: { sortOrder: "asc" } },
+        variants: { orderBy: { sortOrder: "asc" } },
+      },
+    }),
+    prisma.category.findMany({
+      where: { parentId: { not: null } },
+      orderBy: { sortOrder: "asc" },
+      include: { parent: true },
+    }),
+  ]);
 
-  if (!product) notFound();
+  if (!session || !canEdit(session.role, "products")) redirect("/admin/products");
+  if (!found) notFound();
 
   const options = categories.map((c) => ({
     id: c.id,
     label: `${getLocalized(c.parent?.name as Record<string, string> | undefined, locale)} / ${getLocalized(c.name as Record<string, string>, locale)}`,
   }));
 
-  const name = product.name as Record<string, string>;
-  const description = (product.description as Record<string, string> | null) ?? {};
+  const name = found.name as Record<string, string>;
+  const description = (found.description as Record<string, string> | null) ?? {};
 
   const initial: Partial<ProductFormState> = {
     name: Object.fromEntries(routing.locales.map((l) => [l, name[l] ?? ""])),
     description: Object.fromEntries(routing.locales.map((l) => [l, description[l] ?? ""])),
-    categoryId: product.categoryId,
-    basePrice: product.basePrice,
-    discountPrice: product.discountPrice,
-    availability: product.availability,
-    isVisible: product.isVisible,
-    isFeatured: product.isFeatured,
-    images: product.images.map((i) => i.url),
-    variants: product.variants.map((v) => ({ name: v.name, price: v.price })),
+    categoryId: found.categoryId,
+    basePrice: found.basePrice,
+    discountPrice: found.discountPrice,
+    availability: found.availability,
+    isVisible: found.isVisible,
+    isFeatured: found.isFeatured,
+    images: found.images.map((i) => i.url),
+    variants: found.variants.map((v) => ({ name: v.name, price: v.price })),
   };
 
   const boundUpdate = updateProduct.bind(null, id);

@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { store, genId } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
+import { assertCanEdit } from "@/lib/rbac";
 import { slugify } from "@/lib/slugify";
 import { routing } from "@/i18n/routing";
 
@@ -13,10 +14,10 @@ export type CategoryFormState = {
   isVisible: boolean;
 };
 
-function uniqueSlug(base: string, excludeId?: string) {
+async function uniqueSlug(base: string, excludeId?: string) {
   let slug = base || "category";
   let n = 1;
-  while (store.categories.some((c) => c.slug === slug && c.id !== excludeId)) {
+  while (await prisma.category.findFirst({ where: { slug, NOT: excludeId ? { id: excludeId } : undefined } })) {
     slug = `${base}-${n}`;
     n++;
   }
@@ -33,49 +34,46 @@ function normalizeLocalized(value: Record<string, string>) {
 }
 
 export async function createCategory(data: CategoryFormState) {
+  await assertCanEdit("categories");
   const name = normalizeLocalized(data.name);
-  const slug = uniqueSlug(slugify(name[routing.defaultLocale]));
-  const now = new Date();
+  const slug = await uniqueSlug(slugify(name[routing.defaultLocale]));
 
-  store.categories.push({
-    id: genId(),
-    slug,
-    name,
-    description: null,
-    image: data.image,
-    sortOrder: 0,
-    isVisible: data.isVisible,
-    metaTitle: null,
-    metaDescription: null,
-    parentId: data.parentId || null,
-    createdAt: now,
-    updatedAt: now,
+  await prisma.category.create({
+    data: {
+      slug,
+      name,
+      image: data.image,
+      isVisible: data.isVisible,
+      parentId: data.parentId || null,
+    },
   });
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
 }
 
 export async function updateCategory(id: string, data: CategoryFormState) {
-  const category = store.categories.find((c) => c.id === id);
-  if (!category) throw new Error("Category not found");
-  category.name = normalizeLocalized(data.name);
-  category.parentId = data.parentId || null;
-  category.image = data.image;
-  category.isVisible = data.isVisible;
-  category.updatedAt = new Date();
+  await assertCanEdit("categories");
+  await prisma.category.update({
+    where: { id },
+    data: {
+      name: normalizeLocalized(data.name),
+      parentId: data.parentId || null,
+      image: data.image,
+      isVisible: data.isVisible,
+    },
+  });
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
 }
 
 export async function deleteCategory(id: string) {
-  store.categories = store.categories.filter((c) => c.id !== id);
+  await assertCanEdit("categories");
+  await prisma.category.delete({ where: { id } });
   revalidatePath("/admin/categories");
 }
 
 export async function toggleCategoryVisibility(id: string, isVisible: boolean) {
-  const category = store.categories.find((c) => c.id === id);
-  if (!category) return;
-  category.isVisible = isVisible;
-  category.updatedAt = new Date();
+  await assertCanEdit("categories");
+  await prisma.category.update({ where: { id }, data: { isVisible } });
   revalidatePath("/admin/categories");
 }

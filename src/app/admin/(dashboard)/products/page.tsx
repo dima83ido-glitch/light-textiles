@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { store, withCategory } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
+import { getSession } from "@/lib/session";
+import { canEdit } from "@/lib/rbac";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { AdminPagination } from "@/components/admin/pagination";
@@ -21,35 +23,41 @@ export default async function AdminProductsPage({
   const { q, page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
   const locale = await getAdminLocale();
-  const t = await getTranslations({ locale, namespace: "admin.products" });
+  const [t, session] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.products" }),
+    getSession(),
+  ]);
+  const editable = session ? canEdit(session.role, "products") : false;
 
-  const matching = q
-    ? store.products.filter((p) => p.slug.toLowerCase().includes(q.toLowerCase()))
-    : store.products;
+  const where = q ? { slug: { contains: q.toLowerCase() } } : {};
 
-  const sorted = [...matching].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  const total = sorted.length;
-  const start = (page - 1) * PAGE_SIZE;
-  const products = sorted.slice(start, start + PAGE_SIZE).map((p) => {
-    const withRelations = withCategory(p);
-    return {
-      ...withRelations,
-      category: withRelations.category!,
-      images: [...p.images].sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 1),
-    };
-  });
+  const [total, products] = await Promise.all([
+    prisma.product.count({ where }),
+    prisma.product.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      },
+    }),
+  ]);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-[var(--color-ink)]">{t("title")}</h1>
-        <Link
-          href="/admin/products/new"
-          className="flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
-        >
-          <Plus className="h-4 w-4" /> {t("addProduct")}
-        </Link>
+        {editable && (
+          <Link
+            href="/admin/products/new"
+            className="flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
+          >
+            <Plus className="h-4 w-4" /> {t("addProduct")}
+          </Link>
+        )}
       </div>
 
       <form className="mb-5">
@@ -85,19 +93,25 @@ export default async function AdminProductsPage({
                           <Image src={product.images[0].url} alt="" fill sizes="40px" className="object-cover" />
                         )}
                       </div>
-                      <Link href={`/admin/products/${product.id}`} className="line-clamp-1 font-medium text-[var(--color-ink)] hover:text-[var(--color-accent-strong)]">
-                        {name}
-                      </Link>
+                      {editable ? (
+                        <Link href={`/admin/products/${product.id}`} className="line-clamp-1 font-medium text-[var(--color-ink)] hover:text-[var(--color-accent-strong)]">
+                          {name}
+                        </Link>
+                      ) : (
+                        <span className="line-clamp-1 font-medium text-[var(--color-ink)]">{name}</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-[var(--color-ink-muted)]">{catName}</td>
                   <td className="px-4 py-3 font-medium text-[var(--color-ink)]">{formatPrice(product.discountPrice ?? product.basePrice)} ₴</td>
                   <td className="px-4 py-3">
-                    <VisibilityToggle id={product.id} isVisible={product.isVisible} action={toggleProductVisibility} />
+                    {editable ? (
+                      <VisibilityToggle id={product.id} isVisible={product.isVisible} action={toggleProductVisibility} />
+                    ) : (
+                      <span className="text-xs text-[var(--color-ink-soft)]">{product.isVisible ? t("columnVisible") : "—"}</span>
+                    )}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <DeleteButton id={product.id} action={deleteProduct} />
-                  </td>
+                  <td className="px-4 py-3 text-right">{editable && <DeleteButton id={product.id} action={deleteProduct} />}</td>
                 </tr>
               );
             })}

@@ -1,4 +1,4 @@
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 
 function formatPhoneDisplay(phone: string) {
   const digits = phone.replace(/\D/g, "").replace(/^380/, "0");
@@ -26,7 +26,7 @@ export const FALLBACK_SITE_SETTINGS = {
 };
 
 export async function getSiteSettings() {
-  const settings = store.siteSettings;
+  const settings = await prisma.siteSettings.findUnique({ where: { id: "main" } });
   if (!settings) return FALLBACK_SITE_SETTINGS;
 
   return {

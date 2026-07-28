@@ -1,19 +1,22 @@
 import { getTranslations, getLocale } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getLocalized } from "@/lib/get-localized";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
 
 export async function FeaturedProducts() {
-  const products = [...store.products]
-    .filter((p) => p.isVisible && p.isFeatured)
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 8)
-    .map((p) => ({
-      ...p,
-      images: [...p.images].sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 1),
-      variants: [...p.variants].sort((a, b) => a.price - b.price).slice(0, 1),
-    }));
-  const [t, locale] = await Promise.all([getTranslations("home"), getLocale()]);
+  const [products, t, locale] = await Promise.all([
+    prisma.product.findMany({
+      where: { isVisible: true, isFeatured: true },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      include: {
+        images: { orderBy: { sortOrder: "asc" }, take: 1 },
+        variants: { orderBy: { price: "asc" }, take: 1 },
+      },
+    }),
+    getTranslations("home"),
+    getLocale(),
+  ]);
 
   if (products.length === 0) return null;
 

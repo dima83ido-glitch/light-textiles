@@ -4,14 +4,23 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { AdminRole } from "@prisma/client";
+import { roleMessageKey } from "@/lib/role-label";
 import { createStaffUser } from "./actions";
+
+const ROLES: AdminRole[] = ["OWNER", "MANAGER", "WAREHOUSE", "EMPLOYEE"];
 
 export function NewStaffForm() {
   const t = useTranslations("admin.users");
   const tc = useTranslations("admin.common");
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm({
-    defaultValues: { email: "", name: "", password: "" },
+  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<{
+    email: string;
+    name: string;
+    password: string;
+    role: AdminRole;
+  }>({
+    defaultValues: { email: "", name: "", password: "", role: "EMPLOYEE" },
   });
 
   const inputClass =
@@ -47,6 +56,13 @@ export function NewStaffForm() {
       <input required placeholder={t("namePlaceholder")} className={inputClass} {...register("name")} />
       <input required type="email" placeholder={t("emailPlaceholder")} className={inputClass} {...register("email")} />
       <input required type="password" placeholder={t("passwordPlaceholder")} className={inputClass} {...register("password")} />
+      <select className={inputClass} {...register("role")}>
+        {ROLES.map((role) => (
+          <option key={role} value={role}>
+            {t(roleMessageKey(role))}
+          </option>
+        ))}
+      </select>
       <button
         type="submit"
         disabled={isSubmitting}

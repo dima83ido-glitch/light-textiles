@@ -33,6 +33,7 @@
     "contactSubtitle": "Leave a request and our manager will contact you to clarify the details of your order or custom sewing.",
     "heroCardEyebrow": "100% cotton",
     "heroCardTitle": "Premium fabric quality",
+    "heroImageAlt": "Folds of premium dark blue satin fabric",
     "advantagesItems": [
       {
         "title": "100% cotton",
@@ -78,6 +79,7 @@
     "price": "Price",
     "priceFrom": "from",
     "inStock": "In stock",
+    "stockByWarehouse": "Stock by warehouse",
     "outOfStock": "Out of stock",
     "onOrder": "Made to order",
     "addToCart": "Add to cart",
@@ -220,6 +222,7 @@
       "products": "Products",
       "categories": "Categories",
       "orders": "Orders",
+      "warehouses": "Warehouses",
       "reviews": "Reviews",
       "media": "Media",
       "homepage": "Homepage",
@@ -282,7 +285,10 @@
       "orderNumber": "No.",
       "customer": "Customer",
       "amount": "Amount",
-      "noOrders": "No orders yet"
+      "noOrders": "No orders yet",
+      "lowStockAlerts": "Low stock alerts",
+      "noLowStock": "Nothing low on stock",
+      "openOrdersQueue": "Open orders"
     },
     "orderStatus": {
       "NEW": "New",
@@ -318,7 +324,44 @@
       "email": "Email",
       "city": "City",
       "address": "Address",
-      "delivery": "Delivery"
+      "delivery": "Delivery",
+      "warehouseNumber": "Branch number",
+      "paymentMethod": "Payment method",
+      "paymentMethods": {
+        "CASH_ON_DELIVERY": "Cash on delivery",
+        "CARD_ONLINE": "Card online",
+        "BANK_TRANSFER": "Bank transfer"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllRead": "Mark all read",
+      "empty": "No notifications"
+    },
+    "warehouses": {
+      "title": "Warehouses",
+      "productsStocked": "{count} products",
+      "unitsInStock": "{count} units",
+      "product": "Product",
+      "selectProduct": "Select a product",
+      "toWarehouse": "Destination warehouse",
+      "selectWarehouse": "Select a warehouse",
+      "newQuantity": "New quantity",
+      "quantity": "Quantity",
+      "note": "Note",
+      "currentStock": "Current stock",
+      "noStock": "No stock recorded yet",
+      "history": "Movement history",
+      "date": "Date",
+      "movementTypeLabel": "Type",
+      "by": "By",
+      "noHistory": "No movements yet",
+      "movementType": {
+        "INCOMING": "Incoming",
+        "OUTGOING": "Outgoing",
+        "TRANSFER": "Transfer",
+        "ADJUSTMENT": "Adjustment"
+      }
     },
     "products": {
       "title": "Products",
@@ -428,8 +471,10 @@
       "columnEmail": "Email",
       "columnRole": "Role",
       "columnStatus": "Status",
-      "roleOwner": "Super admin",
-      "roleStaff": "Administrator",
+      "roleOwner": "Owner",
+      "roleManager": "Manager",
+      "roleWarehouse": "Warehouse",
+      "roleEmployee": "Employee",
       "namePlaceholder": "Name",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
@@ -440,9 +485,9 @@
       "cannotDeactivateSelf": "You cannot deactivate your own account",
       "transferOwnership": "Transfer ownership",
       "transferConfirmTitle": "Transfer ownership?",
-      "transferConfirmText": "You will transfer Super admin rights to this user and become a regular administrator yourself.",
+      "transferConfirmText": "You will transfer Owner rights to this user and become a Manager yourself.",
       "transferButton": "Transfer",
-      "onlyOwnerError": "Only the Super admin can manage administrators"
+      "onlyOwnerError": "Only the Owner can manage administrators"
     },
     "account": {
       "title": "My account",

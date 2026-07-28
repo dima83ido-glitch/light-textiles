@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { store, type OrderStatus } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
+import type { OrderStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
@@ -34,11 +35,16 @@ export default async function AdminOrdersPage({
     getTranslations({ locale, namespace: "admin.orderStatusPlural" }),
   ]);
 
-  const matching = filter ? store.orders.filter((o) => o.status === filter) : store.orders;
-  const sorted = [...matching].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  const total = sorted.length;
-  const start = (page - 1) * PAGE_SIZE;
-  const orders = sorted.slice(start, start + PAGE_SIZE);
+  const where = filter ? { status: filter } : {};
+  const [total, orders] = await Promise.all([
+    prisma.order.count({ where }),
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (

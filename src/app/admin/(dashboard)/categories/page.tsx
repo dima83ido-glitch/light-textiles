@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { store, countProductsInCategory } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
@@ -14,12 +14,13 @@ export default async function AdminCategoriesPage() {
     getTranslations({ locale, namespace: "admin.categories" }),
     getTranslations({ locale, namespace: "common" }),
   ]);
-  const categories = [...store.categories]
-    .sort((a, b) => {
-      const parentCmp = (a.parentId ?? "").localeCompare(b.parentId ?? "");
-      return parentCmp !== 0 ? parentCmp : a.sortOrder - b.sortOrder;
-    })
-    .map((c) => ({ ...c, _count: { products: countProductsInCategory(c.id) } }));
+  const rawCategories = await prisma.category.findMany({
+    include: { _count: { select: { products: true } } },
+  });
+  const categories = [...rawCategories].sort((a, b) => {
+    const parentCmp = (a.parentId ?? "").localeCompare(b.parentId ?? "");
+    return parentCmp !== 0 ? parentCmp : a.sortOrder - b.sortOrder;
+  });
 
   const groups = categories.filter((c) => !c.parentId);
   const childrenByParent = new Map<string, typeof categories>();

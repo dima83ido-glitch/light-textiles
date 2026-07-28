@@ -11,7 +11,9 @@ datasource db {
 
 enum AdminRole {
   OWNER
-  STAFF
+  MANAGER
+  WAREHOUSE
+  EMPLOYEE
 }
 
 model AdminUser {
@@ -19,10 +21,12 @@ model AdminUser {
   email        String    @unique
   passwordHash String
   name         String
-  role         AdminRole @default(STAFF)
+  role         AdminRole @default(EMPLOYEE)
   isActive     Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  stockMovements StockMovement[]
 }
 
 // ---------- Catalog ----------
@@ -73,18 +77,89 @@ model Product {
   metaTitle       Json?
   metaDescription Json?
 
+  lowStockThreshold Int @default(5)
+
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
-  images     ProductImage[]
-  variants   ProductVariant[]
-  reviews    Review[]
-  orderItems OrderItem[]
+  images         ProductImage[]
+  variants       ProductVariant[]
+  reviews        Review[]
+  orderItems     OrderItem[]
+  stockLevels    StockLevel[]
+  stockMovements StockMovement[]
+  notifications  Notification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+}
+
+// ---------- Warehouses / inventory ----------
+
+model Warehouse {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  name     Json // { uk: string, ru: string }
+  address  String?
+  isActive Boolean @default(true)
+
+  stockLevels       StockLevel[]
+  movements         StockMovement[] @relation("MovementWarehouse")
+  incomingTransfers StockMovement[] @relation("TransferTo")
+  outgoingTransfers StockMovement[] @relation("TransferFrom")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockLevel {
+  id          String    @id @default(cuid())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  quantity    Int       @default(0)
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([productId, warehouseId])
+  @@index([warehouseId])
+}
+
+enum StockMovementType {
+  INCOMING
+  OUTGOING
+  TRANSFER
+  ADJUSTMENT
+}
+
+model StockMovement {
+  id        String            @id @default(cuid())
+  type      StockMovementType
+  productId String
+  product   Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int
+
+  // For INCOMING/OUTGOING/ADJUSTMENT, only warehouseId is set.
+  // For TRANSFER, fromWarehouseId and toWarehouseId are both set (warehouseId unused).
+  warehouseId     String?
+  warehouse       Warehouse? @relation("MovementWarehouse", fields: [warehouseId], references: [id])
+  fromWarehouseId String?
+  fromWarehouse   Warehouse? @relation("TransferFrom", fields: [fromWarehouseId], references: [id])
+  toWarehouseId   String?
+  toWarehouse     Warehouse? @relation("TransferTo", fields: [toWarehouseId], references: [id])
+
+  note String?
+
+  createdByUserId String
+  createdByUser   AdminUser @relation(fields: [createdByUserId], references: [id])
+  createdAt       DateTime  @default(now())
+
+  @@index([productId])
+  @@index([warehouseId])
+  @@index([fromWarehouseId])
+  @@index([toWarehouseId])
 }
 
 model ProductImage {
@@ -122,20 +197,31 @@ enum OrderStatus {
   CANCELLED
 }
 
-model Order {
-  id             String      @id @default(cuid())
-  orderNumber    String      @unique
-  customerName   String
-  phone          String
-  email          String?
-  address        String?
-  city           String?
-  deliveryMethod String?
-  status         OrderStatus @default(NEW)
-  totalAmount    Int
-  notes          String?
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CARD_ONLINE
+  BANK_TRANSFER
+}
 
-  items OrderItem[]
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  customerName    String
+  phone           String
+  email           String?
+  address         String?
+  city            String?
+  deliveryMethod  String?
+  // Nova Poshta (or similar carrier) branch number the customer picked for pickup —
+  // distinct from the internal Warehouse model used for stock/inventory.
+  warehouseNumber String?
+  paymentMethod   PaymentMethod @default(CASH_ON_DELIVERY)
+  status          OrderStatus   @default(NEW)
+  totalAmount     Int
+  notes           String?
+
+  items         OrderItem[]
+  notifications Notification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -241,4 +327,31 @@ model MediaAsset {
   width     Int?
   height    Int?
   createdAt DateTime @default(now())
+}
+
+// ---------- Notifications ----------
+
+enum NotificationType {
+  NEW_ORDER
+  LOW_STOCK
+}
+
+model Notification {
+  id            String           @id @default(cuid())
+  type          NotificationType
+  message       String
+  audienceRoles AdminRole[]
+  isRead        Boolean          @default(false)
+
+  orderId String?
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  warehouseId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

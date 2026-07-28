@@ -2,11 +2,11 @@
 
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
-import { store } from "@/lib/demo-store";
-import { setSessionCookie, clearSessionCookie } from "@/lib/demo-session";
+import { prisma } from "@/lib/prisma";
+import { setSessionCookie, clearSessionCookie } from "@/lib/session";
 
-export async function demoLogin(email: string, password: string): Promise<{ error?: string }> {
-  const user = store.adminUsers.find((u) => u.email === email);
+export async function adminLogin(email: string, password: string): Promise<{ error?: string }> {
+  const user = await prisma.adminUser.findUnique({ where: { email } });
   if (!user || !user.isActive) return { error: "invalid" };
 
   const valid = await bcrypt.compare(password, user.passwordHash);
@@ -16,7 +16,7 @@ export async function demoLogin(email: string, password: string): Promise<{ erro
   return {};
 }
 
-export async function demoLogout(): Promise<void> {
+export async function adminLogout(): Promise<void> {
   await clearSessionCookie();
   redirect("/admin/login");
 }

@@ -2,9 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { getSession } from "@/lib/demo-session";
-import { store } from "@/lib/demo-store";
+import { getSession } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { roleMessageKey } from "@/lib/role-label";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { TransferOwnershipButton } from "@/components/admin/transfer-ownership-button";
@@ -16,11 +17,11 @@ export default async function AdminUsersPage() {
   if (session?.role !== "OWNER") redirect("/admin");
 
   const locale = await getAdminLocale();
-  const [t, tc] = await Promise.all([
+  const [t, tc, users] = await Promise.all([
     getTranslations({ locale, namespace: "admin.users" }),
     getTranslations({ locale, namespace: "admin.common" }),
+    prisma.adminUser.findMany({ orderBy: { createdAt: "asc" } }),
   ]);
-  const users = [...store.adminUsers].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   const currentId = session.id;
 
@@ -57,9 +58,7 @@ export default async function AdminUsersPage() {
                     {isSelf && <span className="ml-1 text-[var(--color-ink-soft)]">{t("you")}</span>}
                   </td>
                   <td className="px-4 py-3 text-[var(--color-ink-muted)]">{user.email}</td>
-                  <td className="px-4 py-3 text-[var(--color-ink-muted)]">
-                    {user.role === "OWNER" ? t("roleOwner") : t("roleStaff")}
-                  </td>
+                  <td className="px-4 py-3 text-[var(--color-ink-muted)]">{t(roleMessageKey(user.role))}</td>
                   <td className="px-4 py-3">
                     {isSelf ? (
                       <span className="text-xs text-[var(--color-ink-soft)]">—</span>

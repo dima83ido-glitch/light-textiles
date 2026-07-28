@@ -1,5 +1,6 @@
-import { store, genId } from "@/lib/demo-store";
-import type { Order, OrderItem } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
+import type { Order, PaymentMethod } from "@prisma/client";
+import { notifyNewOrder } from "@/lib/notifications";
 
 export function generateOrderNumber() {
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -22,42 +23,42 @@ export async function createOrder(input: {
   address?: string;
   city?: string;
   deliveryMethod?: string;
+  warehouseNumber?: string;
+  paymentMethod?: PaymentMethod;
   notes?: string;
   items: OrderItemInput[];
 }): Promise<Order> {
   const totalAmount = input.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const orderNumber = generateOrderNumber();
-  const orderId = genId();
-  const now = new Date();
 
-  const items: OrderItem[] = input.items.map((item) => ({
-    id: genId(),
-    orderId,
-    productId: item.productId ?? null,
-    variantId: item.variantId ?? null,
-    nameSnapshot: item.nameSnapshot,
-    unitPrice: item.unitPrice,
-    quantity: item.quantity,
-    lineTotal: item.unitPrice * item.quantity,
-  }));
+  const order = await prisma.order.create({
+    data: {
+      orderNumber,
+      customerName: input.customerName,
+      phone: input.phone,
+      email: input.email || null,
+      address: input.address || null,
+      city: input.city || null,
+      deliveryMethod: input.deliveryMethod || null,
+      warehouseNumber: input.warehouseNumber || null,
+      paymentMethod: input.paymentMethod ?? "CASH_ON_DELIVERY",
+      status: "NEW",
+      totalAmount,
+      notes: input.notes || null,
+      items: {
+        create: input.items.map((item) => ({
+          productId: item.productId ?? null,
+          variantId: item.variantId ?? null,
+          nameSnapshot: item.nameSnapshot,
+          unitPrice: item.unitPrice,
+          quantity: item.quantity,
+          lineTotal: item.unitPrice * item.quantity,
+        })),
+      },
+    },
+  });
 
-  const order: Order = {
-    id: orderId,
-    orderNumber,
-    customerName: input.customerName,
-    phone: input.phone,
-    email: input.email || null,
-    address: input.address || null,
-    city: input.city || null,
-    deliveryMethod: input.deliveryMethod || null,
-    status: "NEW",
-    totalAmount,
-    notes: input.notes || null,
-    items,
-    createdAt: now,
-    updatedAt: now,
-  };
+  await notifyNewOrder(order);
 
-  store.orders.push(order);
   return order;
 }

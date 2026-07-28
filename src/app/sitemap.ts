@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
+
+// Reads product/category slugs from the DB — generate per-request instead of
+// at build time, since build environments aren't guaranteed to have DB access.
+export const dynamic = "force-dynamic";
 
 function localizedUrl(path: string, locale: string) {
   const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
@@ -13,10 +17,10 @@ function alternates(path: string) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const products = store.products.filter((p) => p.isVisible).map((p) => ({ slug: p.slug, updatedAt: p.updatedAt }));
-  const categories = store.categories
-    .filter((c) => c.isVisible)
-    .map((c) => ({ slug: c.slug, updatedAt: c.updatedAt }));
+  const [products, categories] = await Promise.all([
+    prisma.product.findMany({ where: { isVisible: true }, select: { slug: true, updatedAt: true } }),
+    prisma.category.findMany({ where: { isVisible: true }, select: { slug: true, updatedAt: true } }),
+  ]);
 
   const staticPaths = ["/", "/catalog", "/about", "/delivery", "/custom-order", "/contacts"];
 

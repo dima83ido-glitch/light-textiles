@@ -96,8 +96,8 @@ async function main() {
 
   // --- Admin user ---
   console.log("Creating admin user...");
-  const ownerEmail = "dima83ido@gmail.com";
-  const tempPassword = "LightTextiles2026!";
+  const ownerEmail = process.env.OWNER_EMAIL || "dima83ido@gmail.com";
+  const tempPassword = process.env.OWNER_PASSWORD || "LightTextiles2026!";
   const passwordHash = await bcrypt.hash(tempPassword, 10);
   await prisma.adminUser.upsert({
     where: { email: ownerEmail },
@@ -109,6 +109,22 @@ async function main() {
       role: "OWNER",
     },
   });
+
+  // --- Warehouses ---
+  console.log("Creating warehouses...");
+  const warehouseSeeds = [
+    { slug: "radomyshl", name: { uk: "Радомишль", en: "Radomyshl", ru: "Радомышль" } },
+    { slug: "horenychi", name: { uk: "Горенычі", en: "Horenychi", ru: "Горенычи" } },
+  ];
+  const warehouseIds: string[] = [];
+  for (const w of warehouseSeeds) {
+    const row = await prisma.warehouse.upsert({
+      where: { slug: w.slug },
+      update: { name: w.name },
+      create: { slug: w.slug, name: w.name },
+    });
+    warehouseIds.push(row.id);
+  }
 
   // --- Categories ---
   console.log("Creating categories...");
@@ -235,6 +251,17 @@ async function main() {
   }
 
   console.log(`Products created: ${created}, skipped (no category): ${skipped}`);
+
+  // --- Initial stock levels (flat default so the storefront isn't empty) ---
+  console.log("Seeding initial stock levels...");
+  const allProductIds = await prisma.product.findMany({ select: { id: true } });
+  const DEFAULT_SEED_QUANTITY = 20;
+  await prisma.stockLevel.createMany({
+    data: allProductIds.flatMap((p) =>
+      warehouseIds.map((warehouseId) => ({ productId: p.id, warehouseId, quantity: DEFAULT_SEED_QUANTITY })),
+    ),
+    skipDuplicates: true,
+  });
 
   // Feature a handful of products per top-level group for the homepage.
   console.log("Marking featured products...");

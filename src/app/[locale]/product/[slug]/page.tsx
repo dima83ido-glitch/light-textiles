@@ -3,24 +3,17 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { store, withCategory } from "@/lib/demo-store";
-import { toProductCardData } from "@/lib/products";
+import { prisma } from "@/lib/prisma";
+import { getProductBySlug, toProductCardData } from "@/lib/products";
 import { getLocalized } from "@/lib/get-localized";
 import { getAlternates } from "@/lib/seo";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 import { ProductCard } from "@/components/product/product-card";
+import { StockByWarehouse } from "@/components/product/stock-by-warehouse";
 
 async function getProduct(slug: string) {
-  const product = store.products.find((p) => p.slug === slug && p.isVisible);
-  if (!product) return null;
-  const withRelations = withCategory(product);
-  return {
-    ...withRelations,
-    category: withRelations.category!,
-    images: [...product.images].sort((a, b) => a.sortOrder - b.sortOrder),
-    variants: [...product.variants].sort((a, b) => a.sortOrder - b.sortOrder),
-  };
+  return getProductBySlug(slug);
 }
 
 export async function generateMetadata({
@@ -66,14 +59,14 @@ export default async function ProductPage({
     : null;
   const categoryName = getLocalized(product.category.name as Record<string, string>, locale);
 
-  const similar = store.products
-    .filter((p) => p.categoryId === product.categoryId && p.isVisible && p.id !== product.id)
-    .slice(0, 4)
-    .map((p) => ({
-      ...p,
-      images: [...p.images].sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 1),
-      variants: [...p.variants].sort((a, b) => a.price - b.price).slice(0, 1),
-    }));
+  const similar = await prisma.product.findMany({
+    where: { categoryId: product.categoryId, isVisible: true, id: { not: product.id } },
+    take: 4,
+    include: {
+      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      variants: { orderBy: { price: "asc" }, take: 1 },
+    },
+  });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -122,6 +115,11 @@ export default async function ProductPage({
             basePrice={product.basePrice}
             availability={product.availability}
             variants={product.variants.map((v) => ({ id: v.id, name: v.name, price: v.price }))}
+          />
+
+          <StockByWarehouse
+            stockLevels={product.stockLevels.map((s) => ({ warehouse: s.warehouse, quantity: s.quantity }))}
+            locale={locale}
           />
 
           {description && (

@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
+import { assertCanEdit } from "@/lib/rbac";
 import { routing } from "@/i18n/routing";
 
 export type ContactsFormState = {
@@ -24,36 +25,22 @@ function normalizeLocalized(value: Record<string, string>) {
 }
 
 export async function updateSiteSettings(data: ContactsFormState) {
-  const workingHours = normalizeLocalized(data.workingHours);
-  const address = normalizeLocalized(data.address);
-
+  await assertCanEdit("contacts");
   const fields = {
     phone: data.phone,
     viber: data.viber || null,
     email: data.email,
-    workingHours,
-    address,
+    workingHours: normalizeLocalized(data.workingHours),
+    address: normalizeLocalized(data.address),
     facebookUrl: data.facebookUrl || null,
     instagramUrl: data.instagramUrl || null,
   };
 
-  if (store.siteSettings) {
-    Object.assign(store.siteSettings, fields, { updatedAt: new Date() });
-  } else {
-    store.siteSettings = {
-      id: "main",
-      ...fields,
-      heroTitle: null,
-      heroSubtitle: null,
-      heroImage: null,
-      aboutText: null,
-      deliveryText: null,
-      footerText: null,
-      metaTitle: null,
-      metaDescription: null,
-      updatedAt: new Date(),
-    };
-  }
+  await prisma.siteSettings.upsert({
+    where: { id: "main" },
+    update: fields,
+    create: { id: "main", ...fields },
+  });
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/contacts");

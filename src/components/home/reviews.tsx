@@ -1,13 +1,12 @@
 import { Star } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 
 export async function Reviews() {
-  const reviews = [...store.reviews]
-    .filter((r) => r.isApproved)
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 6);
-  const t = await getTranslations("home");
+  const [reviews, t] = await Promise.all([
+    prisma.review.findMany({ where: { isApproved: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+    getTranslations("home"),
+  ]);
 
   if (reviews.length === 0) return null;
 

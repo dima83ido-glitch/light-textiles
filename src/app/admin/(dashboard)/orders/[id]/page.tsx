@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { OrderStatusSelect } from "@/components/admin/order-status-select";
@@ -11,8 +11,10 @@ import { updateOrderStatus } from "../actions";
 export default async function AdminOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const locale = await getAdminLocale();
-  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.orders" })]);
-  const order = store.orders.find((o) => o.id === id);
+  const [t, order] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.orders" }),
+    prisma.order.findUnique({ where: { id }, include: { items: true } }),
+  ]);
 
   if (!order) notFound();
 
@@ -97,6 +99,16 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
                 <dd className="text-[var(--color-ink)]">{order.deliveryMethod}</dd>
               </div>
             )}
+            {order.warehouseNumber && (
+              <div>
+                <dt className="text-xs text-[var(--color-ink-soft)]">{t("warehouseNumber")}</dt>
+                <dd className="text-[var(--color-ink)]">{order.warehouseNumber}</dd>
+              </div>
+            )}
+            <div>
+              <dt className="text-xs text-[var(--color-ink-soft)]">{t("paymentMethod")}</dt>
+              <dd className="text-[var(--color-ink)]">{t(`paymentMethods.${order.paymentMethod}`)}</dd>
+            </div>
             <div>
               <dt className="text-xs text-[var(--color-ink-soft)]">{t("date")}</dt>
               <dd className="text-[var(--color-ink)]">{order.createdAt.toLocaleString(locale)}</dd>

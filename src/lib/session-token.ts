@@ -1,22 +1,18 @@
+import type { AdminRole } from "@prisma/client";
+
 /**
- * Signed session token for the portfolio-demo admin login — a hand-rolled
- * replacement for NextAuth. Uses Web Crypto (available in both the Node
- * runtime and the Edge runtime middleware uses) so the exact same
- * sign/verify code runs in both places, unlike NextAuth's split config.
- *
- * The signing secret below is a hardcoded constant, not a real secret: this
- * is a portfolio demo with no sensitive data behind it, and no environment
- * variables are required to run the app.
+ * Signed session token for the admin portal. Uses Web Crypto (available in
+ * both the Node runtime and the Edge runtime middleware runs in) so the same
+ * sign/verify code runs in both places without pulling Prisma into Edge.
  */
-const COOKIE_NAME = "demo_session";
-const SECRET = "light-textiles-portfolio-demo-v1";
+const COOKIE_NAME = "admin_session";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 export type SessionPayload = {
   id: string;
   email: string;
   name: string;
-  role: "OWNER" | "STAFF";
+  role: AdminRole;
   exp: number; // unix seconds
 };
 
@@ -37,8 +33,18 @@ function base64UrlDecode(str: string): Uint8Array {
   return bytes;
 }
 
+function getSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) {
+    throw new Error(
+      "SESSION_SECRET environment variable is not set. Set it to a long random string (e.g. `openssl rand -base64 32`).",
+    );
+  }
+  return secret;
+}
+
 async function getKey(): Promise<CryptoKey> {
-  return crypto.subtle.importKey("raw", new TextEncoder().encode(SECRET), { name: "HMAC", hash: "SHA-256" }, false, [
+  return crypto.subtle.importKey("raw", new TextEncoder().encode(getSecret()), { name: "HMAC", hash: "SHA-256" }, false, [
     "sign",
     "verify",
   ]);

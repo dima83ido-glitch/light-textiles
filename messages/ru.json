@@ -33,6 +33,7 @@
     "contactSubtitle": "Оставьте заявку, и наш менеджер свяжется с вами, чтобы уточнить детали заказа или индивидуального пошива.",
     "heroCardEyebrow": "100% хлопок",
     "heroCardTitle": "Премиум качество тканей",
+    "heroImageAlt": "Складки премиальной темно-синей атласной ткани",
     "advantagesItems": [
       {
         "title": "100% хлопок",
@@ -78,6 +79,7 @@
     "price": "Цена",
     "priceFrom": "от",
     "inStock": "В наличии",
+    "stockByWarehouse": "Наличие по складам",
     "outOfStock": "Нет в наличии",
     "onOrder": "Под заказ",
     "addToCart": "Добавить в корзину",
@@ -220,6 +222,7 @@
       "products": "Товары",
       "categories": "Категории",
       "orders": "Заказы",
+      "warehouses": "Склады",
       "reviews": "Отзывы",
       "media": "Медиа",
       "homepage": "Главная страница",
@@ -282,7 +285,10 @@
       "orderNumber": "№",
       "customer": "Клиент",
       "amount": "Сумма",
-      "noOrders": "Заказов пока нет"
+      "noOrders": "Заказов пока нет",
+      "lowStockAlerts": "Заканчивается на складе",
+      "noLowStock": "Дефицита нет",
+      "openOrdersQueue": "Открытые заказы"
     },
     "orderStatus": {
       "NEW": "Новое",
@@ -318,7 +324,44 @@
       "email": "Email",
       "city": "Город",
       "address": "Адрес",
-      "delivery": "Доставка"
+      "delivery": "Доставка",
+      "warehouseNumber": "Номер отделения",
+      "paymentMethod": "Способ оплаты",
+      "paymentMethods": {
+        "CASH_ON_DELIVERY": "Наложенный платёж",
+        "CARD_ONLINE": "Оплата картой онлайн",
+        "BANK_TRANSFER": "Банковский перевод"
+      }
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "markAllRead": "Отметить все прочитанными",
+      "empty": "Нет уведомлений"
+    },
+    "warehouses": {
+      "title": "Склады",
+      "productsStocked": "Товаров: {count}",
+      "unitsInStock": "Единиц: {count}",
+      "product": "Товар",
+      "selectProduct": "Выберите товар",
+      "toWarehouse": "Склад назначения",
+      "selectWarehouse": "Выберите склад",
+      "newQuantity": "Новое количество",
+      "quantity": "Количество",
+      "note": "Комментарий",
+      "currentStock": "Текущий остаток",
+      "noStock": "Остатков пока нет",
+      "history": "История движений",
+      "date": "Дата",
+      "movementTypeLabel": "Тип",
+      "by": "Кто",
+      "noHistory": "Движений пока нет",
+      "movementType": {
+        "INCOMING": "Приход",
+        "OUTGOING": "Расход",
+        "TRANSFER": "Перемещение",
+        "ADJUSTMENT": "Корректировка"
+      }
     },
     "products": {
       "title": "Товары",
@@ -428,8 +471,10 @@
       "columnEmail": "Email",
       "columnRole": "Роль",
       "columnStatus": "Статус",
-      "roleOwner": "Супер админ",
-      "roleStaff": "Администратор",
+      "roleOwner": "Владелец",
+      "roleManager": "Менеджер",
+      "roleWarehouse": "Склад",
+      "roleEmployee": "Сотрудник",
       "namePlaceholder": "Имя",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Пароль",
@@ -440,9 +485,9 @@
       "cannotDeactivateSelf": "Вы не можете деактивировать собственный аккаунт",
       "transferOwnership": "Передать права владельца",
       "transferConfirmTitle": "Передать права владельца?",
-      "transferConfirmText": "Вы передадите права Супер админа этому пользователю, а сами станете обычным администратором.",
+      "transferConfirmText": "Вы передадите права Владельца этому пользователю, а сами станете Менеджером.",
       "transferButton": "Передать",
-      "onlyOwnerError": "Только Супер админ может управлять администраторами"
+      "onlyOwnerError": "Только Владелец может управлять администраторами"
     },
     "account": {
       "title": "Мой аккаунт",

@@ -1,17 +1,26 @@
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
 import { getLocalized } from "@/lib/get-localized";
+import { getSession } from "@/lib/session";
+import { canEdit } from "@/lib/rbac";
 import { ProductForm } from "@/components/admin/product-form";
 import { createProduct } from "../actions";
 
 export default async function NewProductPage() {
   const locale = await getAdminLocale();
-  const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.products" })]);
-  const categories = [...store.categories]
-    .filter((c) => c.parentId !== null)
-    .sort((a, b) => a.sortOrder - b.sortOrder)
-    .map((c) => ({ ...c, parent: c.parentId ? store.categories.find((p) => p.id === c.parentId) : undefined }));
+  const [t, session, categories] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.products" }),
+    getSession(),
+    prisma.category.findMany({
+      where: { parentId: { not: null } },
+      orderBy: { sortOrder: "asc" },
+      include: { parent: true },
+    }),
+  ]);
+
+  if (!session || !canEdit(session.role, "products")) redirect("/admin/products");
 
   const options = categories.map((c) => ({
     id: c.id,

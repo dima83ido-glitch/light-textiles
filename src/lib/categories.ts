@@ -1,4 +1,4 @@
-import { store } from "@/lib/demo-store";
+import { prisma } from "@/lib/prisma";
 
 export type NavCategory = {
   id: string;
@@ -9,9 +9,10 @@ export type NavCategory = {
 };
 
 export async function getCategoryTree(): Promise<NavCategory[]> {
-  const categories = [...store.categories]
-    .filter((c) => c.isVisible)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const categories = await prisma.category.findMany({
+    where: { isVisible: true },
+    orderBy: { sortOrder: "asc" },
+  });
 
   const byId = new Map<string, NavCategory>(
     categories.map((c) => [
