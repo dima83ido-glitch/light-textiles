@@ -96,8 +96,14 @@ async function main() {
 
   // --- Admin user ---
   console.log("Creating admin user...");
-  const ownerEmail = process.env.OWNER_EMAIL || "dima83ido@gmail.com";
-  const tempPassword = process.env.OWNER_PASSWORD || "LightTextiles2026!";
+  const ownerEmail = process.env.OWNER_EMAIL;
+  const tempPassword = process.env.OWNER_PASSWORD;
+  if (!ownerEmail || !tempPassword) {
+    throw new Error(
+      "OWNER_EMAIL and OWNER_PASSWORD environment variables are required to seed the database. " +
+        "Set them (see .env.example) before running `npm run db:seed` — no default credentials are provided.",
+    );
+  }
   const passwordHash = await bcrypt.hash(tempPassword, 10);
   await prisma.adminUser.upsert({
     where: { email: ownerEmail },

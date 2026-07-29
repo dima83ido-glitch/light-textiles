@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, ShoppingBag } from "lucide-react";
@@ -24,7 +24,14 @@ export type ProductCardData = {
 export function ProductCard({ product }: { product: ProductCardData }) {
   const t = useTranslations("product");
   const [hovered, setHovered] = useState(false);
-  const isFavorite = useFavoritesStore((s) => s.isFavorite(product.id));
+  // Zustand's persist middleware rehydrates from localStorage before the client's first
+  // paint, while SSR always renders the default (empty) state — reading the store value
+  // straight into render would mismatch. Only trust it once mounted, matching the pattern
+  // already used in header-badges.tsx/theme-toggle.tsx.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isFavoriteStored = useFavoritesStore((s) => s.isFavorite(product.id));
+  const isFavorite = mounted && isFavoriteStored;
   const toggleFavorite = useFavoritesStore((s) => s.toggle);
   const addToCart = useCartStore((s) => s.add);
 

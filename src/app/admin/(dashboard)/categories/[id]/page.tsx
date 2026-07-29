@@ -2,18 +2,24 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 import { routing } from "@/i18n/routing";
 import { CategoryForm } from "@/components/admin/category-form";
 import { updateCategory, type CategoryFormState } from "../actions";
 
 export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireView("categories");
   const { id } = await params;
   const locale = await getAdminLocale();
   const [t] = await Promise.all([getTranslations({ locale, namespace: "admin.categories" })]);
   const [category, groups] = await Promise.all([
     prisma.category.findUnique({ where: { id } }),
-    prisma.category.findMany({ where: { parentId: null, NOT: { id } }, orderBy: { sortOrder: "asc" } }),
+    prisma.category.findMany({
+      where: { parentId: null, NOT: { id } },
+      orderBy: { sortOrder: "asc" },
+      select: { id: true, name: true },
+    }),
   ]);
 
   if (!category) notFound();

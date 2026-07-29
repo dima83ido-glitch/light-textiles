@@ -1,10 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { routing } from "@/i18n/routing";
 import { ContactsForm } from "./contacts-form";
 
 export default async function AdminContactsPage() {
+  await requireView("contacts");
   const locale = await getAdminLocale();
   const [t, settings] = await Promise.all([
     getTranslations({ locale, namespace: "admin.contacts" }),

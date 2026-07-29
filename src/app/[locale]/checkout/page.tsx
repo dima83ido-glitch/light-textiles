@@ -90,17 +90,32 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 lg:col-span-2">
           <div>
-            <input placeholder={t("name")} className={inputClass} {...register("customerName")} />
+            <label htmlFor="checkout-name" className="sr-only">
+              {t("name")}
+            </label>
+            <input id="checkout-name" placeholder={t("name")} className={inputClass} {...register("customerName")} />
             {errors.customerName && <p className="mt-1 text-xs text-red-500">{errors.customerName.message}</p>}
           </div>
           <div>
-            <input placeholder={t("phone")} className={inputClass} {...register("phone")} />
+            <label htmlFor="checkout-phone" className="sr-only">
+              {t("phone")}
+            </label>
+            <input id="checkout-phone" placeholder={t("phone")} className={inputClass} {...register("phone")} />
             {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
           </div>
-          <input placeholder={t("email")} className={inputClass} {...register("email")} />
+          <label htmlFor="checkout-email" className="sr-only">
+            {t("email")}
+          </label>
+          <input id="checkout-email" placeholder={t("email")} className={inputClass} {...register("email")} />
           <div className="grid grid-cols-2 gap-4">
-            <input placeholder={t("city")} className={inputClass} {...register("city")} />
-            <select className={inputClass} {...register("deliveryMethod")} defaultValue="">
+            <label htmlFor="checkout-city" className="sr-only">
+              {t("city")}
+            </label>
+            <input id="checkout-city" placeholder={t("city")} className={inputClass} {...register("city")} />
+            <label htmlFor="checkout-delivery-method" className="sr-only">
+              {t("deliveryMethod")}
+            </label>
+            <select id="checkout-delivery-method" className={inputClass} {...register("deliveryMethod")} defaultValue="">
               <option value="" disabled>
                 {t("deliveryMethod")}
               </option>
@@ -108,8 +123,14 @@ export default function CheckoutPage() {
               <option value="ukr-poshta">{t("ukrPoshta")}</option>
             </select>
           </div>
-          <input placeholder={t("address")} className={inputClass} {...register("address")} />
-          <textarea placeholder={t("notes")} rows={3} className={inputClass} {...register("notes")} />
+          <label htmlFor="checkout-address" className="sr-only">
+            {t("address")}
+          </label>
+          <input id="checkout-address" placeholder={t("address")} className={inputClass} {...register("address")} />
+          <label htmlFor="checkout-notes" className="sr-only">
+            {t("notes")}
+          </label>
+          <textarea id="checkout-notes" placeholder={t("notes")} rows={3} className={inputClass} {...register("notes")} />
 
           <button
             type="submit"

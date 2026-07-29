@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
 export type NavCategory = {
@@ -8,10 +9,13 @@ export type NavCategory = {
   children: NavCategory[];
 };
 
-export async function getCategoryTree(): Promise<NavCategory[]> {
+// Rendered by the header on every page and again by the catalog page — cache() dedupes
+// those into a single Prisma call per request instead of two.
+export const getCategoryTree = cache(async function getCategoryTree(): Promise<NavCategory[]> {
   const categories = await prisma.category.findMany({
     where: { isVisible: true },
     orderBy: { sortOrder: "asc" },
+    select: { id: true, slug: true, name: true, image: true, parentId: true },
   });
 
   const byId = new Map<string, NavCategory>(
@@ -32,4 +36,4 @@ export async function getCategoryTree(): Promise<NavCategory[]> {
   }
 
   return roots;
-}
+});

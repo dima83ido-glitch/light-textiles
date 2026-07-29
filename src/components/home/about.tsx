@@ -1,21 +1,17 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { Reveal } from "@/components/ui/reveal";
 
-export function About() {
-  const t = useTranslations("home");
+export async function About() {
+  const t = await getTranslations("home");
   const stats = t.raw("aboutStats") as { value: string; label: string }[];
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
+        <Reveal
+          direction="left"
+          duration={0.6}
           className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] bg-[var(--color-surface-tint)] shadow-[var(--shadow-lifted)]"
         >
           <Image
@@ -25,14 +21,9 @@ export function About() {
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"
           />
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
+        <Reveal direction="right" duration={0.6} delay={0.1}>
           <h2 className="mb-5 text-3xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-4xl">
             {t("aboutTitle")}
           </h2>
@@ -51,7 +42,7 @@ export function About() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

@@ -85,7 +85,12 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {/* JSON.stringify doesn't escape "<" — without this, a "</script>" inside admin-entered
+          product content would break out of the script tag and inject arbitrary HTML/JS. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
 
       <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-ink-soft)]">
         <Link href="/" className="hover:text-[var(--color-accent-strong)]">

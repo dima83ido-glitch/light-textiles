@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const idsParam = searchParams.get("ids") ?? "";
   const locale = searchParams.get("locale") ?? "uk";
-  const ids = idsParam.split(",").filter(Boolean);
+  const ids = idsParam.split(",").filter(Boolean).slice(0, 100);
 
   if (ids.length === 0) return NextResponse.json({ products: [] });
 

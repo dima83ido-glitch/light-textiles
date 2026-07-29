@@ -38,6 +38,12 @@ export function HeaderNav({
             className="relative"
             onMouseEnter={() => setOpenGroup(group.id)}
             onMouseLeave={() => setOpenGroup((cur) => (cur === group.id ? null : cur))}
+            onFocus={() => setOpenGroup(group.id)}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+                setOpenGroup((cur) => (cur === group.id ? null : cur));
+              }
+            }}
           >
             <Link
               href={`/catalog/${group.slug}`}

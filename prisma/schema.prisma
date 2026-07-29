@@ -94,6 +94,9 @@ model Product {
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+  // Every public catalog/homepage query filters by categoryId + isVisible together —
+  // this lets Postgres satisfy that filter from the index alone.
+  @@index([categoryId, isVisible])
 }
 
 // ---------- Warehouses / inventory ----------
@@ -225,6 +228,8 @@ model Order {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([status])
 }
 
 model OrderItem {
@@ -260,6 +265,7 @@ model Review {
   createdAt  DateTime @default(now())
 
   @@index([productId])
+  @@index([isApproved])
 }
 
 // ---------- Site content ----------

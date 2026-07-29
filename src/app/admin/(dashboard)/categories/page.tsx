@@ -3,12 +3,14 @@ import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { toggleCategoryVisibility, deleteCategory } from "./actions";
 
 export default async function AdminCategoriesPage() {
+  await requireView("categories");
   const locale = await getAdminLocale();
   const [t, tCommon] = await Promise.all([
     getTranslations({ locale, namespace: "admin.categories" }),

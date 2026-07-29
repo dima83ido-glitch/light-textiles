@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Minus, Plus, ShoppingBag, X, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -33,7 +33,13 @@ export function ProductPurchasePanel({
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
 
   const addToCart = useCartStore((s) => s.add);
-  const isFavorite = useFavoritesStore((s) => s.isFavorite(productId));
+  // See product-card.tsx for why this needs a mounted guard: the persisted favorites
+  // store rehydrates from localStorage before first client paint, which would otherwise
+  // mismatch the server-rendered (always-empty) state.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isFavoriteStored = useFavoritesStore((s) => s.isFavorite(productId));
+  const isFavorite = mounted && isFavoriteStored;
   const toggleFavorite = useFavoritesStore((s) => s.toggle);
 
   const price = selectedVariant?.price ?? basePrice;
@@ -175,6 +181,16 @@ function QuickOrderModal({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    nameInputRef.current?.focus();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,6 +217,9 @@ function QuickOrderModal({
       onClick={onClose}
     >
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quick-order-title"
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -208,7 +227,9 @@ function QuickOrderModal({
         className="w-full max-w-sm rounded-[var(--radius-card)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-lifted)]"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-[var(--color-ink)]">{t("quickOrderTitle")}</h3>
+          <h3 id="quick-order-title" className="text-lg font-semibold text-[var(--color-ink)]">
+            {t("quickOrderTitle")}
+          </h3>
           <button type="button" onClick={onClose} aria-label="Close" className="text-[var(--color-ink-muted)]">
             <X className="h-5 w-5" />
           </button>
@@ -218,14 +239,23 @@ function QuickOrderModal({
           <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{t("quickOrderThanks")}</p>
         ) : (
           <form onSubmit={submit} className="flex flex-col gap-3">
+            <label htmlFor="quick-order-name" className="sr-only">
+              {t("quickOrderName")}
+            </label>
             <input
+              id="quick-order-name"
+              ref={nameInputRef}
               required
               placeholder={t("quickOrderName")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-accent)]"
             />
+            <label htmlFor="quick-order-phone" className="sr-only">
+              {t("quickOrderPhone")}
+            </label>
             <input
+              id="quick-order-phone"
               required
               placeholder={t("quickOrderPhone")}
               value={phone}

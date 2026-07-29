@@ -43,19 +43,37 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div>
-        <input placeholder={t("name")} className={inputClass} {...register("name")} />
+        <label htmlFor="contact-name" className="sr-only">
+          {t("name")}
+        </label>
+        <input id="contact-name" placeholder={t("name")} className={inputClass} {...register("name")} />
         {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
       </div>
       <div>
-        <input placeholder={t("phone")} className={inputClass} {...register("phone")} />
+        <label htmlFor="contact-phone" className="sr-only">
+          {t("phone")}
+        </label>
+        <input id="contact-phone" placeholder={t("phone")} className={inputClass} {...register("phone")} />
         {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
       </div>
       <div>
-        <input placeholder={t("email")} className={inputClass} {...register("email")} />
+        <label htmlFor="contact-email" className="sr-only">
+          {t("email")}
+        </label>
+        <input id="contact-email" placeholder={t("email")} className={inputClass} {...register("email")} />
         {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
       </div>
       <div>
-        <textarea placeholder={t("message")} rows={4} className={inputClass} {...register("message")} />
+        <label htmlFor="contact-message" className="sr-only">
+          {t("message")}
+        </label>
+        <textarea
+          id="contact-message"
+          placeholder={t("message")}
+          rows={4}
+          className={inputClass}
+          {...register("message")}
+        />
         {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message.message}</p>}
       </div>
 

@@ -42,7 +42,11 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          <label htmlFor="admin-login-email" className="sr-only">
+            {t("emailPlaceholder")}
+          </label>
           <input
+            id="admin-login-email"
             required
             type="email"
             placeholder={t("emailPlaceholder")}
@@ -50,7 +54,11 @@ export default function AdminLoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)]"
           />
+          <label htmlFor="admin-login-password" className="sr-only">
+            {t("passwordPlaceholder")}
+          </label>
           <input
+            id="admin-login-password"
             required
             type="password"
             placeholder={t("passwordPlaceholder")}

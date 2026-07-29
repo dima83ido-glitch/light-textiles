@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -10,6 +11,7 @@ import { FaqForm } from "./faq-form";
 import { toggleBannerActive, deleteBanner, toggleFaqActive, deleteFaqItem } from "./actions";
 
 export default async function AdminHomepagePage() {
+  await requireView("homepage");
   const locale = await getAdminLocale();
   const [t, banners, faqItems] = await Promise.all([
     getTranslations({ locale, namespace: "admin.homepage" }),

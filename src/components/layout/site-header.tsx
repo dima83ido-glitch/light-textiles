@@ -4,8 +4,6 @@ import { getSiteSettings } from "@/lib/site-settings";
 import { getLocalized } from "@/lib/get-localized";
 import { HeaderShell } from "./header-shell";
 
-export const revalidate = 300;
-
 export async function SiteHeader() {
   const [groups, settings, t, locale] = await Promise.all([
     getCategoryTree(),

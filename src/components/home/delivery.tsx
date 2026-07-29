@@ -1,13 +1,11 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { Banknote, Package, Truck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Reveal } from "@/components/ui/reveal";
 
 const icons = [Truck, Banknote, Package];
 
-export function Delivery() {
-  const t = useTranslations("home");
+export async function Delivery() {
+  const t = await getTranslations("home");
   const items = t.raw("deliveryItems") as { title: string; text: string }[];
 
   return (
@@ -21,12 +19,9 @@ export function Delivery() {
           {items.map((card, i) => {
             const Icon = icons[i % icons.length];
             return (
-              <motion.div
+              <Reveal
                 key={card.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
+                delay={i * 0.08}
                 className="rounded-[var(--radius-card)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-soft)]"
               >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
@@ -34,7 +29,7 @@ export function Delivery() {
                 </div>
                 <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{card.title}</h3>
                 <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{card.text}</p>
-              </motion.div>
+              </Reveal>
             );
           })}
         </div>

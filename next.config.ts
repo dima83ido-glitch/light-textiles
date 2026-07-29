@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const nextConfig: NextConfig = {
   experimental: {
     cpus: 1,
+    optimizePackageImports: ["framer-motion"],
   },
   images: {
     remotePatterns: [

@@ -2,18 +2,36 @@ import { Star } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 import { VisibilityToggle } from "@/components/admin/visibility-toggle";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { AdminPagination } from "@/components/admin/pagination";
 import { toggleReviewApproval, deleteReview } from "./actions";
 import { NewReviewForm } from "./new-review-form";
 
-export default async function AdminReviewsPage() {
+const PAGE_SIZE = 30;
+
+export default async function AdminReviewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  await requireView("reviews");
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
   const locale = await getAdminLocale();
-  const [t, reviews] = await Promise.all([
+  const [t, total, reviews] = await Promise.all([
     getTranslations({ locale, namespace: "admin.reviews" }),
-    prisma.review.findMany({ orderBy: { createdAt: "desc" }, include: { product: true } }),
+    prisma.review.count(),
+    prisma.review.findMany({
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      include: { product: { select: { name: true } } },
+    }),
   ]);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <div>
@@ -55,6 +73,7 @@ export default async function AdminReviewsPage() {
           </p>
         )}
       </div>
+      <AdminPagination page={page} totalPages={totalPages} basePath="/admin/reviews" />
     </div>
   );
 }

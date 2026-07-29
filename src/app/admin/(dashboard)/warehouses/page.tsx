@@ -3,9 +3,11 @@ import { Warehouse as WarehouseIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 
 export default async function AdminWarehousesPage() {
+  await requireView("warehouses");
   const locale = await getAdminLocale();
   const [t, warehouses] = await Promise.all([
     getTranslations({ locale, namespace: "admin.warehouses" }),

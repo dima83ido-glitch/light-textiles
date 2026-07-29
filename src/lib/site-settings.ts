@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
 function formatPhoneDisplay(phone: string) {
@@ -25,7 +26,9 @@ export const FALLBACK_SITE_SETTINGS = {
   instagramUrl: "https://www.instagram.com/light_textiles.com.ua/",
 };
 
-export async function getSiteSettings() {
+// Wrapped in React's cache() so the handful of components that all render on every page
+// (header, footer, contact section) share one Prisma call per request instead of one each.
+export const getSiteSettings = cache(async function getSiteSettings() {
   const settings = await prisma.siteSettings.findUnique({ where: { id: "main" } });
   if (!settings) return FALLBACK_SITE_SETTINGS;
 
@@ -39,4 +42,4 @@ export async function getSiteSettings() {
     facebookUrl: settings.facebookUrl ?? FALLBACK_SITE_SETTINGS.facebookUrl,
     instagramUrl: settings.instagramUrl ?? FALLBACK_SITE_SETTINGS.instagramUrl,
   };
-}
+});

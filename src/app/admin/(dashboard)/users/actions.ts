@@ -17,8 +17,19 @@ async function assertOwner() {
   }
 }
 
+const MIN_PASSWORD_LENGTH = 8;
+
+// The client-side form only enforces `required` (non-empty); the real length/strength
+// check has to happen here since that's the actual trust boundary.
+function assertStrongPassword(password: string) {
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    throw new Error(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+  }
+}
+
 export async function createStaffUser(data: { email: string; name: string; password: string; role: AdminRole }) {
   await assertOwner();
+  assertStrongPassword(data.password);
   const passwordHash = await bcrypt.hash(data.password, 10);
   await prisma.adminUser.create({
     data: { email: data.email, name: data.name, passwordHash, role: data.role, isActive: true },
@@ -31,6 +42,7 @@ export async function updateStaffUser(
   data: { name: string; email: string; password?: string; role: AdminRole },
 ) {
   await assertOwner();
+  if (data.password) assertStrongPassword(data.password);
   await prisma.adminUser.update({
     where: { id },
     data: {
@@ -77,6 +89,7 @@ export async function updateOwnProfile(data: { name: string; email: string; pass
     const messages = await getAdminMessages(locale);
     throw new Error(messages.admin.common.unauthorized);
   }
+  if (data.password) assertStrongPassword(data.password);
   await prisma.adminUser.update({
     where: { id: session.id },
     data: {

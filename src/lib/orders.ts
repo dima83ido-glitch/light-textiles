@@ -16,6 +16,47 @@ export type OrderItemInput = {
   quantity: number;
 };
 
+// The client only ever supplies productId/variantId/quantity in good faith — unitPrice is
+// re-derived here from the database so a tampered request can't check out at an arbitrary price.
+async function resolveAuthoritativeItems(items: OrderItemInput[]) {
+  const productIds = [...new Set(items.map((item) => item.productId).filter((id): id is string => !!id))];
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+    include: { variants: true },
+  });
+  const productsById = new Map(products.map((p) => [p.id, p]));
+
+  return items.map((item) => {
+    if (!item.productId) {
+      throw new Error("Order item is missing productId");
+    }
+    const product = productsById.get(item.productId);
+    if (!product) {
+      throw new Error(`Product ${item.productId} not found`);
+    }
+
+    let unitPrice: number;
+    if (item.variantId) {
+      const variant = product.variants.find((v) => v.id === item.variantId);
+      if (!variant) {
+        throw new Error(`Variant ${item.variantId} not found on product ${item.productId}`);
+      }
+      unitPrice = variant.price;
+    } else {
+      unitPrice = product.discountPrice ?? product.basePrice;
+    }
+
+    return {
+      productId: item.productId,
+      variantId: item.variantId,
+      nameSnapshot: item.nameSnapshot,
+      unitPrice,
+      quantity: item.quantity,
+    };
+  });
+}
+
 export async function createOrder(input: {
   customerName: string;
   phone: string;
@@ -28,7 +69,8 @@ export async function createOrder(input: {
   notes?: string;
   items: OrderItemInput[];
 }): Promise<Order> {
-  const totalAmount = input.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  const items = await resolveAuthoritativeItems(input.items);
+  const totalAmount = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const orderNumber = generateOrderNumber();
 
   const order = await prisma.order.create({
@@ -46,7 +88,7 @@ export async function createOrder(input: {
       totalAmount,
       notes: input.notes || null,
       items: {
-        create: input.items.map((item) => ({
+        create: items.map((item) => ({
           productId: item.productId ?? null,
           variantId: item.variantId ?? null,
           nameSnapshot: item.nameSnapshot,

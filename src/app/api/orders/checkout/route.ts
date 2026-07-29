@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { checkoutSchema } from "@/lib/validation/order";
 import { createOrder } from "@/lib/orders";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  if (!checkRateLimit(`checkout:${getClientIp(request)}`, 20, 10 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   const body = await request.json();
   const parsed = checkoutSchema.safeParse(body);
 
@@ -10,7 +15,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const order = await createOrder(parsed.data);
-
-  return NextResponse.json({ ok: true, orderNumber: order.orderNumber });
+  try {
+    const order = await createOrder(parsed.data);
+    return NextResponse.json({ ok: true, orderNumber: order.orderNumber });
+  } catch {
+    return NextResponse.json({ error: "One or more items in your order are no longer valid." }, { status: 400 });
+  }
 }

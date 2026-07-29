@@ -4,10 +4,12 @@ import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminLocale } from "@/lib/admin-locale";
+import { requireView } from "@/lib/rbac";
 import { getLocalized } from "@/lib/get-localized";
 import { StockMovementForm } from "../stock-movement-form";
 
 export default async function WarehouseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireView("warehouses");
   const { id } = await params;
   const locale = await getAdminLocale();
 

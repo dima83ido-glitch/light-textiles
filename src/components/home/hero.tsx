@@ -54,9 +54,16 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-          className="relative mx-auto aspect-[4/5] w-full max-w-md sm:max-w-lg lg:max-w-md"
+          className="group relative mx-auto aspect-[4/5] w-full max-w-md sm:max-w-lg lg:max-w-md"
         >
-          <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] shadow-[var(--shadow-lifted)]">
+          {/* Ambient blue glow — sits behind the rounded card, outside the clip so it can bloom past the edges */}
+          <div className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-[var(--color-accent)]/0 opacity-0 blur-2xl transition-all duration-500 ease-out group-hover:bg-[var(--color-accent)]/35 group-hover:opacity-100" />
+
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 overflow-hidden rounded-[2.5rem] shadow-[var(--shadow-lifted)] transition-shadow duration-500 ease-out will-change-transform group-hover:shadow-[0_32px_64px_-12px_rgba(79,169,255,0.4),0_16px_32px_rgba(16,22,31,0.16)]"
+          >
             <Image
               src="/images/hero-fabric.jpg"
               alt={t("heroImageAlt")}
@@ -66,8 +73,8 @@ export function Hero() {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-black/5" />
-            <div className="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/15" />
-          </div>
+            <div className="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/15 transition-all duration-500 ease-out group-hover:ring-white/25" />
+          </motion.div>
 
           <div className="absolute inset-x-8 bottom-8 rounded-2xl bg-[var(--color-surface)]/90 p-5 shadow-[var(--shadow-soft)] backdrop-blur-sm">
             <p className="text-xs font-medium text-[var(--color-ink-soft)]">{t("heroCardEyebrow")}</p>

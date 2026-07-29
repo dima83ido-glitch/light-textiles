@@ -1,13 +1,11 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { Ruler, ShieldCheck, Truck, Percent } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Reveal } from "@/components/ui/reveal";
 
 const icons = [ShieldCheck, Ruler, Truck, Percent];
 
-export function Advantages() {
-  const t = useTranslations("home");
+export async function Advantages() {
+  const t = await getTranslations("home");
   const items = t.raw("advantagesItems") as { title: string; text: string }[];
 
   return (
@@ -20,12 +18,9 @@ export function Advantages() {
         {items.map((item, i) => {
           const Icon = icons[i % icons.length];
           return (
-            <motion.div
+            <Reveal
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              delay={i * 0.08}
               className="group rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lifted)]"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)] transition-colors group-hover:bg-[var(--color-accent)] group-hover:text-white">
@@ -33,7 +28,7 @@ export function Advantages() {
               </div>
               <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{item.title}</h3>
               <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.text}</p>
-            </motion.div>
+            </Reveal>
           );
         })}
       </div>
