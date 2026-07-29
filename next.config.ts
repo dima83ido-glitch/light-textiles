@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["framer-motion"],
   },
   images: {
+    // AVIF first (smaller than the default webp-only on photographic images, sharp already
+    // does the encoding), browsers that don't support it get webp automatically.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

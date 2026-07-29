@@ -21,7 +21,7 @@ export type ProductCardData = {
   availability: "IN_STOCK" | "OUT_OF_STOCK" | "ON_ORDER";
 };
 
-export function ProductCard({ product }: { product: ProductCardData }) {
+export function ProductCard({ product, priority = false }: { product: ProductCardData; priority?: boolean }) {
   const t = useTranslations("product");
   // Zustand's persist middleware rehydrates from localStorage before the client's first
   // paint, while SSR always renders the default (empty) state — reading the store value
@@ -59,6 +59,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

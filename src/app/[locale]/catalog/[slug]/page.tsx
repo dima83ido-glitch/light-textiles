@@ -114,8 +114,8 @@ export default async function CatalogCategoryPage({
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {items.map((product) => (
-            <ProductCard key={product.id} product={toProductCardData(product, locale)} />
+          {items.map((product, i) => (
+            <ProductCard key={product.id} product={toProductCardData(product, locale)} priority={i < 4} />
           ))}
         </div>
       )}

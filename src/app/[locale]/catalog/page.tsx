@@ -36,13 +36,13 @@ export default async function CatalogRootPage({
       </h1>
 
       <div className="flex flex-col gap-12">
-        {groups.map((group) => (
+        {groups.map((group, groupIndex) => (
           <div key={group.id}>
             <h2 className="mb-5 text-xl font-semibold text-[var(--color-ink)]">
               {getLocalized(group.name, locale)}
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-              {group.children.map((child) => (
+              {group.children.map((child, childIndex) => (
                 <Link
                   key={child.id}
                   href={`/catalog/${child.slug}`}
@@ -54,6 +54,7 @@ export default async function CatalogRootPage({
                       alt={getLocalized(child.name, locale)}
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
+                      priority={groupIndex === 0 && childIndex < 4}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
