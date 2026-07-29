@@ -7,7 +7,8 @@ import { Plus, Trash2, Upload, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ProductFormState } from "@/app/admin/(dashboard)/products/actions";
 import { routing } from "@/i18n/routing";
-import { LocalizedTextField } from "./localized-field";
+import { LocalizedTextField, adminInputClass } from "./localized-field";
+import { Button } from "@/components/ui/button";
 
 type CategoryOption = { id: string; label: string };
 
@@ -73,8 +74,6 @@ export function ProductForm({
     }
   }
 
-  const inputClass =
-    "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)]";
   const labelClass = "mb-1.5 block text-xs font-medium text-[var(--color-ink-muted)]";
 
   return (
@@ -87,7 +86,7 @@ export function ProductForm({
       <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <div>
           <label className={labelClass}>{t("category")}</label>
-          <select className={inputClass} {...register("categoryId")}>
+          <select className={adminInputClass} {...register("categoryId")}>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
@@ -97,13 +96,13 @@ export function ProductForm({
         </div>
         <div>
           <label className={labelClass}>{t("basePrice")}</label>
-          <input type="number" className={inputClass} {...register("basePrice", { valueAsNumber: true })} />
+          <input type="number" className={adminInputClass} {...register("basePrice", { valueAsNumber: true })} />
         </div>
         <div>
           <label className={labelClass}>{t("discountPrice")}</label>
           <input
             type="number"
-            className={inputClass}
+            className={adminInputClass}
             {...register("discountPrice", {
               setValueAs: (v) => (v === "" ? null : Number(v)),
             })}
@@ -111,7 +110,7 @@ export function ProductForm({
         </div>
         <div>
           <label className={labelClass}>{t("availability")}</label>
-          <select className={inputClass} {...register("availability")}>
+          <select className={adminInputClass} {...register("availability")}>
             <option value="IN_STOCK">{t("availabilityInStock")}</option>
             <option value="OUT_OF_STOCK">{t("availabilityOutOfStock")}</option>
             <option value="ON_ORDER">{t("availabilityOnOrder")}</option>
@@ -139,16 +138,17 @@ export function ProductForm({
               <button
                 type="button"
                 onClick={() => setValue("images", images.filter((_, idx) => idx !== i))}
+                aria-label={tCommon("delete")}
                 className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
-          <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--color-border)] text-[var(--color-ink-soft)] transition-colors hover:border-[var(--color-accent)]">
+          <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--color-border)] text-[var(--color-ink-soft)] transition-colors hover:border-[var(--color-accent)] focus-within:ring-2 focus-within:ring-[var(--color-accent-strong)] focus-within:ring-offset-2">
             <Upload className="h-5 w-5" />
             <span className="text-[11px]">{uploading ? "..." : t("addImageShort")}</span>
-            <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileSelect} />
+            <input type="file" accept="image/*" multiple className="sr-only" onChange={handleFileSelect} />
           </label>
         </div>
       </section>
@@ -169,18 +169,19 @@ export function ProductForm({
             <div key={field.id} className="flex gap-2">
               <input
                 placeholder={t("variantNamePlaceholder")}
-                className={inputClass}
+                className={adminInputClass}
                 {...register(`variants.${i}.name` as const)}
               />
               <input
                 type="number"
                 placeholder={t("variantPricePlaceholder")}
-                className={`${inputClass} w-32`}
+                className={`${adminInputClass} w-32`}
                 {...register(`variants.${i}.price` as const, { valueAsNumber: true })}
               />
               <button
                 type="button"
                 onClick={() => removeVariant(i)}
+                aria-label={tCommon("delete")}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[var(--color-ink-soft)] transition-colors hover:bg-[var(--color-surface-subtle)] hover:text-red-500"
               >
                 <Trash2 className="h-4 w-4" />
@@ -190,13 +191,9 @@ export function ProductForm({
         </div>
       </section>
 
-      <button
-        type="submit"
-        disabled={isSubmitting || uploading}
-        className="w-fit rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
-      >
+      <Button type="submit" disabled={isSubmitting || uploading} className="w-fit">
         {isSubmitting ? tCommon("saving") : tCommon("save")}
-      </button>
+      </Button>
     </form>
   );
 }

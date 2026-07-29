@@ -28,10 +28,10 @@ export function MediaUploader() {
   }
 
   return (
-    <label className="mb-6 flex w-fit cursor-pointer items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95">
+    <label className="mb-6 flex w-fit cursor-pointer items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 focus-within:ring-2 focus-within:ring-[var(--color-accent-strong)] focus-within:ring-offset-2">
       <Upload className="h-4 w-4" />
       {uploading ? t("uploading") : t("uploadFiles")}
-      <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileSelect} />
+      <input type="file" accept="image/*" multiple className="sr-only" onChange={handleFileSelect} />
     </label>
   );
 }
