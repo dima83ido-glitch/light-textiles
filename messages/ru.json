@@ -12,7 +12,9 @@
     "search": "Поиск",
     "cart": "Корзина",
     "favorites": "Избранное",
-    "menu": "Меню"
+    "menu": "Меню",
+    "switchToLightTheme": "Включить светлую тему",
+    "switchToDarkTheme": "Включить тёмную тему"
   },
   "home": {
     "metaTitle": "Light Textiles — Постельное белье, полотенца и ткани от производителя",

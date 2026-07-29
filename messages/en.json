@@ -12,7 +12,9 @@
     "search": "Search",
     "cart": "Cart",
     "favorites": "Favorites",
-    "menu": "Menu"
+    "menu": "Menu",
+    "switchToLightTheme": "Switch to light theme",
+    "switchToDarkTheme": "Switch to dark theme"
   },
   "home": {
     "metaTitle": "Light Textiles — Bedding, towels, and fabrics from the manufacturer",

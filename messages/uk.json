@@ -12,7 +12,9 @@
     "search": "Пошук",
     "cart": "Кошик",
     "favorites": "Обране",
-    "menu": "Меню"
+    "menu": "Меню",
+    "switchToLightTheme": "Увімкнути світлу тему",
+    "switchToDarkTheme": "Увімкнути темну тему"
   },
   "home": {
     "metaTitle": "Light Textiles — Постільна білизна, рушники та тканини від виробника",

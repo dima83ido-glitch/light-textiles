@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string }) {
+  const t = useTranslations("nav");
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -18,7 +20,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={isDark ? "Увімкнути світлу тему" : "Увімкнути темну тему"}
+      aria-label={isDark ? t("switchToLightTheme") : t("switchToDarkTheme")}
       className={cn(
         "relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-accent-strong)] active:scale-90",
         className,
