@@ -35,6 +35,7 @@ export function CatalogPagination({
           {i > 0 && pages[i - 1] !== p - 1 && <span className="px-1 text-[var(--color-ink-soft)]">…</span>}
           <Link
             href={hrefFor(p)}
+            aria-current={p === currentPage ? "page" : undefined}
             className={cn(
               "flex h-9 min-w-9 items-center justify-center rounded-full px-3 text-sm font-medium transition-colors",
               p === currentPage
