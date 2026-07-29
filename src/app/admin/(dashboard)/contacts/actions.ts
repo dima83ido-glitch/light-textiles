@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { assertCanEdit } from "@/lib/rbac";
 import { routing } from "@/i18n/routing";
@@ -42,6 +42,7 @@ export async function updateSiteSettings(data: ContactsFormState) {
     create: { id: "main", ...fields },
   });
 
+  revalidateTag("site-settings");
   revalidatePath("/", "layout");
   revalidatePath("/admin/contacts");
 }

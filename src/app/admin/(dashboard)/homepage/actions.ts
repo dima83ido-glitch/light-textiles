@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { assertCanEdit } from "@/lib/rbac";
 import { routing } from "@/i18n/routing";
@@ -36,6 +36,7 @@ export async function createBanner(data: {
       isActive: true,
     },
   });
+  revalidateTag("banners");
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
@@ -43,6 +44,7 @@ export async function createBanner(data: {
 export async function toggleBannerActive(id: string, isActive: boolean) {
   await assertCanEdit("homepage");
   await prisma.banner.update({ where: { id }, data: { isActive } });
+  revalidateTag("banners");
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
@@ -50,6 +52,7 @@ export async function toggleBannerActive(id: string, isActive: boolean) {
 export async function deleteBanner(id: string) {
   await assertCanEdit("homepage");
   await prisma.banner.delete({ where: { id } });
+  revalidateTag("banners");
   revalidatePath("/admin/homepage");
 }
 
@@ -64,6 +67,7 @@ export async function createFaqItem(data: { question: Record<string, string>; an
       isActive: true,
     },
   });
+  revalidateTag("faq");
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
@@ -71,6 +75,7 @@ export async function createFaqItem(data: { question: Record<string, string>; an
 export async function toggleFaqActive(id: string, isActive: boolean) {
   await assertCanEdit("homepage");
   await prisma.faqItem.update({ where: { id }, data: { isActive } });
+  revalidateTag("faq");
   revalidatePath("/admin/homepage");
   revalidatePath("/", "layout");
 }
@@ -78,5 +83,6 @@ export async function toggleFaqActive(id: string, isActive: boolean) {
 export async function deleteFaqItem(id: string) {
   await assertCanEdit("homepage");
   await prisma.faqItem.delete({ where: { id } });
+  revalidateTag("faq");
   revalidatePath("/admin/homepage");
 }

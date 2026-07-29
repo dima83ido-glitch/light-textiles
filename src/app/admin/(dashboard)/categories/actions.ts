@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { assertCanEdit } from "@/lib/rbac";
@@ -47,6 +47,7 @@ export async function createCategory(data: CategoryFormState) {
       parentId: data.parentId || null,
     },
   });
+  revalidateTag("categories");
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
 }
@@ -62,6 +63,7 @@ export async function updateCategory(id: string, data: CategoryFormState) {
       isVisible: data.isVisible,
     },
   });
+  revalidateTag("categories");
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
 }
@@ -69,11 +71,13 @@ export async function updateCategory(id: string, data: CategoryFormState) {
 export async function deleteCategory(id: string) {
   await assertCanEdit("categories");
   await prisma.category.delete({ where: { id } });
+  revalidateTag("categories");
   revalidatePath("/admin/categories");
 }
 
 export async function toggleCategoryVisibility(id: string, isVisible: boolean) {
   await assertCanEdit("categories");
   await prisma.category.update({ where: { id }, data: { isVisible } });
+  revalidateTag("categories");
   revalidatePath("/admin/categories");
 }

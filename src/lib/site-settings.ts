@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 function formatPhoneDisplay(phone: string) {
@@ -26,9 +27,7 @@ export const FALLBACK_SITE_SETTINGS = {
   instagramUrl: "https://www.instagram.com/light_textiles.com.ua/",
 };
 
-// Wrapped in React's cache() so the handful of components that all render on every page
-// (header, footer, contact section) share one Prisma call per request instead of one each.
-export const getSiteSettings = cache(async function getSiteSettings() {
+async function fetchSiteSettings() {
   const settings = await prisma.siteSettings.findUnique({ where: { id: "main" } });
   if (!settings) return FALLBACK_SITE_SETTINGS;
 
@@ -42,4 +41,12 @@ export const getSiteSettings = cache(async function getSiteSettings() {
     facebookUrl: settings.facebookUrl ?? FALLBACK_SITE_SETTINGS.facebookUrl,
     instagramUrl: settings.instagramUrl ?? FALLBACK_SITE_SETTINGS.instagramUrl,
   };
-});
+}
+
+// Same reasoning as getCategoryTree in categories.ts: persisted across requests via
+// unstable_cache (5min revalidate + on-demand revalidateTag("site-settings") from the admin
+// contacts action), with the outer cache() still deduping the several call sites that all
+// render on every page (header, footer, contact section) down to one call per request.
+export const getSiteSettings = cache(
+  unstable_cache(fetchSiteSettings, ["site-settings"], { tags: ["site-settings"], revalidate: 300 }),
+);

@@ -1,15 +1,11 @@
 import { getTranslations, getLocale } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
+import { getActiveFaqItems } from "@/lib/homepage-content";
 import { getLocalized } from "@/lib/get-localized";
 import { Reveal } from "@/components/ui/reveal";
 import { FaqAccordion } from "./faq-accordion";
 
 export async function Faq() {
-  const [items, t, locale] = await Promise.all([
-    prisma.faqItem.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-    getTranslations("home"),
-    getLocale(),
-  ]);
+  const [items, t, locale] = await Promise.all([getActiveFaqItems(), getTranslations("home"), getLocale()]);
 
   if (items.length === 0) return null;
 

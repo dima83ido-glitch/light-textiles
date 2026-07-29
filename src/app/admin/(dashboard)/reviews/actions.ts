@@ -1,12 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { assertCanEdit } from "@/lib/rbac";
 
 export async function toggleReviewApproval(id: string, isApproved: boolean) {
   await assertCanEdit("reviews");
   await prisma.review.update({ where: { id }, data: { isApproved } });
+  revalidateTag("reviews");
   revalidatePath("/admin/reviews");
   revalidatePath("/", "layout");
 }
@@ -14,6 +15,7 @@ export async function toggleReviewApproval(id: string, isApproved: boolean) {
 export async function deleteReview(id: string) {
   await assertCanEdit("reviews");
   await prisma.review.delete({ where: { id } });
+  revalidateTag("reviews");
   revalidatePath("/admin/reviews");
 }
 
@@ -29,6 +31,7 @@ export async function createReview(data: { authorName: string; rating: number; t
       isApproved: true,
     },
   });
+  revalidateTag("reviews");
   revalidatePath("/admin/reviews");
   revalidatePath("/", "layout");
 }

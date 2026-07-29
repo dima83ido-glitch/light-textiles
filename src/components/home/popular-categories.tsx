@@ -1,18 +1,13 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { prisma } from "@/lib/prisma";
+import { getPopularCategories } from "@/lib/categories";
 import { getLocalized } from "@/lib/get-localized";
 import { CategoryCardMotion } from "./category-card-motion";
 
 export async function PopularCategories() {
   const [categories, t, tCommon, locale] = await Promise.all([
-    prisma.category.findMany({
-      where: { isVisible: true, parentId: { not: null } },
-      orderBy: { sortOrder: "asc" },
-      take: 8,
-      include: { _count: { select: { products: true } } },
-    }),
+    getPopularCategories(),
     getTranslations("home"),
     getTranslations("common"),
     getLocale(),
@@ -48,7 +43,7 @@ export async function PopularCategories() {
                 <div className="relative">
                   <p className="text-sm font-semibold text-white drop-shadow-sm">{name}</p>
                   <p className="text-xs text-white/80">
-                    {tCommon("itemsCount", { count: category._count.products })}
+                    {tCommon("itemsCount", { count: category.productCount })}
                   </p>
                 </div>
               </Link>
