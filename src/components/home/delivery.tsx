@@ -22,9 +22,9 @@ export async function Delivery() {
               <Reveal
                 key={card.title}
                 delay={i * 0.08}
-                className="rounded-[var(--radius-card)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-soft)]"
+                className="group rounded-[var(--radius-card)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lifted)]"
               >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)] transition-colors group-hover:bg-[var(--color-accent)] group-hover:text-white">
                   <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
                 </div>
                 <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{card.title}</h3>

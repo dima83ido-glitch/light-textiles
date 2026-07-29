@@ -3,6 +3,7 @@ import { getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { getLocalized } from "@/lib/get-localized";
+import { Reveal } from "@/components/ui/reveal";
 
 export async function PromoBanners() {
   const [banners, locale] = await Promise.all([
@@ -15,7 +16,7 @@ export async function PromoBanners() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-12">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {banners.map((banner) => {
+        {banners.map((banner, i) => {
           const title = getLocalized(banner.title as Record<string, string>, locale);
           const subtitle = banner.subtitle ? getLocalized(banner.subtitle as Record<string, string>, locale) : null;
           const content = (
@@ -28,12 +29,10 @@ export async function PromoBanners() {
               </div>
             </div>
           );
-          return banner.link ? (
-            <Link key={banner.id} href={banner.link}>
-              {content}
-            </Link>
-          ) : (
-            <div key={banner.id}>{content}</div>
+          return (
+            <Reveal key={banner.id} delay={i * 0.08}>
+              {banner.link ? <Link href={banner.link}>{content}</Link> : content}
+            </Reveal>
           );
         })}
       </div>

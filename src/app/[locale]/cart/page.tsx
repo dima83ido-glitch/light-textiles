@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
+import { buttonClass } from "@/components/ui/button";
 
 export default function CartPage() {
   const t = useTranslations("cart");
@@ -20,7 +21,21 @@ export default function CartPage() {
 
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-  if (!mounted) return <div className="mx-auto max-w-5xl px-6 py-20" />;
+  if (!mounted) {
+    return (
+      <div className="mx-auto max-w-5xl animate-pulse px-6 py-12">
+        <div className="mb-8 h-9 w-40 rounded-full bg-[var(--color-surface-subtle)]" />
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+          <div className="flex flex-col gap-4 lg:col-span-2">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="h-28 rounded-[var(--radius-card)] bg-[var(--color-surface-subtle)]" />
+            ))}
+          </div>
+          <div className="h-40 rounded-[var(--radius-card)] bg-[var(--color-surface-subtle)]" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
@@ -34,10 +49,7 @@ export default function CartPage() {
             <ShoppingBag className="h-7 w-7" />
           </div>
           <p className="text-[var(--color-ink-muted)]">{t("empty")}</p>
-          <Link
-            href="/catalog"
-            className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]"
-          >
+          <Link href="/catalog" className={buttonClass()}>
             {t("continueShopping")}
           </Link>
         </div>
@@ -73,8 +85,10 @@ export default function CartPage() {
                     <div className="flex items-center rounded-full border border-[var(--color-border)]">
                       <button
                         type="button"
+                        disabled={item.quantity <= 1}
                         onClick={() => setQuantity(item.productId, item.quantity - 1, item.variantId)}
-                        className="flex h-8 w-8 items-center justify-center text-[var(--color-ink-muted)]"
+                        aria-label={t("decreaseQuantity")}
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-ink)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
                       >
                         <Minus className="h-3.5 w-3.5" />
                       </button>
@@ -82,7 +96,8 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => setQuantity(item.productId, item.quantity + 1, item.variantId)}
-                        className="flex h-8 w-8 items-center justify-center text-[var(--color-ink-muted)]"
+                        aria-label={t("increaseQuantity")}
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-ink)]"
                       >
                         <Plus className="h-3.5 w-3.5" />
                       </button>

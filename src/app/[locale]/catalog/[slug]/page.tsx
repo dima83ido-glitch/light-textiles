@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PackageSearch } from "lucide-react";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -8,6 +9,7 @@ import { getAlternates } from "@/lib/seo";
 import { ProductCard } from "@/components/product/product-card";
 import { CatalogToolbar } from "@/components/catalog/catalog-toolbar";
 import { CatalogPagination } from "@/components/catalog/pagination";
+import { buttonClass } from "@/components/ui/button";
 
 export async function generateMetadata({
   params,
@@ -101,7 +103,15 @@ export default async function CatalogCategoryPage({
       <CatalogToolbar total={total} />
 
       {items.length === 0 ? (
-        <p className="py-20 text-center text-[var(--color-ink-muted)]">{tCatalog("empty")}</p>
+        <div className="flex flex-col items-center gap-6 py-20 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
+            <PackageSearch className="h-7 w-7" />
+          </div>
+          <p className="text-[var(--color-ink-muted)]">{tCatalog("empty")}</p>
+          <Link href="/catalog" className={buttonClass()}>
+            {tCatalog("title")}
+          </Link>
+        </div>
       ) : (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((product) => (

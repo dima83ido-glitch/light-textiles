@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Delivery } from "@/components/home/delivery";
 import { PageHero } from "@/components/ui/page-hero";
 import { Card } from "@/components/ui/card";
+import { Reveal } from "@/components/ui/reveal";
 import { getAlternates } from "@/lib/seo";
 
 const returnsIcons = [RotateCcw, Wrench, ShieldCheck];
@@ -50,13 +51,15 @@ export default async function DeliveryPage({
           {returnsItems.map((item, i) => {
             const Icon = returnsIcons[i % returnsIcons.length];
             return (
-              <Card key={item.title} hoverLift>
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
-                  <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
-                </div>
-                <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.text}</p>
-              </Card>
+              <Reveal key={item.title} delay={i * 0.08}>
+                <Card hoverLift>
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
+                    <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
+                  </div>
+                  <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.text}</p>
+                </Card>
+              </Reveal>
             );
           })}
         </div>

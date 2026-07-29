@@ -82,3 +82,15 @@ body {
   background: var(--color-accent);
   color: white;
 }
+
+/* Keyboard-only focus ring. Buttons/links across the app rely on hover styles for
+   affordance but many never got an explicit focus treatment — this covers all of them
+   in one place instead of patching every component. Inputs/textareas/selects keep their
+   own focus:ring-* treatment (already visible on click too), so they're excluded here. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

@@ -107,7 +107,9 @@
     "total": "Total",
     "checkout": "Checkout",
     "quantity": "Quantity",
-    "remove": "Remove"
+    "remove": "Remove",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity"
   },
   "favorites": {
     "title": "Favorites",
@@ -233,7 +235,8 @@
       "analytics": "Analytics",
       "settings": "Settings",
       "account": "My account",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "menu": "Menu"
     },
     "common": {
       "save": "Save",

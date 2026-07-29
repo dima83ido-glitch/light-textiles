@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function CatalogToolbar({ total }: { total: number }) {
   const t = useTranslations("catalog");
@@ -54,7 +56,7 @@ export function CatalogToolbar({ total }: { total: number }) {
             <select
               value={currentSort}
               onChange={(e) => updateParams({ sort: e.target.value === "newest" ? null : e.target.value })}
-              className="appearance-none rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] py-2 pl-4 pr-9 text-sm font-medium text-[var(--color-ink)] outline-none"
+              className="appearance-none rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] py-2 pl-4 pr-9 text-sm font-medium text-[var(--color-ink)] outline-none transition-all duration-200 focus:border-[var(--color-accent)] focus:ring-4 focus:ring-[var(--color-accent)]/15"
             >
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -87,30 +89,15 @@ export function CatalogToolbar({ total }: { total: number }) {
           >
             <div>
               <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">{t("priceFrom")}</label>
-              <input
-                name="min"
-                type="number"
-                min={0}
-                defaultValue={minPrice}
-                className="w-28 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none"
-              />
+              <Input name="min" type="number" min={0} defaultValue={minPrice} className="w-28 px-3 py-2" />
             </div>
             <div>
               <label className="mb-1 block text-xs text-[var(--color-ink-soft)]">{t("priceTo")}</label>
-              <input
-                name="max"
-                type="number"
-                min={0}
-                defaultValue={maxPrice}
-                className="w-28 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none"
-              />
+              <Input name="max" type="number" min={0} defaultValue={maxPrice} className="w-28 px-3 py-2" />
             </div>
-            <button
-              type="submit"
-              className="rounded-full bg-[var(--color-ink)] px-5 py-2 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
-            >
+            <Button type="submit" className="px-5 py-2">
               {t("apply")}
-            </button>
+            </Button>
           </form>
         </div>
       </div>

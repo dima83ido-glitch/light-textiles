@@ -40,7 +40,7 @@ export default async function ContactsPage({
         <div className="flex flex-col gap-4">
           <a
             href={`tel:${settings.phone}`}
-            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-colors hover:text-[var(--color-accent-strong)]"
+            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:text-[var(--color-accent-strong)] hover:shadow-[var(--shadow-lifted)]"
           >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-tint)]">
               <Phone className="h-4 w-4 text-[var(--color-accent-strong)]" />
@@ -49,7 +49,7 @@ export default async function ContactsPage({
           </a>
           <a
             href={`mailto:${settings.email}`}
-            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-colors hover:text-[var(--color-accent-strong)]"
+            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:text-[var(--color-accent-strong)] hover:shadow-[var(--shadow-lifted)]"
           >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-tint)]">
               <Mail className="h-4 w-4 text-[var(--color-accent-strong)]" />
@@ -58,7 +58,7 @@ export default async function ContactsPage({
           </a>
           <a
             href={`viber://chat?number=${settings.viber}`}
-            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-colors hover:text-[var(--color-accent-strong)]"
+            className="flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-sm font-medium text-[var(--color-ink)] shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:text-[var(--color-accent-strong)] hover:shadow-[var(--shadow-lifted)]"
           >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-tint)]">
               <MessageCircle className="h-4 w-4 text-[var(--color-accent-strong)]" />

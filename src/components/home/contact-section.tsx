@@ -2,6 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getLocalized } from "@/lib/get-localized";
+import { Reveal } from "@/components/ui/reveal";
 import { ContactForm } from "./contact-form";
 
 export async function ContactSection() {
@@ -16,7 +17,7 @@ export async function ContactSection() {
   return (
     <section className="bg-[var(--color-surface-tint)] py-20">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2">
-        <div>
+        <Reveal direction="left">
           <h2 className="mb-5 text-3xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-4xl">
             {t("contactTitle")}
           </h2>
@@ -44,11 +45,11 @@ export async function ContactSection() {
               {localized(settings.address)}
             </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="rounded-[var(--radius-card)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-lifted)] sm:p-8">
+        <Reveal direction="right" delay={0.1} className="rounded-[var(--radius-card)] bg-[var(--color-surface)] p-7 shadow-[var(--shadow-lifted)] sm:p-8">
           <ContactForm />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

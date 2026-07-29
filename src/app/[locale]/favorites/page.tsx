@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { buttonClass } from "@/components/ui/button";
 
 export default function FavoritesPage() {
   const t = useTranslations("favorites");
@@ -30,13 +31,23 @@ export default function FavoritesPage() {
         {t("title")}
       </h1>
 
-      {products === null ? null : products.length === 0 ? (
+      {products === null ? (
+        <div className="grid animate-pulse grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-3">
+              <div className="aspect-[4/5] rounded-[var(--radius-card)] bg-[var(--color-surface-subtle)]" />
+              <div className="h-4 w-3/4 rounded-full bg-[var(--color-surface-subtle)]" />
+              <div className="h-4 w-1/3 rounded-full bg-[var(--color-surface-subtle)]" />
+            </div>
+          ))}
+        </div>
+      ) : products.length === 0 ? (
         <div className="flex flex-col items-center gap-6 py-20 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
             <Heart className="h-7 w-7" />
           </div>
           <p className="text-[var(--color-ink-muted)]">{t("empty")}</p>
-          <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+          <Link href="/catalog" className={buttonClass()}>
             {tCart("continueShopping")}
           </Link>
         </div>

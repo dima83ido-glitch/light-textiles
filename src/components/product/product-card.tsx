@@ -23,7 +23,6 @@ export type ProductCardData = {
 
 export function ProductCard({ product }: { product: ProductCardData }) {
   const t = useTranslations("product");
-  const [hovered, setHovered] = useState(false);
   // Zustand's persist middleware rehydrates from localStorage before the client's first
   // paint, while SSR always renders the default (empty) state — reading the store value
   // straight into render would mismatch. Only trust it once mounted, matching the pattern
@@ -51,8 +50,6 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       className="group relative flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-lifted)]"
     >
       <Link href={`/product/${product.slug}`} className="relative block aspect-[4/5] overflow-hidden bg-[var(--color-surface-subtle)]">
@@ -91,12 +88,9 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           <Heart className="h-4.5 w-4.5" fill={isFavorite ? "currentColor" : "none"} strokeWidth={1.75} />
         </button>
 
-        <motion.div
-          initial={false}
-          animate={{ y: hovered ? 0 : 12, opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.22, ease: "easeOut" }}
-          className="absolute inset-x-3 bottom-3"
-        >
+        {/* Always visible on touch devices (no hover to reveal it on); fades in on hover
+            for pointer/desktop so the image stays clean until intent is shown. */}
+        <div className="absolute inset-x-3 bottom-3 translate-y-0 opacity-100 transition-all duration-200 ease-out lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
           <button
             type="button"
             onClick={(e) => {
@@ -109,12 +103,12 @@ export function ProductCard({ product }: { product: ProductCardData }) {
                 image: product.image,
               });
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-2.5 text-sm font-semibold text-[var(--color-canvas)] shadow-lg"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-2.5 text-sm font-semibold text-[var(--color-canvas)] shadow-lg transition-transform active:scale-95"
           >
             <ShoppingBag className="h-4 w-4" />
             {t("addToCart")}
           </button>
-        </motion.div>
+        </div>
       </Link>
 
       <div className="flex flex-1 flex-col gap-2 p-4">

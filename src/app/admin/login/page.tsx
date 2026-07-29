@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
 import { adminLogin } from "@/lib/auth-actions";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function AdminLoginPage() {
   const t = useTranslations("admin.login");
@@ -45,35 +47,29 @@ export default function AdminLoginPage() {
           <label htmlFor="admin-login-email" className="sr-only">
             {t("emailPlaceholder")}
           </label>
-          <input
+          <Input
             id="admin-login-email"
             required
             type="email"
             placeholder={t("emailPlaceholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)]"
           />
           <label htmlFor="admin-login-password" className="sr-only">
             {t("passwordPlaceholder")}
           </label>
-          <input
+          <Input
             id="admin-login-password"
             required
             type="password"
             placeholder={t("passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)]"
           />
           {error && <p className="text-xs text-red-500">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-2 rounded-full bg-[var(--color-ink)] py-3 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
-          >
+          <Button type="submit" disabled={loading} className="mt-2">
             {loading ? t("submitting") : t("submit")}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

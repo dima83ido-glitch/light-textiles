@@ -67,7 +67,7 @@ export default async function AdminOrdersPage({
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)]">
+      <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)]">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-subtle)] text-left text-[var(--color-ink-soft)]">

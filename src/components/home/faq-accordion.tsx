@@ -24,7 +24,10 @@ export function FaqAccordion({
             <button
               type="button"
               onClick={() => setOpenId(isOpen ? null : item.id)}
-              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium text-[var(--color-ink)]"
+              aria-expanded={isOpen}
+              aria-controls={`faq-panel-${item.id}`}
+              id={`faq-trigger-${item.id}`}
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-tint)]"
             >
               {item.question}
               <Plus
@@ -37,6 +40,9 @@ export function FaqAccordion({
             <AnimatePresence initial={false}>
               {isOpen && (
                 <motion.div
+                  id={`faq-panel-${item.id}`}
+                  role="region"
+                  aria-labelledby={`faq-trigger-${item.id}`}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}

@@ -46,9 +46,11 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
               key={img + i}
               type="button"
               onClick={() => setActive(i)}
+              aria-label={`${name} ${i + 1}`}
+              aria-current={active === i}
               className={cn(
                 "relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors",
-                active === i ? "border-[var(--color-accent)]" : "border-transparent",
+                active === i ? "border-[var(--color-accent)]" : "border-transparent hover:border-[var(--color-border)]",
               )}
             >
               <Image src={img} alt={`${name} ${i + 1}`} fill sizes="80px" className="object-cover" />

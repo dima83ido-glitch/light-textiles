@@ -1,6 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getLocalized } from "@/lib/get-localized";
+import { Reveal } from "@/components/ui/reveal";
 import { FaqAccordion } from "./faq-accordion";
 
 export async function Faq() {
@@ -23,7 +24,9 @@ export async function Faq() {
       <h2 className="mb-10 text-center text-3xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-4xl">
         {t("faqTitle")}
       </h2>
-      <FaqAccordion items={localized} />
+      <Reveal>
+        <FaqAccordion items={localized} />
+      </Reveal>
     </section>
   );
 }

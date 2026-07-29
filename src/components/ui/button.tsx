@@ -12,19 +12,18 @@ const variantClass: Record<ButtonVariant, string> = {
   ghost: "text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-accent-strong)]",
 };
 
+const baseClass =
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0";
+
+/** For CTAs that must render as a Link/anchor instead of a real <button> (e.g. "continue shopping" after an empty state) — keeps them pixel-identical to <Button> without nesting an anchor inside a button element. */
+export function buttonClass(variant: ButtonVariant = "primary", className?: string) {
+  return cn(baseClass, variantClass[variant], className);
+}
+
 export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }>(
   ({ className, variant = "primary", type = "button", ...props }, ref) => {
     return (
-      <button
-        ref={ref}
-        type={type}
-        className={cn(
-          "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
-          variantClass[variant],
-          className,
-        )}
-        {...props}
-      />
+      <button ref={ref} type={type} className={buttonClass(variant, className)} {...props} />
     );
   },
 );

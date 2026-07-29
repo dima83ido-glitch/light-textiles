@@ -9,6 +9,12 @@ import { Link } from "@/i18n/navigation";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validation/order";
 import { formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
+import { Input, inputBaseClass } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button, buttonClass } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const buttonLinkClass = buttonClass();
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
@@ -52,7 +58,21 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!mounted) return <div className="mx-auto max-w-3xl px-6 py-20" />;
+  if (!mounted) {
+    return (
+      <div className="mx-auto max-w-4xl animate-pulse px-6 py-12">
+        <div className="mb-8 h-9 w-56 rounded-full bg-[var(--color-surface-subtle)]" />
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+          <div className="flex flex-col gap-4 lg:col-span-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-12 rounded-2xl bg-[var(--color-surface-subtle)]" />
+            ))}
+          </div>
+          <div className="h-40 rounded-[var(--radius-card)] bg-[var(--color-surface-subtle)]" />
+        </div>
+      </div>
+    );
+  }
 
   if (orderNumber) {
     return (
@@ -60,7 +80,7 @@ export default function CheckoutPage() {
         <CheckCircle2 className="h-14 w-14 text-emerald-500" />
         <h1 className="text-2xl font-semibold text-[var(--color-ink)]">{t("success")}</h1>
         <p className="text-sm text-[var(--color-ink-soft)]">№ {orderNumber}</p>
-        <Link href="/" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+        <Link href="/" className={buttonLinkClass}>
           {t("goHome")}
         </Link>
       </div>
@@ -71,15 +91,12 @@ export default function CheckoutPage() {
     return (
       <div className="mx-auto max-w-lg px-6 py-24 text-center">
         <p className="mb-6 text-[var(--color-ink-muted)]">{t("emptyCart")}</p>
-        <Link href="/catalog" className="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)]">
+        <Link href="/catalog" className={buttonLinkClass}>
           {tCart("continueShopping")}
         </Link>
       </div>
     );
   }
-
-  const inputClass =
-    "w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20";
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
@@ -93,29 +110,34 @@ export default function CheckoutPage() {
             <label htmlFor="checkout-name" className="sr-only">
               {t("name")}
             </label>
-            <input id="checkout-name" placeholder={t("name")} className={inputClass} {...register("customerName")} />
+            <Input id="checkout-name" placeholder={t("name")} {...register("customerName")} />
             {errors.customerName && <p className="mt-1 text-xs text-red-500">{errors.customerName.message}</p>}
           </div>
           <div>
             <label htmlFor="checkout-phone" className="sr-only">
               {t("phone")}
             </label>
-            <input id="checkout-phone" placeholder={t("phone")} className={inputClass} {...register("phone")} />
+            <Input id="checkout-phone" placeholder={t("phone")} {...register("phone")} />
             {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
           </div>
           <label htmlFor="checkout-email" className="sr-only">
             {t("email")}
           </label>
-          <input id="checkout-email" placeholder={t("email")} className={inputClass} {...register("email")} />
+          <Input id="checkout-email" placeholder={t("email")} {...register("email")} />
           <div className="grid grid-cols-2 gap-4">
             <label htmlFor="checkout-city" className="sr-only">
               {t("city")}
             </label>
-            <input id="checkout-city" placeholder={t("city")} className={inputClass} {...register("city")} />
+            <Input id="checkout-city" placeholder={t("city")} {...register("city")} />
             <label htmlFor="checkout-delivery-method" className="sr-only">
               {t("deliveryMethod")}
             </label>
-            <select id="checkout-delivery-method" className={inputClass} {...register("deliveryMethod")} defaultValue="">
+            <select
+              id="checkout-delivery-method"
+              className={cn(inputBaseClass, "appearance-none")}
+              {...register("deliveryMethod")}
+              defaultValue=""
+            >
               <option value="" disabled>
                 {t("deliveryMethod")}
               </option>
@@ -126,19 +148,15 @@ export default function CheckoutPage() {
           <label htmlFor="checkout-address" className="sr-only">
             {t("address")}
           </label>
-          <input id="checkout-address" placeholder={t("address")} className={inputClass} {...register("address")} />
+          <Input id="checkout-address" placeholder={t("address")} {...register("address")} />
           <label htmlFor="checkout-notes" className="sr-only">
             {t("notes")}
           </label>
-          <textarea id="checkout-notes" placeholder={t("notes")} rows={3} className={inputClass} {...register("notes")} />
+          <Textarea id="checkout-notes" placeholder={t("notes")} rows={3} {...register("notes")} />
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="mt-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] disabled:opacity-60"
-          >
+          <Button type="submit" disabled={isSubmitting} className="mt-2">
             {t("submit")}
-          </button>
+          </Button>
         </form>
 
         <div className="h-fit rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-soft)]">

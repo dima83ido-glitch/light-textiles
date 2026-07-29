@@ -7,6 +7,9 @@ import { useTranslations } from "next-intl";
 import { cn, formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useFavoritesStore } from "@/stores/favorites-store";
+import { useOverlayA11y } from "@/lib/use-overlay-a11y";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export type Variant = { id: string; name: string; price: number };
 
@@ -87,8 +90,9 @@ export function ProductPurchasePanel({
         <div className="flex items-center rounded-full border border-[var(--color-border)]">
           <button
             type="button"
+            disabled={quantity <= 1}
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="flex h-11 w-11 items-center justify-center text-[var(--color-ink-muted)]"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-ink)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
             aria-label={t("decreaseQuantity")}
           >
             <Minus className="h-4 w-4" />
@@ -97,7 +101,7 @@ export function ProductPurchasePanel({
           <button
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
-            className="flex h-11 w-11 items-center justify-center text-[var(--color-ink-muted)]"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-ink)]"
             aria-label={t("increaseQuantity")}
           >
             <Plus className="h-4 w-4" />
@@ -108,7 +112,7 @@ export function ProductPurchasePanel({
           type="button"
           onClick={() => toggleFavorite(productId)}
           className={cn(
-            "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] transition-colors",
+            "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] transition-all active:scale-90",
             isFavorite ? "text-red-500" : "text-[var(--color-ink-muted)] hover:text-red-500",
           )}
           aria-label={t("addToFavorites")}
@@ -134,7 +138,7 @@ export function ProductPurchasePanel({
               quantity,
             )
           }
-          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] transition-transform hover:-translate-y-0.5"
+          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-canvas)] shadow-[var(--shadow-lifted)] transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
         >
           <ShoppingBag className="h-4 w-4" />
           {t("addToCart")}
@@ -142,7 +146,7 @@ export function ProductPurchasePanel({
         <button
           type="button"
           onClick={() => setQuickOrderOpen(true)}
-          className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-surface-tint)] py-3.5 text-sm font-semibold text-[var(--color-accent-ink)] transition-transform hover:-translate-y-0.5"
+          className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-surface-tint)] py-3.5 text-sm font-semibold text-[var(--color-accent-ink)] transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
         >
           <Zap className="h-4 w-4" />
           {t("quickOrder")}
@@ -182,15 +186,13 @@ function QuickOrderModal({
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     nameInputRef.current?.focus();
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+  }, []);
+
+  useOverlayA11y(true, onClose, dialogRef);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -217,6 +219,7 @@ function QuickOrderModal({
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="quick-order-title"
@@ -230,45 +233,50 @@ function QuickOrderModal({
           <h3 id="quick-order-title" className="text-lg font-semibold text-[var(--color-ink)]">
             {t("quickOrderTitle")}
           </h3>
-          <button type="button" onClick={onClose} aria-label="Close" className="text-[var(--color-ink-muted)]">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-tint)] hover:text-[var(--color-ink)]"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {status === "success" ? (
-          <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{t("quickOrderThanks")}</p>
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-sm font-medium text-emerald-600 dark:text-emerald-400"
+          >
+            {t("quickOrderThanks")}
+          </motion.p>
         ) : (
           <form onSubmit={submit} className="flex flex-col gap-3">
             <label htmlFor="quick-order-name" className="sr-only">
               {t("quickOrderName")}
             </label>
-            <input
+            <Input
               id="quick-order-name"
               ref={nameInputRef}
               required
               placeholder={t("quickOrderName")}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-accent)]"
             />
             <label htmlFor="quick-order-phone" className="sr-only">
               {t("quickOrderPhone")}
             </label>
-            <input
+            <Input
               id="quick-order-phone"
               required
               placeholder={t("quickOrderPhone")}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-accent)]"
             />
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className="rounded-full bg-[var(--color-ink)] py-3 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
-            >
+            <Button type="submit" disabled={status === "loading"}>
               {status === "loading" ? t("quickOrderSubmitting") : t("quickOrderSubmit")}
-            </button>
+            </Button>
             {status === "error" && <p className="text-xs text-red-500">{t("quickOrderError")}</p>}
           </form>
         )}

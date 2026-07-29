@@ -5,6 +5,12 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
+const LOCALE_NAMES: Record<string, string> = {
+  uk: "Українська",
+  en: "English",
+  ru: "Русский",
+};
+
 export function LocaleSwitcher() {
   const locale = useLocale();
   const pathname = usePathname();
@@ -17,8 +23,10 @@ export function LocaleSwitcher() {
           key={l}
           type="button"
           onClick={() => router.replace(pathname, { locale: l })}
+          aria-label={LOCALE_NAMES[l] ?? l}
+          aria-current={l === locale ? "true" : undefined}
           className={cn(
-            "rounded-full px-2.5 py-1 transition-colors",
+            "rounded-full px-2.5 py-1.5 transition-colors",
             l === locale
               ? "bg-[var(--color-surface)] text-[var(--color-accent-strong)] shadow-sm"
               : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]",

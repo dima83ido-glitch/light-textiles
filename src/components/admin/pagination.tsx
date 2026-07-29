@@ -30,27 +30,35 @@ export async function AdminPagination({
   };
 
   const linkClass =
-    "flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-subtle)] aria-disabled:pointer-events-none aria-disabled:opacity-40";
+    "flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-subtle)]";
+  const disabledClass = "flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] opacity-40 cursor-not-allowed";
+
+  const isFirst = page <= 1;
+  const isLast = page >= totalPages;
 
   return (
     <div className="mt-5 flex items-center justify-between">
-      <Link
-        href={buildHref(page - 1)}
-        aria-disabled={page <= 1}
-        className={linkClass}
-      >
-        <ChevronLeft className="h-4 w-4" /> {t("previous")}
-      </Link>
+      {isFirst ? (
+        <span aria-disabled="true" className={disabledClass}>
+          <ChevronLeft className="h-4 w-4" /> {t("previous")}
+        </span>
+      ) : (
+        <Link href={buildHref(page - 1)} className={linkClass}>
+          <ChevronLeft className="h-4 w-4" /> {t("previous")}
+        </Link>
+      )}
       <p className="text-sm text-[var(--color-ink-soft)]">
         {t("pageInfo", { page, total: totalPages })}
       </p>
-      <Link
-        href={buildHref(page + 1)}
-        aria-disabled={page >= totalPages}
-        className={linkClass}
-      >
-        {t("next")} <ChevronRight className="h-4 w-4" />
-      </Link>
+      {isLast ? (
+        <span aria-disabled="true" className={disabledClass}>
+          {t("next")} <ChevronRight className="h-4 w-4" />
+        </span>
+      ) : (
+        <Link href={buildHref(page + 1)} className={linkClass}>
+          {t("next")} <ChevronRight className="h-4 w-4" />
+        </Link>
+      )}
     </div>
   );
 }

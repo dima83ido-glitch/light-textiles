@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/home/contact-form";
 import { PageHero } from "@/components/ui/page-hero";
 import { Card } from "@/components/ui/card";
+import { Reveal } from "@/components/ui/reveal";
 import { getAlternates } from "@/lib/seo";
 
 const stepIcons = [ClipboardList, MessageSquareText, Truck];
@@ -42,13 +43,15 @@ export default async function CustomOrderPage({
           {steps.map((step, i) => {
             const Icon = stepIcons[i % stepIcons.length];
             return (
-              <Card key={step.title} hoverLift>
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
-                  <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
-                </div>
-                <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{step.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{step.text}</p>
-              </Card>
+              <Reveal key={step.title} delay={i * 0.08}>
+                <Card hoverLift>
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface-tint)] text-[var(--color-accent-strong)]">
+                    <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
+                  </div>
+                  <h3 className="mb-2 text-base font-semibold text-[var(--color-ink)]">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{step.text}</p>
+                </Card>
+              </Reveal>
             );
           })}
         </div>

@@ -107,7 +107,9 @@
     "total": "Итого",
     "checkout": "Оформить заказ",
     "quantity": "Количество",
-    "remove": "Удалить"
+    "remove": "Удалить",
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество"
   },
   "favorites": {
     "title": "Избранное",
@@ -233,7 +235,8 @@
       "analytics": "Аналитика",
       "settings": "Настройки",
       "account": "Мой аккаунт",
-      "signOut": "Выйти"
+      "signOut": "Выйти",
+      "menu": "Меню"
     },
     "common": {
       "save": "Сохранить",

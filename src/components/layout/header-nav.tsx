@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,6 +9,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { getLocalized } from "@/lib/get-localized";
 import type { NavCategory } from "@/lib/categories";
+import { useOverlayA11y } from "@/lib/use-overlay-a11y";
 import { HeaderBadges } from "./header-badges";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -23,11 +24,13 @@ export function HeaderNav({
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("nav");
 
   useEffect(() => setMounted(true), []);
+  useOverlayA11y(mobileOpen, () => setMobileOpen(false), drawerRef);
 
   return (
     <nav className="relative">
@@ -119,6 +122,10 @@ export function HeaderNav({
                   onClick={() => setMobileOpen(false)}
                 />
             <motion.div
+              ref={drawerRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t("menu")}
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}

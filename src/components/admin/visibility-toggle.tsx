@@ -32,6 +32,8 @@ export function VisibilityToggle({
         "relative h-6 w-11 rounded-full transition-colors",
         optimistic ? "bg-[var(--color-accent)]" : "bg-[var(--color-border)]",
       )}
+      role="switch"
+      aria-checked={optimistic}
       aria-label={t("toggleVisibility")}
     >
       <span

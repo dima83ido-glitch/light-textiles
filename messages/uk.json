@@ -107,7 +107,9 @@
     "total": "Разом",
     "checkout": "Оформити замовлення",
     "quantity": "Кількість",
-    "remove": "Видалити"
+    "remove": "Видалити",
+    "decreaseQuantity": "Зменшити кількість",
+    "increaseQuantity": "Збільшити кількість"
   },
   "favorites": {
     "title": "Обране",
@@ -233,7 +235,8 @@
       "analytics": "Аналітика",
       "settings": "Налаштування",
       "account": "Мій акаунт",
-      "signOut": "Вийти"
+      "signOut": "Вийти",
+      "menu": "Меню"
     },
     "common": {
       "save": "Зберегти",

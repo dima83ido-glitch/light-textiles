@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Bell } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -79,37 +80,45 @@ export function NotificationBell() {
         )}
       </button>
 
-      {open && (
-        <div className="absolute right-0 top-12 z-50 w-80 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-lifted)]">
-          <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
-            <p className="text-sm font-semibold text-[var(--color-ink)]">{t("title")}</p>
-            {unreadCount > 0 && (
-              <button type="button" onClick={markAllRead} className="text-xs font-medium text-[var(--color-accent-strong)]">
-                {t("markAllRead")}
-              </button>
-            )}
-          </div>
-          <div className="max-h-96 overflow-y-auto">
-            {notifications.length === 0 && (
-              <p className="px-4 py-8 text-center text-sm text-[var(--color-ink-soft)]">{t("empty")}</p>
-            )}
-            {notifications.map((n) => (
-              <div
-                key={n.id}
-                className={cn(
-                  "border-b border-[var(--color-border)] px-4 py-3 text-sm last:border-0",
-                  !n.isRead && "bg-[var(--color-surface-tint)]",
-                )}
-              >
-                <p className="text-[var(--color-ink)]">{n.message}</p>
-                <p className="mt-1 text-xs text-[var(--color-ink-soft)]">
-                  {new Date(n.createdAt).toLocaleString()}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={{ duration: 0.16, ease: "easeOut" }}
+            className="absolute right-0 top-12 z-50 w-80 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-lifted)]"
+          >
+            <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
+              <p className="text-sm font-semibold text-[var(--color-ink)]">{t("title")}</p>
+              {unreadCount > 0 && (
+                <button type="button" onClick={markAllRead} className="text-xs font-medium text-[var(--color-accent-strong)] hover:underline">
+                  {t("markAllRead")}
+                </button>
+              )}
+            </div>
+            <div className="max-h-96 overflow-y-auto">
+              {notifications.length === 0 && (
+                <p className="px-4 py-8 text-center text-sm text-[var(--color-ink-soft)]">{t("empty")}</p>
+              )}
+              {notifications.map((n) => (
+                <div
+                  key={n.id}
+                  className={cn(
+                    "border-b border-[var(--color-border)] px-4 py-3 text-sm last:border-0",
+                    !n.isRead && "bg-[var(--color-surface-tint)]",
+                  )}
+                >
+                  <p className="text-[var(--color-ink)]">{n.message}</p>
+                  <p className="mt-1 text-xs text-[var(--color-ink-soft)]">
+                    {new Date(n.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -59,77 +59,81 @@ export default async function WarehouseDetailPage({ params }: { params: Promise<
         <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-subtle)] px-4 py-3">
           <h2 className="text-sm font-semibold text-[var(--color-ink)]">{t("currentStock")}</h2>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[var(--color-border)] text-left text-[var(--color-ink-soft)]">
-              <th className="px-4 py-3 font-medium">{t("product")}</th>
-              <th className="px-4 py-3 font-medium">{t("quantity")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stockLevels.map((s) => (
-              <tr key={s.id} className="border-b border-[var(--color-border)] last:border-0">
-                <td className="px-4 py-3 text-[var(--color-ink)]">
-                  {getLocalized(s.product.name as Record<string, string>, locale)}
-                </td>
-                <td className="px-4 py-3 font-medium text-[var(--color-ink)]">{s.quantity}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[var(--color-border)] text-left text-[var(--color-ink-soft)]">
+                <th className="px-4 py-3 font-medium">{t("product")}</th>
+                <th className="px-4 py-3 font-medium">{t("quantity")}</th>
               </tr>
-            ))}
-            {stockLevels.length === 0 && (
-              <tr>
-                <td colSpan={2} className="py-8 text-center text-[var(--color-ink-soft)]">
-                  {t("noStock")}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {stockLevels.map((s) => (
+                <tr key={s.id} className="border-b border-[var(--color-border)] last:border-0">
+                  <td className="px-4 py-3 text-[var(--color-ink)]">
+                    {getLocalized(s.product.name as Record<string, string>, locale)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-[var(--color-ink)]">{s.quantity}</td>
+                </tr>
+              ))}
+              {stockLevels.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="py-8 text-center text-[var(--color-ink-soft)]">
+                    {t("noStock")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)]">
         <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-subtle)] px-4 py-3">
           <h2 className="text-sm font-semibold text-[var(--color-ink)]">{t("history")}</h2>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[var(--color-border)] text-left text-[var(--color-ink-soft)]">
-              <th className="px-4 py-3 font-medium">{t("date")}</th>
-              <th className="px-4 py-3 font-medium">{t("movementTypeLabel")}</th>
-              <th className="px-4 py-3 font-medium">{t("product")}</th>
-              <th className="px-4 py-3 font-medium">{t("quantity")}</th>
-              <th className="px-4 py-3 font-medium">{t("by")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {movements.map((m) => (
-              <tr key={m.id} className="border-b border-[var(--color-border)] last:border-0">
-                <td className="px-4 py-3 text-[var(--color-ink-muted)]">{m.createdAt.toLocaleString(locale)}</td>
-                <td className="px-4 py-3 text-[var(--color-ink)]">
-                  {tMove(m.type)}
-                  {m.type === "TRANSFER" && (
-                    <span className="text-[var(--color-ink-soft)]">
-                      {" "}
-                      ({getLocalized(m.fromWarehouse?.name as Record<string, string> | undefined, locale)} →{" "}
-                      {getLocalized(m.toWarehouse?.name as Record<string, string> | undefined, locale)})
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-[var(--color-ink)]">
-                  {getLocalized(m.product.name as Record<string, string>, locale)}
-                </td>
-                <td className="px-4 py-3 font-medium text-[var(--color-ink)]">{m.quantity}</td>
-                <td className="px-4 py-3 text-[var(--color-ink-muted)]">{m.createdByUser.name}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[var(--color-border)] text-left text-[var(--color-ink-soft)]">
+                <th className="px-4 py-3 font-medium">{t("date")}</th>
+                <th className="px-4 py-3 font-medium">{t("movementTypeLabel")}</th>
+                <th className="px-4 py-3 font-medium">{t("product")}</th>
+                <th className="px-4 py-3 font-medium">{t("quantity")}</th>
+                <th className="px-4 py-3 font-medium">{t("by")}</th>
               </tr>
-            ))}
-            {movements.length === 0 && (
-              <tr>
-                <td colSpan={5} className="py-8 text-center text-[var(--color-ink-soft)]">
-                  {t("noHistory")}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {movements.map((m) => (
+                <tr key={m.id} className="border-b border-[var(--color-border)] last:border-0">
+                  <td className="px-4 py-3 text-[var(--color-ink-muted)]">{m.createdAt.toLocaleString(locale)}</td>
+                  <td className="px-4 py-3 text-[var(--color-ink)]">
+                    {tMove(m.type)}
+                    {m.type === "TRANSFER" && (
+                      <span className="text-[var(--color-ink-soft)]">
+                        {" "}
+                        ({getLocalized(m.fromWarehouse?.name as Record<string, string> | undefined, locale)} →{" "}
+                        {getLocalized(m.toWarehouse?.name as Record<string, string> | undefined, locale)})
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-[var(--color-ink)]">
+                    {getLocalized(m.product.name as Record<string, string>, locale)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-[var(--color-ink)]">{m.quantity}</td>
+                  <td className="px-4 py-3 text-[var(--color-ink-muted)]">{m.createdByUser.name}</td>
+                </tr>
+              ))}
+              {movements.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-[var(--color-ink-soft)]">
+                    {t("noHistory")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
