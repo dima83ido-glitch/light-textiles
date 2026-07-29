@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { adminInputClass } from "@/components/admin/localized-field";
+import { Button } from "@/components/ui/button";
 import { updateOwnProfile } from "../users/actions";
 
 export function AccountForm({ initial }: { initial: { name: string; email: string } }) {
@@ -12,9 +14,6 @@ export function AccountForm({ initial }: { initial: { name: string; email: strin
   const { register, handleSubmit, formState: { isSubmitting } } = useForm({
     defaultValues: { name: initial.name, email: initial.email, password: "" },
   });
-
-  const inputClass =
-    "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]";
 
   return (
     <form
@@ -31,24 +30,20 @@ export function AccountForm({ initial }: { initial: { name: string; email: strin
     >
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("nameLabel")}
-        <input required className={inputClass} {...register("name")} />
+        <input required className={adminInputClass} {...register("name")} />
       </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("emailLabel")}
-        <input required type="email" className={inputClass} {...register("email")} />
+        <input required type="email" className={adminInputClass} {...register("email")} />
       </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("passwordLabel")}
-        <input type="password" placeholder={t("passwordHint")} className={inputClass} {...register("password")} />
+        <input type="password" placeholder={t("passwordHint")} className={adminInputClass} {...register("password")} />
       </label>
       <div className="mt-1 flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-fit rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-transform active:scale-95 disabled:opacity-60"
-        >
+        <Button type="submit" disabled={isSubmitting} className="w-fit">
           {isSubmitting ? tc("saving") : tc("save")}
-        </button>
+        </Button>
         {saved && !isSubmitting && (
           <span className="text-sm text-[var(--color-accent-strong)]">{t("saved")}</span>
         )}

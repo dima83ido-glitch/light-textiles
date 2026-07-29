@@ -6,6 +6,8 @@ import { Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { AdminRole } from "@prisma/client";
 import { roleMessageKey } from "@/lib/role-label";
+import { adminInputClass } from "@/components/admin/localized-field";
+import { Button } from "@/components/ui/button";
 import { createStaffUser } from "./actions";
 
 const ROLES: AdminRole[] = ["OWNER", "MANAGER", "WAREHOUSE", "EMPLOYEE"];
@@ -23,18 +25,11 @@ export function NewStaffForm() {
     defaultValues: { email: "", name: "", password: "", role: "EMPLOYEE" },
   });
 
-  const inputClass =
-    "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]";
-
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mb-5 flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-transform active:scale-95"
-      >
+      <Button type="button" onClick={() => setOpen(true)} className="mb-5">
         <Plus className="h-4 w-4" /> {t("addAdmin")}
-      </button>
+      </Button>
     );
   }
 
@@ -49,27 +44,23 @@ export function NewStaffForm() {
     >
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-[var(--color-ink)]">{t("newAdmin")}</p>
-        <button type="button" onClick={() => setOpen(false)} className="text-[var(--color-ink-soft)]">
+        <button type="button" onClick={() => setOpen(false)} aria-label={tc("cancel")} className="text-[var(--color-ink-soft)]">
           <X className="h-4 w-4" />
         </button>
       </div>
-      <input required placeholder={t("namePlaceholder")} className={inputClass} {...register("name")} />
-      <input required type="email" placeholder={t("emailPlaceholder")} className={inputClass} {...register("email")} />
-      <input required type="password" placeholder={t("passwordPlaceholder")} className={inputClass} {...register("password")} />
-      <select className={inputClass} {...register("role")}>
+      <input required placeholder={t("namePlaceholder")} className={adminInputClass} {...register("name")} />
+      <input required type="email" placeholder={t("emailPlaceholder")} className={adminInputClass} {...register("email")} />
+      <input required type="password" placeholder={t("passwordPlaceholder")} className={adminInputClass} {...register("password")} />
+      <select className={adminInputClass} {...register("role")}>
         {ROLES.map((role) => (
           <option key={role} value={role}>
             {t(roleMessageKey(role))}
           </option>
         ))}
       </select>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-fit rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-transform active:scale-95 disabled:opacity-60"
-      >
+      <Button type="submit" disabled={isSubmitting} className="w-fit">
         {isSubmitting ? tc("saving") : tc("create")}
-      </button>
+      </Button>
     </form>
   );
 }

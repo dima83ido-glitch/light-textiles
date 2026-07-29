@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import type { AdminRole } from "@prisma/client";
 import { roleMessageKey } from "@/lib/role-label";
+import { adminInputClass } from "@/components/admin/localized-field";
+import { Button } from "@/components/ui/button";
 
 const ROLES: AdminRole[] = ["OWNER", "MANAGER", "WAREHOUSE", "EMPLOYEE"];
 
@@ -22,9 +24,6 @@ export function EditStaffForm({
     defaultValues: { name: initial.name, email: initial.email, password: "", role: initial.role },
   });
 
-  const inputClass =
-    "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]";
-
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
@@ -41,19 +40,19 @@ export function EditStaffForm({
     >
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("columnName")}
-        <input required className={inputClass} {...register("name")} />
+        <input required className={adminInputClass} {...register("name")} />
       </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("columnEmail")}
-        <input required type="email" className={inputClass} {...register("email")} />
+        <input required type="email" className={adminInputClass} {...register("email")} />
       </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {tc("password")}
-        <input type="password" placeholder={t("newPasswordPlaceholder")} className={inputClass} {...register("password")} />
+        <input type="password" placeholder={t("newPasswordPlaceholder")} className={adminInputClass} {...register("password")} />
       </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--color-ink)]">
         {t("columnRole")}
-        <select className={inputClass} {...register("role")}>
+        <select className={adminInputClass} {...register("role")}>
           {ROLES.map((role) => (
             <option key={role} value={role}>
               {t(roleMessageKey(role))}
@@ -62,20 +61,12 @@ export function EditStaffForm({
         </select>
       </label>
       <div className="mt-1 flex items-center gap-2">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-fit rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-transform active:scale-95 disabled:opacity-60"
-        >
+        <Button type="submit" disabled={isSubmitting} className="w-fit">
           {isSubmitting ? tc("saving") : tc("save")}
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/admin/users")}
-          className="rounded-full border border-[var(--color-border)] px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[var(--color-surface-subtle)]"
-        >
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => router.push("/admin/users")}>
           {tc("cancel")}
-        </button>
+        </Button>
       </div>
     </form>
   );

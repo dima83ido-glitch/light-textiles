@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LocalizedTextField } from "@/components/admin/localized-field";
+import { Button } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
 import { createFaqItem } from "./actions";
 
@@ -22,13 +23,9 @@ export function FaqForm() {
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mb-5 flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
-      >
+      <Button type="button" onClick={() => setOpen(true)} className="mb-5">
         <Plus className="h-4 w-4" /> {t("addQuestion")}
-      </button>
+      </Button>
     );
   }
 
@@ -43,19 +40,15 @@ export function FaqForm() {
     >
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-[var(--color-ink)]">{t("newQuestion")}</p>
-        <button type="button" onClick={() => setOpen(false)} className="text-[var(--color-ink-soft)]">
+        <button type="button" onClick={() => setOpen(false)} aria-label={tCommon("cancel")} className="text-[var(--color-ink-soft)]">
           <X className="h-4 w-4" />
         </button>
       </div>
       <LocalizedTextField label={t("questionLabel")} register={register} name="question" required />
       <LocalizedTextField label={t("answerLabel")} register={register} name="answer" multiline rows={3} required />
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-fit rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
-      >
+      <Button type="submit" disabled={isSubmitting} className="w-fit">
         {isSubmitting ? tCommon("saving") : tCommon("add")}
-      </button>
+      </Button>
     </form>
   );
 }

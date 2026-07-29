@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Plus, Upload, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { LocalizedTextField } from "@/components/admin/localized-field";
+import { LocalizedTextField, adminInputClass } from "@/components/admin/localized-field";
+import { Button } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
 import { createBanner } from "./actions";
 
@@ -22,9 +23,6 @@ export function BannerForm() {
     defaultValues: { title: emptyLocaleMap(), subtitle: emptyLocaleMap(), image: "", link: "" },
   });
   const image = watch("image");
-
-  const inputClass =
-    "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-accent)]";
 
   async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -43,13 +41,9 @@ export function BannerForm() {
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mb-5 flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95"
-      >
+      <Button type="button" onClick={() => setOpen(true)} className="mb-5">
         <Plus className="h-4 w-4" /> {t("addBanner")}
-      </button>
+      </Button>
     );
   }
 
@@ -64,7 +58,7 @@ export function BannerForm() {
     >
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-[var(--color-ink)]">{t("newBanner")}</p>
-        <button type="button" onClick={() => setOpen(false)} className="text-[var(--color-ink-soft)]">
+        <button type="button" onClick={() => setOpen(false)} aria-label={tCommon("cancel")} className="text-[var(--color-ink-soft)]">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -74,24 +68,20 @@ export function BannerForm() {
           <Image src={image} alt="" fill sizes="320px" className="object-cover" />
         </div>
       ) : (
-        <label className="flex h-32 w-full max-w-xs cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--color-border)] text-[var(--color-ink-soft)]">
+        <label className="flex h-32 w-full max-w-xs cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--color-border)] text-[var(--color-ink-soft)] focus-within:ring-2 focus-within:ring-[var(--color-accent-strong)] focus-within:ring-offset-2">
           <Upload className="h-5 w-5" />
           <span className="text-[11px]">{uploading ? "..." : t("uploadImage")}</span>
-          <input type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+          <input type="file" accept="image/*" className="sr-only" onChange={handleFileSelect} />
         </label>
       )}
 
       <LocalizedTextField label={t("titleLabel")} register={register} name="title" required />
       <LocalizedTextField label={t("subtitleLabel")} register={register} name="subtitle" />
-      <input placeholder={t("linkPlaceholder")} className={inputClass} {...register("link")} />
+      <input placeholder={t("linkPlaceholder")} className={adminInputClass} {...register("link")} />
 
-      <button
-        type="submit"
-        disabled={isSubmitting || uploading || !image}
-        className="w-fit rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-semibold text-[var(--color-canvas)] transition-all duration-200 active:scale-95 disabled:opacity-60"
-      >
+      <Button type="submit" disabled={isSubmitting || uploading || !image} className="w-fit">
         {isSubmitting ? tCommon("saving") : tCommon("add")}
-      </button>
+      </Button>
     </form>
   );
 }
