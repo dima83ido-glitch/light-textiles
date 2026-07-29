@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { toProductCardData } from "@/lib/products";
+import { productCardSelect, toProductCardData } from "@/lib/products";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,10 +12,7 @@ export async function GET(request: Request) {
 
   const products = await prisma.product.findMany({
     where: { id: { in: ids }, isVisible: true },
-    include: {
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
-      variants: { orderBy: { price: "asc" }, take: 1 },
-    },
+    select: productCardSelect,
   });
 
   return NextResponse.json({

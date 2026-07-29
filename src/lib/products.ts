@@ -4,6 +4,20 @@ import type { ProductCardData } from "@/components/product/product-card";
 
 export const PAGE_SIZE = 24;
 
+// toProductCardData below only ever reads these fields — select (not include) so list views
+// (catalog grid, featured products, similar products, favorites) don't pull the full row
+// (description, metaTitle/metaDescription, sourceUrl, etc.) for every product on the page.
+export const productCardSelect = {
+  id: true,
+  slug: true,
+  name: true,
+  basePrice: true,
+  discountPrice: true,
+  availability: true,
+  images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 },
+  variants: { select: { price: true }, orderBy: { price: "asc" }, take: 1 },
+} as const;
+
 export async function getCategoryBySlug(slug: string) {
   const category = await prisma.category.findFirst({
     where: { slug, isVisible: true },
@@ -45,10 +59,7 @@ export async function getProductsForCategoryIds(
       orderBy,
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      include: {
-        images: { orderBy: { sortOrder: "asc" }, take: 1 },
-        variants: { orderBy: { price: "asc" }, take: 1 },
-      },
+      select: productCardSelect,
     }),
   ]);
 
@@ -59,10 +70,12 @@ export async function getProductBySlug(slug: string) {
   return prisma.product.findFirst({
     where: { slug, isVisible: true },
     include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      variants: { orderBy: { sortOrder: "asc" } },
-      stockLevels: { include: { warehouse: true } },
+      category: { select: { name: true, slug: true } },
+      images: { select: { url: true }, orderBy: { sortOrder: "asc" } },
+      variants: { select: { id: true, name: true, price: true }, orderBy: { sortOrder: "asc" } },
+      stockLevels: {
+        select: { quantity: true, warehouse: { select: { id: true, name: true } } },
+      },
     },
   });
 }

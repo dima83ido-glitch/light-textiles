@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
-import { getProductBySlug, toProductCardData } from "@/lib/products";
+import { getProductBySlug, productCardSelect, toProductCardData } from "@/lib/products";
 import { getLocalized } from "@/lib/get-localized";
 import { getAlternates } from "@/lib/seo";
 import { ProductGallery } from "@/components/product/product-gallery";
@@ -62,10 +62,7 @@ export default async function ProductPage({
   const similar = await prisma.product.findMany({
     where: { categoryId: product.categoryId, isVisible: true, id: { not: product.id } },
     take: 4,
-    include: {
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
-      variants: { orderBy: { price: "asc" }, take: 1 },
-    },
+    select: productCardSelect,
   });
 
   const jsonLd = {

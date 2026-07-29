@@ -1,7 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { getLocalized } from "@/lib/get-localized";
-import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { productCardSelect, toProductCardData } from "@/lib/products";
+import { ProductCard } from "@/components/product/product-card";
 
 export async function FeaturedProducts() {
   const [products, t, locale] = await Promise.all([
@@ -9,10 +9,7 @@ export async function FeaturedProducts() {
       where: { isVisible: true, isFeatured: true },
       orderBy: { createdAt: "desc" },
       take: 8,
-      include: {
-        images: { orderBy: { sortOrder: "asc" }, take: 1 },
-        variants: { orderBy: { price: "asc" }, take: 1 },
-      },
+      select: productCardSelect,
     }),
     getTranslations("home"),
     getLocale(),
@@ -27,21 +24,9 @@ export async function FeaturedProducts() {
       </h2>
 
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-        {products.map((product) => {
-          const name = getLocalized(product.name as Record<string, string>, locale);
-          const price = product.variants[0]?.price ?? product.basePrice;
-          const data: ProductCardData = {
-            id: product.id,
-            slug: product.slug,
-            name,
-            image: product.images[0]?.url,
-            basePrice: price,
-            discountPrice: product.discountPrice,
-            priceFrom: product.variants.length > 0,
-            availability: product.availability,
-          };
-          return <ProductCard key={product.id} product={data} />;
-        })}
+        {products.map((product) => (
+          <ProductCard key={product.id} product={toProductCardData(product, locale)} />
+        ))}
       </div>
     </section>
   );
