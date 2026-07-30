@@ -219,6 +219,14 @@
     ],
     "customOrderFormTitle": "Залишити заявку на пошиття"
   },
+  "errorPages": {
+    "notFoundTitle": "Сторінку не знайдено",
+    "notFoundDescription": "Сторінка, яку ви шукаєте, не існує або була переміщена.",
+    "notFoundCta": "На головну",
+    "errorTitle": "Щось пішло не так",
+    "errorDescription": "Сталася непередбачена помилка. Спробуйте ще раз.",
+    "errorRetry": "Спробувати ще раз"
+  },
   "admin": {
     "title": "Адмін-панель",
     "nav": {

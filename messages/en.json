@@ -219,6 +219,14 @@
     ],
     "customOrderFormTitle": "Submit a custom sewing request"
   },
+  "errorPages": {
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you're looking for doesn't exist or may have been moved.",
+    "notFoundCta": "Back to home",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "An unexpected error occurred. Please try again.",
+    "errorRetry": "Try again"
+  },
   "admin": {
     "title": "Admin panel",
     "nav": {
