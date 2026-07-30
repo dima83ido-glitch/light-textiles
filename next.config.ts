@@ -4,6 +4,15 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Silences a build-time warning: an unrelated package-lock.json in the parent user
+  // directory (C:\Users\User\package-lock.json, outside this repo) makes Next unable to
+  // infer the workspace root unambiguously. Pinning it here doesn't touch that file.
+  outputFileTracingRoot: __dirname,
+  // No X-Powered-By: Next.js header — trivial info-disclosure hardening, on by default otherwise.
+  poweredByHeader: false,
+  // Dev-only (double-invokes effects/renders to surface side-effect bugs); no effect on
+  // the production build/runtime. Explicit here instead of relying on Next's default.
+  reactStrictMode: true,
   experimental: {
     cpus: 1,
     optimizePackageImports: ["framer-motion"],
