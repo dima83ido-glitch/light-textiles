@@ -38,9 +38,14 @@ export default async function AdminProductsPage({
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      include: {
-        category: true,
-        images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      select: {
+        id: true,
+        name: true,
+        basePrice: true,
+        discountPrice: true,
+        isVisible: true,
+        category: { select: { name: true } },
+        images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 },
       },
     }),
   ]);

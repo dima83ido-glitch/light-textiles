@@ -22,8 +22,12 @@ export async function getCategoryBySlug(slug: string) {
   const category = await prisma.category.findFirst({
     where: { slug, isVisible: true },
     include: {
-      children: { where: { isVisible: true }, orderBy: { sortOrder: "asc" } },
-      parent: true,
+      children: {
+        where: { isVisible: true },
+        orderBy: { sortOrder: "asc" },
+        select: { id: true, slug: true, name: true },
+      },
+      parent: { select: { slug: true, name: true } },
     },
   });
   return category;
