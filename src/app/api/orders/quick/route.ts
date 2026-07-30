@@ -25,7 +25,8 @@ export async function POST(request: Request) {
       items: [{ productId, variantId, nameSnapshot, unitPrice, quantity: 1 }],
     });
     return NextResponse.json({ ok: true, orderNumber: order.orderNumber });
-  } catch {
+  } catch (error) {
+    console.error("POST /api/orders/quick failed:", error);
     return NextResponse.json({ error: "This item is no longer available." }, { status: 400 });
   }
 }

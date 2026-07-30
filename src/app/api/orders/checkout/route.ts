@@ -18,7 +18,11 @@ export async function POST(request: Request) {
   try {
     const order = await createOrder(parsed.data);
     return NextResponse.json({ ok: true, orderNumber: order.orderNumber });
-  } catch {
+  } catch (error) {
+    // Most failures here are the expected "item no longer exists" case from
+    // resolveAuthoritativeItems, but this also silently swallowed genuine bugs/DB
+    // failures with zero server-side trace — log before returning the generic message.
+    console.error("POST /api/orders/checkout failed:", error);
     return NextResponse.json({ error: "One or more items in your order are no longer valid." }, { status: 400 });
   }
 }
