@@ -9,6 +9,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
+    "db:backup": "bash scripts/backup-db.sh",
+    "db:restore": "bash scripts/restore-db.sh",
     "export-demo-data": "tsx scripts/export-demo-data.ts"
   },
   "engines": {

@@ -48,3 +48,6 @@ build.log
 
 # runtime-uploaded media (persisted separately in production, e.g. a Render disk)
 /public/uploads/media/
+
+# local database backups (scripts/backup-db.sh) — contains real customer data, never commit
+/backups/
