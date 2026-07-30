@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { getProductBySlug, productCardSelect, toProductCardData } from "@/lib/products";
 import { getLocalized } from "@/lib/get-localized";
-import { getAlternates } from "@/lib/seo";
+import { getAlternates, OG_LOCALE } from "@/lib/seo";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 import { ProductCard } from "@/components/product/product-card";
@@ -28,12 +28,25 @@ export async function generateMetadata({
   const description = product.description
     ? getLocalized(product.description as Record<string, string>, locale)
     : undefined;
+  const alternates = getAlternates(`/product/${slug}`, locale);
 
   return {
     title: `${name} — Light Textiles`,
     description: description?.slice(0, 160),
-    alternates: getAlternates(`/product/${slug}`, locale),
+    alternates,
     openGraph: {
+      // Next.js replaces (not merges) the root layout's openGraph object whenever a page
+      // defines its own, so siteName/type/locale are repeated here to keep them present.
+      siteName: "Light Textiles",
+      type: "website",
+      locale: OG_LOCALE[locale] ?? OG_LOCALE.uk,
+      url: alternates.canonical,
+      title: name,
+      description: description?.slice(0, 160),
+      images: product.images[0] ? [product.images[0].url] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
       title: name,
       description: description?.slice(0, 160),
       images: product.images[0] ? [product.images[0].url] : undefined,
